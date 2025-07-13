@@ -1,39 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 40px;
-    background: #f5f5f5;
+    font-family: 'Noto Sans JP', Arial, sans-serif;
+    background: #111;
+    color: #eee;
+    margin: 0;
+    padding: 0;
 }
 
-h1, h2 {
-    color: #333;
+nav {
+    background: #e50914;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 15px 30px;
+    justify-content: space-between;
 }
 
-form {
-    margin-bottom: 20px;
+nav .logo {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-input, select, button {
-    padding: 8px;
-    margin: 5px;
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
 }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
-    background: #fff;
+nav ul li {
+    margin: 0 15px;
 }
 
-th, td {
-    padding: 10px;
-    border: 1px solid #ccc;
-}
-
-a {
-    margin-right: 10px;
-    color: #0066cc;
+nav ul li a {
+    color: #fff;
     text-decoration: none;
+    font-weight: bold;
 }
 
-a:hover {
-    text-decoration: underline;
+nav .search-box input[type="text"] {
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    width: 250px;
+}
+
+.banner {
+    background: url('https://your-banner-image.jpg') no-repeat center center/cover;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+}
+
+.banner::before {
+    content: '';
+    background: rgba(0,0,0,0.6);
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%; width: 100%;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+}
+
+.banner-content h1 {
+    font-size: 48px;
+    margin: 0 0 20px;
+}
+
+.banner-content p {
+    font-size: 18px;
+}
+
+.banner-content button {
+    background: #e50914;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.banner-content button:hover {
+    background: #c2080f;
+}
+
+.add-form {
+    text-align: center;
+    margin: 30px 0;
+}
+
+input[type="text"], select {
+    padding: 10px;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    width: 200px;
+}
+
+button, a.button {
+    background: #e50914;
+    color: #fff;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+button:hover, a.button:hover {
+    background: #c2080f;
+}
+
+.latest-heading {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.manga-grid {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+    padding: 0 30px;
+}
+
+.manga-card {
+    background: #222;
+    border-radius: 6px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease;
+}
+
+.manga-card:hover {
+    transform: scale(1.05);
+}
+
+.manga-card img {
+    width: 100%;
+    display: block;
+}
+
+.manga-card h3 {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.manga-card p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #ccc;
+}
+
+.edit-container {
+    text-align: center;
+    margin: 50px auto;
 }

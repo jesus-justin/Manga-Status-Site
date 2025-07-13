@@ -8,7 +8,6 @@ if (!$id) {
     exit();
 }
 
-// Update form submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $conn->real_escape_string($_POST['status']);
     $sql = "UPDATE manga SET status='$status' WHERE id=$id";
@@ -20,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get manga details
 $sql = "SELECT * FROM manga WHERE id=$id";
 $result = $conn->query($sql);
 $manga = $result->fetch_assoc();
@@ -30,10 +28,14 @@ $manga = $result->fetch_assoc();
 <html>
 <head>
     <title>Edit Manga</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<div class="edit-container">
     <h1>Edit Manga Status</h1>
+    <p class="subtitle">マンガライブラリ</p>
 
     <form method="POST">
         <p>Title: <strong><?php echo htmlspecialchars($manga['title']); ?></strong></p>
@@ -47,6 +49,8 @@ $manga = $result->fetch_assoc();
         <button type="submit">Update</button>
     </form>
 
-    <a href="index.php">Back</a>
+    <p><a href="index.php" class="button">← Back to Library</a></p>
+</div>
+
 </body>
 </html>
