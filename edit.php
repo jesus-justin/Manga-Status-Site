@@ -35,11 +35,9 @@ $manga = $result->fetch_assoc();
 
 <div class="edit-container">
     <h1>Edit Manga Status</h1>
-    <p class="subtitle">マンガライブラリ</p>
-
     <form method="POST">
         <p>Title: <strong><?php echo htmlspecialchars($manga['title']); ?></strong></p>
-        <label for="status">Status:</label>
+        <label>Status:</label>
         <select name="status">
             <option value="will read" <?php if($manga['status']=='will read') echo 'selected'; ?>>Will Read</option>
             <option value="currently reading" <?php if($manga['status']=='currently reading') echo 'selected'; ?>>Currently Reading</option>
@@ -48,8 +46,7 @@ $manga = $result->fetch_assoc();
         </select>
         <button type="submit">Update</button>
     </form>
-
-    <p><a href="index.php" class="button">← Back to Library</a></p>
+    <p><a href="index.php" class="button">← Back</a></p>
 </div>
 
 </body>

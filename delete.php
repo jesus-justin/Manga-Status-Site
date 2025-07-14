@@ -8,6 +8,6 @@ if ($id) {
     $conn->query($sql);
 }
 
-header("Location: index.php");
+header("Location: home.php");
 exit();
 ?>
