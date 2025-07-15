@@ -14,9 +14,9 @@
   <div class="logo">MangaLibrary</div>
   <ul>
     <li><a href="home.php">Home</a></li>
+    <li><a href="browse.php">Browse</a></li>
     <li><a href="#">New Releases</a></li>
     <li><a href="#">Popular</a></li>
-    <li><a href="#">Browse</a></li>
   </ul>
   <div class="search-box">
     <input type="text" placeholder="Search manga...">
@@ -26,7 +26,7 @@
 <div class="banner">
   <div class="banner-content">
     <h1>FEATURED: MANGA LIBRARY</h1>
-    <p>Manage your collection easily with cover images.</p>
+    <p>Manage your collection easily with cover images & categories.</p>
     <button>Read now</button>
   </div>
 </div>
@@ -40,6 +40,7 @@
       <option value="stopped">Stopped</option>
       <option value="finished">Finished</option>
     </select>
+    <input type="text" name="category" placeholder="Enter Category (e.g. Action, Romance)" required>
     <button type="submit">Add Manga</button>
   </form>
 </div>
@@ -53,7 +54,6 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0):
   while ($row = $result->fetch_assoc()):
-    // ✅ Make filename: lowercase → spaces to underscores → .jpeg
     $title = strtolower(trim($row['title']));
     $filename = str_replace(' ', '_', $title) . '.jpeg';
 ?>
@@ -61,6 +61,7 @@ if ($result->num_rows > 0):
     <img src="images/<?php echo htmlspecialchars($filename); ?>" alt="<?php echo htmlspecialchars($row['title']); ?>">
     <h3><?php echo htmlspecialchars($row['title']); ?></h3>
     <p>Status: <?php echo htmlspecialchars($row['status']); ?></p>
+    <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
     <a href="edit.php?id=<?php echo $row['id']; ?>" class="button">Edit</a>
     <a href="delete.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Delete this manga?');" class="button">Delete</a>
   </div>
