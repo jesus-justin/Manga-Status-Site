@@ -15,8 +15,6 @@
   <ul>
     <li><a href="home.php">Home</a></li>
     <li><a href="browse.php">Browse</a></li>
-    <li><a href="#">New Releases</a></li>
-    <li><a href="#">Popular</a></li>
   </ul>
   <div class="search-box">
     <input type="text" placeholder="Search manga...">
