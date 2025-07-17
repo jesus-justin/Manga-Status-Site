@@ -32,13 +32,18 @@
 <div class="add-form">
   <form action="add.php" method="POST">
     <input type="text" name="title" placeholder="Enter Manga Title" required>
-    <select name="status">
+    <select name="status" required>
       <option value="will read">Will Read</option>
       <option value="currently reading">Currently Reading</option>
       <option value="stopped">Stopped</option>
       <option value="finished">Finished</option>
     </select>
-    <input type="text" name="category" placeholder="Enter Category (e.g. Action, Romance)" required>
+    <select name="category">
+      <option value="">Uncategorized</option>
+      <option value="Action">Action</option>
+      <option value="Romance">Romance</option>
+      <option value="Horror">Horror</option>
+    </select>
     <button type="submit">Add Manga</button>
   </form>
 </div>
@@ -47,7 +52,7 @@
 
 <div class="manga-grid">
 <?php
-$sql = "SELECT * FROM manga";
+$sql = "SELECT * FROM manga ORDER BY id DESC";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0):
