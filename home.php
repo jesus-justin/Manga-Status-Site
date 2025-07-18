@@ -3,10 +3,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Manga Library</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    function toggleChapterField() {
+      const status = document.querySelector('select[name="status"]').value;
+      const chapterField = document.getElementById('chapterField');
+      if (status === 'currently reading') {
+        chapterField.style.display = 'block';
+      } else {
+        chapterField.style.display = 'none';
+      }
+    }
+  </script>
 </head>
 <body>
 
@@ -24,7 +34,7 @@
 <div class="banner">
   <div class="banner-content">
     <h1>FEATURED: MANGA LIBRARY</h1>
-    <p>Manage your collection easily with cover images & categories.</p>
+    <p>Manage your collection easily with cover images, categories, and reading links.</p>
     <button>Read now</button>
   </div>
 </div>
@@ -32,7 +42,7 @@
 <div class="add-form">
   <form action="add.php" method="POST">
     <input type="text" name="title" placeholder="Enter Manga Title" required>
-    <select name="status" required>
+    <select name="status" onchange="toggleChapterField()" required>
       <option value="will read">Will Read</option>
       <option value="currently reading">Currently Reading</option>
       <option value="stopped">Stopped</option>
@@ -44,6 +54,10 @@
       <option value="Romance">Romance</option>
       <option value="Horror">Horror</option>
     </select>
+    <input type="url" name="read_link" placeholder="Link to read manga (optional)">
+    <div id="chapterField" style="display:none;">
+      <input type="text" name="last_chapter" placeholder="Last Chapter Read">
+    </div>
     <button type="submit">Add Manga</button>
   </form>
 </div>
@@ -64,7 +78,13 @@ if ($result->num_rows > 0):
     <img src="images/<?php echo htmlspecialchars($filename); ?>" alt="<?php echo htmlspecialchars($row['title']); ?>">
     <h3><?php echo htmlspecialchars($row['title']); ?></h3>
     <p>Status: <?php echo htmlspecialchars($row['status']); ?></p>
+    <?php if (!empty($row['last_chapter'])): ?>
+      <p>Last Chapter: <?php echo htmlspecialchars($row['last_chapter']); ?></p>
+    <?php endif; ?>
     <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
+    <?php if (!empty($row['read_link'])): ?>
+      <p><a href="<?php echo htmlspecialchars($row['read_link']); ?>" target="_blank">Read Here</a></p>
+    <?php endif; ?>
     <a href="edit.php?id=<?php echo $row['id']; ?>" class="button">Edit</a>
     <a href="delete.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Delete this manga?');" class="button">Delete</a>
   </div>
