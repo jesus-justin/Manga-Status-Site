@@ -58,6 +58,14 @@ $manga = $result->fetch_assoc();
 </head>
 <body>
 
+<nav>
+  <div class="logo">MangaLibrary</div>
+  <ul>
+    <li><a href="home.php">Home</a></li>
+    <li><a href="browse.php">Browse</a></li>
+  </ul>
+</nav>
+
 <div class="edit-container">
   <h1>Edit Manga</h1>
   <form method="POST">
