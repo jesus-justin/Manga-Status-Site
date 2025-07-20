@@ -17,7 +17,7 @@ $result = $conn->query($sql);
 
 <h1>Browse Categories</h1>
 
-<ul>
+<ul class="category-list">
 <?php while ($row = $result->fetch_assoc()): ?>
   <li><a href="browse.php?category=<?php echo urlencode($row['category']); ?>">
     <?php echo htmlspecialchars($row['category']); ?>
@@ -34,16 +34,20 @@ if (isset($_GET['category'])) {
   $result2 = $conn->query($sql2);
 
   if ($result2->num_rows > 0):
-    while ($manga = $result2->fetch_assoc()):
+?>
+  <div class="manga-grid">
+  <?php while ($manga = $result2->fetch_assoc()):
       $title = strtolower(trim($manga['title']));
       $filename = str_replace(' ', '_', $title) . '.jpeg';
-?>
-  <div class="manga-card">
-    <img src="images/<?php echo htmlspecialchars($filename); ?>" alt="<?php echo htmlspecialchars($manga['title']); ?>">
-    <h3><?php echo htmlspecialchars($manga['title']); ?></h3>
-    <p>Status: <?php echo htmlspecialchars($manga['status']); ?></p>
+  ?>
+    <div class="manga-card">
+      <img src="images/<?php echo htmlspecialchars($filename); ?>" alt="<?php echo htmlspecialchars($manga['title']); ?>">
+      <h3><?php echo htmlspecialchars($manga['title']); ?></h3>
+      <p>Status: <?php echo htmlspecialchars($manga['status']); ?></p>
+    </div>
+  <?php endwhile; ?>
   </div>
-<?php endwhile; else: ?>
+<?php else: ?>
   <p>No manga in this category.</p>
 <?php endif;
 }
