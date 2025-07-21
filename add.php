@@ -1,6 +1,44 @@
 <?php
 include 'db.php';
 
+function fetchMangaCover($title) {
+  // Use Jikan API to search for manga
+  $searchUrl = 'https://api.jikan.moe/v4/manga?q=' . urlencode($title) . '&limit=1';
+  $response = @file_get_contents($searchUrl);
+  
+  if ($response === false) {
+    return false;
+  }
+  
+  $data = json_decode($response, true);
+  
+  if (empty($data['data'])) {
+    return false;
+  }
+  
+  // Get the image URL from the first result
+  $imageUrl = $data['data'][0]['images']['jpg']['large_image_url'] ?? false;
+  
+  if (!$imageUrl) {
+    return false;
+  }
+  
+  // Download and save the image
+  $imageContent = @file_get_contents($imageUrl);
+  if ($imageContent === false) {
+    return false;
+  }
+  
+  $filename = strtolower(str_replace(' ', '_', trim($title))) . '.jpeg';
+  $savePath = __DIR__ . '/images/' . $filename;
+  
+  if (file_put_contents($savePath, $imageContent) === false) {
+    return false;
+  }
+  
+  return true;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $title = $conn->real_escape_string($_POST['title']);
   $status = $conn->real_escape_string($_POST['status']);
@@ -19,6 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           )";
 
   if ($conn->query($sql) === TRUE) {
+    // Try to fetch and save the manga cover
+    fetchMangaCover($title);
     header("Location: home.php");
     exit();
   } else {
