@@ -39,6 +39,18 @@ function fetchMangaCover($title) {
   return true;
 }
 
+function getExternalMangaLinks($title) {
+  $encoded = urlencode($title);
+  $sites = [
+    ["name" => "WeebCentral", "url" => "https://weebcentral.com/search?query=$encoded"],
+    ["name" => "MangaDex", "url" => "https://mangadex.org/search?title=$encoded"],
+    ["name" => "MangaKakalot", "url" => "https://mangakakalot.com/search/story/$encoded"],
+    ["name" => "MangaSee", "url" => "https://mangasee123.com/search/?keyword=$encoded"],
+    ["name" => "MangaReader", "url" => "https://www.mangareader.net/search/?w=$encoded"]
+  ];
+  return json_encode($sites);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $title = $conn->real_escape_string($_POST['title']);
   $status = $conn->real_escape_string($_POST['status']);
@@ -50,10 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $category = 'Uncategorized';
   }
 
-  $sql = "INSERT INTO manga (title, status, category, read_link, last_chapter)
+  $external_links = $conn->real_escape_string(getExternalMangaLinks($title));
+
+  $sql = "INSERT INTO manga (title, status, category, read_link, last_chapter, external_links)
           VALUES ('$title', '$status', '$category', 
           " . ($read_link !== '' ? "'$read_link'" : "NULL") . ",
-          " . ($status === 'currently reading' && $last_chapter !== '' ? "'$last_chapter'" : "NULL") . "
+          " . ($status === 'currently reading' && $last_chapter !== '' ? "'$last_chapter'" : "NULL") . ",
+          '$external_links'
           )";
 
   if ($conn->query($sql) === TRUE) {
