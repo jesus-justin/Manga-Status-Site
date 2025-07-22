@@ -163,6 +163,18 @@ if ($result->num_rows > 0):
     <?php if (!empty($row['read_link'])): ?>
       <p><a href="<?php echo htmlspecialchars($row['read_link']); ?>" target="_blank">Read Here</a></p>
     <?php endif; ?>
+    <?php if (!empty($row['external_links'])): ?>
+      <?php $links = json_decode($row['external_links'], true); if ($links && is_array($links)): ?>
+        <div class="external-links">
+          <strong>Read on:</strong>
+          <ul>
+            <?php foreach ($links as $link): ?>
+              <li><a href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank"><?php echo htmlspecialchars($link['name']); ?></a></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      <?php endif; ?>
+    <?php endif; ?>
     <div class="card-actions">
       <a href="edit.php?id=<?php echo $row['id']; ?>" class="button">Edit</a>
       <a href="delete.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Delete this manga?');" class="button">Delete</a>
