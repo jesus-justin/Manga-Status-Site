@@ -103,6 +103,13 @@
     <input type="text" id="searchInput" placeholder="Search manga...">
   </div>
   <button id="darkModeToggle" title="Toggle dark mode">🌙</button>
+  <div class="settings-dropdown-container">
+    <button id="settingsBtn" title="Settings" type="button">⚙️</button>
+    <div class="settings-dropdown" id="settingsDropdown">
+      <a href="create.php" class="settings-action">Create</a>
+      <a href="change.php" class="settings-action">Change</a>
+    </div>
+  </div>
 </nav>
 
 <div class="banner">
@@ -112,29 +119,6 @@
     <button id="randomMangaBtn">🎲 Random Manga</button>
     <div id="randomMangaResult" style="margin-top:10px;"></div>
   </div>
-</div>
-
-<div class="add-form">
-  <form action="add.php" method="POST">
-    <input type="text" name="title" placeholder="Enter Manga Title" required>
-    <select name="status" onchange="toggleChapterField()" required>
-      <option value="will read">Will Read</option>
-      <option value="currently reading">Currently Reading</option>
-      <option value="stopped">Stopped</option>
-      <option value="finished">Finished</option>
-    </select>
-    <select name="category">
-      <option value="">Uncategorized</option>
-      <option value="Action">Action</option>
-      <option value="Romance">Romance</option>
-      <option value="Horror">Horror</option>
-    </select>
-    <input type="url" name="read_link" placeholder="Link to read manga (optional)">
-    <div id="chapterField" style="display:none;">
-      <input type="text" name="last_chapter" placeholder="Last Chapter Read">
-    </div>
-    <button type="submit">Add Manga</button>
-  </form>
 </div>
 
 <h2 class="latest-heading">Latest Manga Updates</h2>
@@ -176,14 +160,36 @@ if ($result->num_rows > 0):
       <?php endif; ?>
     <?php endif; ?>
     <div class="card-actions">
-      <a href="edit.php?id=<?php echo $row['id']; ?>" class="button">Edit</a>
-      <a href="delete.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Delete this manga?');" class="button">Delete</a>
     </div>
   </div>
 <?php endwhile; else: ?>
   <p style="color:#eee; text-align:center;">No manga added yet.</p>
 <?php endif; ?>
 </div>
+
+<script>
+// Settings dropdown toggle for click only (no hover)
+(function() {
+  const settingsBtn = document.getElementById('settingsBtn');
+  const dropdown = document.getElementById('settingsDropdown');
+  let dropdownOpen = false;
+  if (settingsBtn && dropdown) {
+    // Toggle on click
+    settingsBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      dropdownOpen = !dropdownOpen;
+      dropdown.style.display = dropdownOpen ? 'block' : 'none';
+    });
+    // Close on outside click
+    document.addEventListener('click', function() {
+      if (dropdownOpen) {
+        dropdown.style.display = 'none';
+        dropdownOpen = false;
+      }
+    });
+  }
+})();
+</script>
 
 </body>
 </html>
