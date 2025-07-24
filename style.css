@@ -207,10 +207,30 @@ button:hover, a.button:hover {
   box-shadow: 0 4px 16px rgba(255,118,140,0.18);
 }
 #darkModeToggle {
-  font-size: 1.3em;
-  background: #23272f;
-  margin-left: 16px;
-  padding: 6px 14px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  margin-right: 0;
+  color: #fff;
+  vertical-align: middle;
+  transition: color 0.2s;
+}
+#darkModeToggle:hover {
+  color: #ffd700;
+}
+#settingsBtn {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  margin-left: 0;
+  color: #fff;
+  vertical-align: middle;
+  transition: color 0.2s;
+}
+#settingsBtn:hover {
+  color: #ffd700;
 }
 
 /* --- THEME: RED (Default) --- */
@@ -507,14 +527,6 @@ h1, h2 {
   margin-left: 10px;
   z-index: 1100;
 }
-#settingsBtn {
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  vertical-align: middle;
-  margin-left: 5px;
-}
 .settings-dropdown {
   display: none;
   position: absolute;
@@ -549,4 +561,53 @@ h1, h2 {
 .settings-dropdown .settings-action:hover {
   background: #383838;
   color: #ffd700;
+}
+
+.menu {
+  margin: 0;
+  display: flex;
+  width: 20em;
+  font-size: 1.5em;
+  padding: 0.5em 1em;
+  position: relative;
+  align-items: center;
+  background-color: var(--bgColorMenu, #222);
+  justify-content: center;
+  border-radius: 1.5em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  gap: 1em;
+}
+.menu__item {
+  all: unset;
+  flex-grow: 1;
+  z-index: 100;
+  display: flex;
+  cursor: pointer;
+  position: relative;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em 0.5em;
+  transition: background 0.2s, transform 0.2s;
+}
+.menu__item:hover {
+  background: #444;
+  transform: scale(1.1);
+}
+.tab-label {
+  margin-left: 0.5em;
+  font-size: 0.8em;
+  color: #fff;
+}
+.settings-tab-container {
+  position: absolute;
+  right: 2em;
+  top: 3.5em;
+  z-index: 200;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.1em;
 }
