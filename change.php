@@ -14,6 +14,19 @@
     <li><a href="browse.php">Browse</a></li>
   </ul>
   <button id="darkModeToggle" title="Toggle dark mode">🌙</button>
+  <button id="settingsBtn" title="Settings" type="button">⚙️</button>
+  <div class="settings-tab-container" id="settingsTabContainer" style="display:none;">
+    <div class="menu">
+      <div class="menu__item" onclick="window.location='create.php'" title="Create">
+        📝
+        <span class="tab-label">Create</span>
+      </div>
+      <div class="menu__item" onclick="window.location='change.php'" title="Change">
+        ✏️
+        <span class="tab-label">Change</span>
+      </div>
+    </div>
+  </div>
 </nav>
 <h2 class="latest-heading">Edit or Delete Manga</h2>
 <div class="manga-grid">
@@ -61,5 +74,26 @@ if ($result->num_rows > 0):
   <p style="color:#eee; text-align:center;">No manga added yet.</p>
 <?php endif; ?>
 </div>
+<script>
+// Settings tab menu toggle for click only (no hover)
+(function() {
+  const settingsBtn = document.getElementById('settingsBtn');
+  const tabContainer = document.getElementById('settingsTabContainer');
+  let tabOpen = false;
+  if (settingsBtn && tabContainer) {
+    settingsBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      tabOpen = !tabOpen;
+      tabContainer.style.display = tabOpen ? 'block' : 'none';
+    });
+    document.addEventListener('click', function() {
+      if (tabOpen) {
+        tabContainer.style.display = 'none';
+        tabOpen = false;
+      }
+    });
+  }
+})();
+</script>
 </body>
 </html> 
