@@ -102,12 +102,20 @@
   <div class="search-box">
     <input type="text" id="searchInput" placeholder="Search manga...">
   </div>
-  <button id="darkModeToggle" title="Toggle dark mode">🌙</button>
-  <div class="settings-dropdown-container">
+  <div class="nav-actions">
+    <button id="darkModeToggle" title="Toggle dark mode">🌙</button>
     <button id="settingsBtn" title="Settings" type="button">⚙️</button>
-    <div class="settings-dropdown" id="settingsDropdown">
-      <a href="create.php" class="settings-action">Create</a>
-      <a href="change.php" class="settings-action">Change</a>
+  </div>
+  <div class="settings-tab-container" id="settingsTabContainer" style="display:none;">
+    <div class="menu">
+      <div class="menu__item" onclick="window.location='create.php'" title="Create">
+        📝
+        <span class="tab-label">Create</span>
+      </div>
+      <div class="menu__item" onclick="window.location='change.php'" title="Change">
+        ✏️
+        <span class="tab-label">Change</span>
+      </div>
     </div>
   </div>
 </nav>
@@ -168,23 +176,21 @@ if ($result->num_rows > 0):
 </div>
 
 <script>
-// Settings dropdown toggle for click only (no hover)
+// Settings tab menu toggle for click only (no hover)
 (function() {
   const settingsBtn = document.getElementById('settingsBtn');
-  const dropdown = document.getElementById('settingsDropdown');
-  let dropdownOpen = false;
-  if (settingsBtn && dropdown) {
-    // Toggle on click
+  const tabContainer = document.getElementById('settingsTabContainer');
+  let tabOpen = false;
+  if (settingsBtn && tabContainer) {
     settingsBtn.addEventListener('click', function(e) {
       e.stopPropagation();
-      dropdownOpen = !dropdownOpen;
-      dropdown.style.display = dropdownOpen ? 'block' : 'none';
+      tabOpen = !tabOpen;
+      tabContainer.style.display = tabOpen ? 'block' : 'none';
     });
-    // Close on outside click
     document.addEventListener('click', function() {
-      if (dropdownOpen) {
-        dropdown.style.display = 'none';
-        dropdownOpen = false;
+      if (tabOpen) {
+        tabContainer.style.display = 'none';
+        tabOpen = false;
       }
     });
   }
