@@ -42,26 +42,40 @@
           id: card.getAttribute('data-id'),
           title: card.getAttribute('data-title'),
           category: card.getAttribute('data-category'),
-          readLink: card.querySelector('a[target="_blank"]') ? card.querySelector('a[target="_blank"]').href : ''
+          readLink: card.querySelector('a[target="_blank"]') ? card.querySelector('a[target="_blank"]').href : '',
+          status: card.getAttribute('data-status'),
+          description: card.querySelector('p') ? card.querySelector('p').innerText : '',
+          externalLinks: (() => {
+            const extLinks = card.querySelectorAll('.external-links ul li a');
+            return Array.from(extLinks).map(a => ({ name: a.innerText, url: a.href }));
+          })()
         }));
         randomBtn.addEventListener('click', function() {
           if (mangaList.length === 0) return;
-          // Remove previous highlight
           mangaCards.forEach(card => card.classList.remove('highlight-manga'));
           const random = mangaList[Math.floor(Math.random() * mangaList.length)];
+          let resultHTML = '';
+          resultHTML += `<div class='random-manga-info'>`;
           if (random.readLink) {
-            document.getElementById('randomMangaResult').innerHTML =
-              `<strong>Read:</strong> <a href='${random.readLink}' target='_blank' style='color:#fff;text-decoration:underline;'>${random.title}</a> [${random.category}]`;
+            resultHTML += `<strong>Read:</strong> <a href='${random.readLink}' target='_blank' style='color:#fff;text-decoration:underline;'>${random.title}</a>`;
           } else {
-            document.getElementById('randomMangaResult').innerHTML =
-              `<strong>Highlighted:</strong> ${random.title} [${random.category}]`;
-            // Highlight the card and scroll to it
-            const card = document.querySelector(`.manga-card[data-id='${random.id}']`);
-            if (card) {
-              card.classList.add('highlight-manga');
-              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+            resultHTML += `<strong>${random.title}</strong>`;
           }
+          if (random.description) {
+            resultHTML += `<div class='random-manga-desc' style='font-size:0.95em;color:#ccc;margin:4px 0 2px 0;'>${random.description}</div>`;
+          }
+          if (random.externalLinks && random.externalLinks.length > 0) {
+            resultHTML += `<div class='external-links'><strong>Read on:</strong> <ul style='margin:2px 0 0 0;padding:0;list-style:none;'>`;
+            random.externalLinks.forEach(link => {
+              resultHTML += `<li style='display:inline;margin-right:8px;'><a href='${link.url}' target='_blank'>${link.name}</a></li>`;
+            });
+            resultHTML += `</ul></div>`;
+          }
+          if (random.status) {
+            resultHTML += `<div class='random-manga-status' style='font-size:0.92em;color:#ffd54f;margin-top:2px;'>Status: ${random.status.replace(/-/g,' ')}</div>`;
+          }
+          resultHTML += `</div>`;
+          document.getElementById('randomMangaResult').innerHTML = resultHTML;
         });
       }
       // --- Theme Mode Toggle (Multi-color) ---
