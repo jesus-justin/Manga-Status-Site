@@ -44,7 +44,7 @@ function getExternalMangaLinks($title) {
   $sites = [
     ["name" => "WeebCentral", "url" => "https://weebcentral.com/search?query=$encoded"],
     ["name" => "MangaDex", "url" => "https://mangadex.org/search?title=$encoded"],
-    ["name" => "MangaKakalot", "url" => "https://mangakakalot.com/search/story/$encoded"],
+    ["name" => "ToonClash", "url" => "https://toonclash.com/search?query=$encoded"],
     ["name" => "MangaSee", "url" => "https://mangasee123.com/search/?keyword=$encoded"],
     ["name" => "MangaReader", "url" => "https://www.mangareader.net/search/?w=$encoded"]
   ];
