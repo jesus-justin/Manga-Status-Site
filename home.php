@@ -261,7 +261,7 @@
 
 <div class="banner">
   <div class="banner-content">
-    <h1>FEATURED: MANGA LIBRARY</h1>
+    <h1>Welcome to your MANGA LIBRARY</h1>
     <p>Manage your collection easily with cover images, categories, and reading links.</p>
     <button id="randomMangaBtn" aria-label="Random Manga">🎲 Random Manga</button>
     <div id="randomMangaResult"></div>
