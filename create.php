@@ -5,18 +5,64 @@
   <meta charset="UTF-8" />
   <title>Add Manga - Manga Library</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="home.css">
   <script>
-    function toggleChapterField() {
-      const status = document.querySelector('select[name="status"]').value;
-      const chapterField = document.getElementById('chapterField');
-      if (status === 'currently reading') {
-        chapterField.style.display = 'block';
-      } else {
-        chapterField.style.display = 'none';
-      }
-    }
     document.addEventListener('DOMContentLoaded', function() {
+      // --- Function to toggle chapter field based on status ---
+      function toggleChapterField() {
+        const status = document.querySelector('select[name="status"]').value;
+        const chapterField = document.getElementById('chapterField');
+        chapterField.style.display = (status === 'currently reading') ? 'block' : 'none';
+      }
+
+      // Initial call and event listener for chapter field
       toggleChapterField();
+      document.querySelector('select[name="status"]').addEventListener('change', toggleChapterField);
+
+      // --- Theme switcher logic ---
+      const themes = ['theme-red', 'theme-white', 'theme-green', 'theme-blue', 'theme-purple'];
+      const themeIcons = ['🌑', '☀️', '🌿', '🌊', '🟣'];
+      const darkModeToggle = document.getElementById('darkModeToggle');
+
+      function applyTheme(theme) {
+        document.body.style.transition = 'all 0.5s ease';
+        document.body.classList.remove(...themes);
+        document.body.classList.add(theme);
+        localStorage.setItem('themeMode', theme);
+        if (darkModeToggle) {
+          const idx = themes.indexOf(theme);
+          darkModeToggle.innerText = themeIcons[idx] || '🎨';
+        }
+      }
+
+      const savedTheme = localStorage.getItem('themeMode') || 'theme-red';
+      applyTheme(savedTheme);
+
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', function () {
+          const currentTheme = Array.from(document.body.classList).find(c => themes.includes(c)) || themes[0];
+          const idx = (themes.indexOf(currentTheme) + 1) % themes.length;
+          applyTheme(themes[idx]);
+        });
+      }
+
+      // --- Settings tab menu toggle ---
+      const settingsBtn = document.getElementById('settingsBtn');
+      const tabContainer = document.getElementById('settingsTabContainer');
+      let tabOpen = false;
+      if (settingsBtn && tabContainer) {
+        settingsBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          tabOpen = !tabOpen;
+          tabContainer.style.display = tabOpen ? 'block' : 'none';
+        });
+        document.addEventListener('click', function() {
+          if (tabOpen) {
+            tabContainer.style.display = 'none';
+            tabOpen = false;
+          }
+        });
+      }
     });
   </script>
 </head>
@@ -45,7 +91,7 @@
 <div class="add-form">
   <form action="add.php" method="POST">
     <input type="text" name="title" placeholder="Enter Manga Title" required>
-    <select name="status" onchange="toggleChapterField()" required>
+    <select name="status" required>
       <option value="will read">Will Read</option>
       <option value="currently reading">Currently Reading</option>
       <option value="stopped">Stopped</option>
@@ -64,26 +110,5 @@
     <button type="submit">Add Manga</button>
   </form>
 </div>
-<script>
-// Settings tab menu toggle for click only (no hover)
-(function() {
-  const settingsBtn = document.getElementById('settingsBtn');
-  const tabContainer = document.getElementById('settingsTabContainer');
-  let tabOpen = false;
-  if (settingsBtn && tabContainer) {
-    settingsBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      tabOpen = !tabOpen;
-      tabContainer.style.display = tabOpen ? 'block' : 'none';
-    });
-    document.addEventListener('click', function() {
-      if (tabOpen) {
-        tabContainer.style.display = 'none';
-        tabOpen = false;
-      }
-    });
-  }
-})();
-</script>
 </body>
 </html> 

@@ -1,5 +1,639 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap');
 
+/* Additional Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInFromLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInFromRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(255, 126, 179, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(255, 126, 179, 0.8), 0 0 30px rgba(255, 126, 179, 0.6); }
+}
+
+/* Enhanced Manga Card Animations */
+.manga-card {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.manga-card:nth-child(odd) {
+  animation: slideInFromLeft 0.6s ease-out;
+}
+
+.manga-card:nth-child(even) {
+  animation: slideInFromRight 0.6s ease-out;
+}
+
+/* Interactive Hover Effects */
+.manga-card img {
+  transition: all 0.3s ease;
+}
+
+.manga-card:hover img {
+  transform: scale(1.1);
+  filter: brightness(1.1) contrast(1.1);
+}
+
+/* Enhanced Button Animations */
+.button, #randomMangaBtn {
+  position: relative;
+  overflow: hidden;
+}
+
+.button::before, #randomMangaBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.button:hover::before, #randomMangaBtn:hover::before {
+  left: 100%;
+}
+
+/* Animated Stats */
+.stat-item {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.stat-item:nth-child(1) { animation-delay: 0.1s; }
+.stat-item:nth-child(2) { animation-delay: 0.2s; }
+.stat-item:nth-child(3) { animation-delay: 0.3s; }
+
+/* Enhanced Navigation */
+nav {
+  position: relative;
+  overflow: hidden;
+}
+
+nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 4s infinite;
+}
+
+/* Animated Logo */
+.logo {
+  position: relative;
+  overflow: hidden;
+}
+
+.logo::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 3s infinite;
+}
+
+/* Enhanced Search Box */
+.search-box input {
+  position: relative;
+  overflow: hidden;
+}
+
+.search-box input::placeholder {
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus::placeholder {
+  opacity: 0.5;
+  transform: translateX(10px);
+}
+
+/* Animated Category Badges */
+.category-badge {
+  animation: bounce 2s infinite;
+  animation-delay: calc(var(--animation-order, 0) * 0.1s);
+}
+
+/* Enhanced Status Labels */
+.status-label {
+  position: relative;
+  overflow: hidden;
+}
+
+.status-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.status-label:hover::before {
+  left: 100%;
+}
+
+/* Floating Elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.floating-actions {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Enhanced Theme Transitions */
+body {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Interactive Loading States */
+.loading {
+  animation: spin 1s linear infinite;
+}
+
+/* Enhanced Toast Notifications */
+.toast {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.toast.show {
+  animation: bounce 0.5s ease-out;
+}
+
+/* Responsive Animations */
+@media (max-width: 768px) {
+  .manga-card {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  .floating-actions {
+    animation: none;
+  }
+}
+
+/* Enhanced Focus States */
+.manga-card:focus,
+.button:focus,
+.filter-pill:focus {
+  outline: 2px solid #ff7eb3;
+  outline-offset: 2px;
+}
+
+/* Animated Background Patterns */
+.banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(255, 126, 179, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 117, 140, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 126, 179, 0.05) 0%, transparent 50%);
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Enhanced Grid Layout */
+.manga-grid {
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Interactive Scroll Effects */
+.manga-card {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.manga-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Enhanced Random Manga Highlight */
+.highlight-manga {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Animated Category Filters */
+.filter-pill {
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-pill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.filter-pill:hover::before {
+  left: 100%;
+}
+
+/* Enhanced Stats Counter */
+.stat-number {
+  animation: fadeIn 1s ease-out;
+}
+
+/* Interactive Particle Effects */
+.particle {
+  transition: all 0.3s ease;
+}
+
+.particle:hover {
+  transform: scale(2);
+  opacity: 0.8;
+}
+
+/* Enhanced Banner Content */
+.banner-content {
+  animation: fadeIn 1s ease-out;
+}
+
+.banner-content h1 {
+  animation: slideInFromLeft 1s ease-out;
+}
+
+.banner-content p {
+  animation: slideInFromRight 1s ease-out;
+  animation-delay: 0.2s;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 480px) {
+  .stats-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .category-filters {
+    justify-content: center;
+  }
+  
+  .floating-actions {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .floating-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
+
+/* Enhanced Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Ripple Effect Animation */
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Confetti Fall Animation */
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Enhanced Manga Card Click Effect */
+.manga-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.manga-card:active {
+  transform: scale(0.98);
+}
+
+/* Enhanced Focus States for Better Accessibility */
+.manga-card:focus-visible,
+.button:focus-visible,
+.filter-pill:focus-visible {
+  outline: 2px solid #ff7eb3;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 126, 179, 0.2);
+}
+
+/* Enhanced Loading States */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 126, 179, 0.3);
+  border-radius: 50%;
+  border-top-color: #ff7eb3;
+  animation: spin 1s ease-in-out infinite;
+}
+
+/* Enhanced Toast Animations */
+.toast {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.toast.show {
+  animation: bounce 0.5s ease-out;
+}
+
+/* Enhanced Particle Interactions */
+.particle {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.particle:hover {
+  transform: scale(2);
+  opacity: 0.8;
+  filter: brightness(1.2);
+}
+
+/* Enhanced External Links */
+.external-links a {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.external-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #ff7eb3;
+  transition: width 0.3s ease;
+}
+
+.external-links a:hover::after {
+  width: 100%;
+}
+
+/* Enhanced Stats Counter Animation */
+.stat-number {
+  animation: fadeIn 1s ease-out;
+  display: inline-block;
+}
+
+/* Enhanced Category Badge Animation */
+.category-badge {
+  animation: bounce 2s infinite;
+  animation-delay: calc(var(--animation-order, 0) * 0.1s);
+}
+
+/* Enhanced Status Label Animation */
+.status-label {
+  position: relative;
+  overflow: hidden;
+}
+
+.status-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.status-label:hover::before {
+  left: 100%;
+}
+
+/* Enhanced Floating Button Animations */
+.floating-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.floating-btn:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+/* Enhanced Search Box Focus */
+.search-box input:focus {
+  border-color: #ff7eb3;
+  box-shadow: 0 0 20px rgba(255, 126, 179, 0.3);
+  transform: scale(1.02);
+}
+
+/* Enhanced Banner Shimmer Effect */
+.banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 126, 179, 0.1), transparent);
+  animation: shimmer 3s infinite;
+}
+
+/* Enhanced Navigation Logo */
+.logo {
+  position: relative;
+  overflow: hidden;
+}
+
+.logo::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 3s infinite;
+}
+
+/* Enhanced Filter Pills */
+.filter-pill {
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-pill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.filter-pill:hover::before {
+  left: 100%;
+}
+
+/* Enhanced Scroll Progress Bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #ff7eb3, #ff758c);
+  z-index: 10000;
+  transition: width 0.1s ease;
+  box-shadow: 0 0 10px rgba(255, 126, 179, 0.5);
+}
+
+/* Enhanced Random Manga Highlight */
+.highlight-manga {
+  animation: glow 2s ease-in-out infinite;
+  border: 3px solid #ff7eb3 !important;
+  box-shadow: 0 0 18px 4px #ff7eb3cc !important;
+}
+
+/* Enhanced Stats Container */
+.stats-container {
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Enhanced Category Filters */
+.category-filters {
+  animation: slideInFromLeft 0.6s ease-out;
+}
+
+/* Enhanced Banner Content */
+.banner-content {
+  animation: fadeIn 1s ease-out;
+}
+
+.banner-content h1 {
+  animation: slideInFromLeft 1s ease-out;
+}
+
+.banner-content p {
+  animation: slideInFromRight 1s ease-out;
+  animation-delay: 0.2s;
+}
+
+/* Enhanced Manga Grid */
+.manga-grid {
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Enhanced Theme Transitions */
+body {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced Interactive Elements */
+.manga-card,
+.button,
+.filter-pill,
+.floating-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced Loading States */
+.loading {
+  animation: spin 1s linear infinite;
+}
+
+/* Enhanced Toast Notifications */
+.toast {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.toast.show {
+  animation: bounce 0.5s ease-out;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 768px) {
+  .manga-card {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  .floating-actions {
+    animation: none;
+  }
+  
+  .stats-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-filters {
+    justify-content: center;
+  }
+  
+  .floating-actions {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .floating-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
+
 body {
     font-family: 'Noto Sans JP', Arial, sans-serif;
     background: #111;
