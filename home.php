@@ -249,7 +249,7 @@
   </div>
   <div class="nav-actions">
     <button id="darkModeToggle" title="Toggle dark mode">🌙</button>
-    <button id="settingsBtn" title="Settings" type="button">⚙️</button>
+    
   </div>
   <div class="settings-tab-container" id="settingsTabContainer" style="display:none;">
     <div class="menu">
