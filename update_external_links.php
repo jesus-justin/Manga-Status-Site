@@ -6,9 +6,9 @@ function getExternalMangaLinks($title) {
   $sites = [
     ["name" => "WeebCentral", "url" => "https://weebcentral.com/search?query=$encoded"],
     ["name" => "MangaDex", "url" => "https://mangadex.org/search?title=$encoded"],
-    ["name" => "ToonClash", "url" => "https://toonclash.com/search?query=$encoded"],
-    ["name" => "MangaSee", "url" => "https://mangasee123.com/search/?keyword=$encoded"],
-    ["name" => "MangaReader", "url" => "https://www.mangareader.net/search/?w=$encoded"]
+    ["name" => "MangaReader.to", "url" => "https://mangareader.to/search?keyword=$encoded"],
+    ["name" => "Manga Plus", "url" => "https://mangaplus.shueisha.co.jp/updates"],
+    ["name" => "Viz", "url" => "https://www.viz.com/search/$encoded/all"]
   ];
   return json_encode($sites);
 }
