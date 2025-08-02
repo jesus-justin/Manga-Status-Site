@@ -102,6 +102,16 @@
       <option value="Action">Action</option>
       <option value="Romance">Romance</option>
       <option value="Horror">Horror</option>
+      <option value="Drama">Drama</option>
+  <option value="Tragedy">Tragedy</option>
+  <option value="Isekai">Isekai</option>
+  <option value="Adventure">Adventure</option>
+  <option value="Fantasy">Fantasy</option>
+  <option value="Magic">Magic</option>
+  <option value="Mystery">Mystery</option>
+  <option value="Gore">Gore</option>
+  <option value="Mecha">Mecha</option>
+  <option value="Comedy">Comedy</option>
     </select>
     <input type="url" name="read_link" placeholder="Link to read manga (optional)">
     <div id="chapterField" style="display:none;">
