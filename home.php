@@ -38,6 +38,40 @@
     #randomMangaResult {
       margin-top: 10px;
     }
+
+    /* Pagination styles */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+
+    .pagination-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      margin: 0 4px;
+      background-color: #444;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .pagination-btn:hover {
+      background-color: #666;
+    }
+
+    .pagination-btn.current {
+      background-color: #007bff;
+      cursor: default;
+    }
+
+    .pagination-ellipsis {
+      padding: 8px 4px;
+      color: #ccc;
+    }
   </style>
   <script>
     function toggleChapterField() {
@@ -272,8 +306,24 @@
 
 <div class="manga-grid">
 <?php
-$sql = "SELECT * FROM manga ORDER BY id DESC";
+// Pagination variables
+$manga_per_page = 10;
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$current_page = max(1, $current_page); // Ensure page is at least 1
+
+// Get total number of manga
+$count_sql = "SELECT COUNT(*) as total FROM manga";
+$count_result = $conn->query($count_sql);
+$total_manga = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_manga / $manga_per_page);
+
+// Calculate offset for SQL query
+$offset = ($current_page - 1) * $manga_per_page;
+
+// Fetch manga for current page
+$sql = "SELECT * FROM manga ORDER BY id DESC LIMIT $manga_per_page OFFSET $offset";
 $result = $conn->query($sql);
+
 if ($result->num_rows > 0):
   while ($row = $result->fetch_assoc()):
     $title = strtolower(trim($row['title']));
@@ -310,7 +360,55 @@ if ($result->num_rows > 0):
   </div>
 <?php endwhile; else: ?>
   <p style="color:#eee; text-align:center;">No manga added yet.</p>
-<?php endif;
+<?php endif; ?>
+</div>
+
+<!-- Pagination Controls -->
+<?php if ($total_pages > 1): ?>
+<div class="pagination">
+  <!-- Previous button -->
+  <?php if ($current_page > 1): ?>
+    <a href="?page=<?= $current_page - 1 ?>" class="pagination-btn">Previous</a>
+  <?php endif; ?>
+
+  <!-- Page numbers -->
+  <?php
+  $start_page = max(1, $current_page - 2);
+  $end_page = min($total_pages, $current_page + 2);
+  
+  // Show first page if not in range
+  if ($start_page > 1): ?>
+    <a href="?page=1" class="pagination-btn">1</a>
+    <?php if ($start_page > 2): ?>
+      <span class="pagination-ellipsis">...</span>
+    <?php endif; ?>
+  <?php endif; ?>
+  
+  <!-- Page number buttons -->
+  <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+    <?php if ($i == $current_page): ?>
+      <span class="pagination-btn current"><?= $i ?></span>
+    <?php else: ?>
+      <a href="?page=<?= $i ?>" class="pagination-btn"><?= $i ?></a>
+    <?php endif; ?>
+  <?php endfor; ?>
+  
+  <!-- Show last page if not in range -->
+  <?php if ($end_page < $total_pages): ?>
+    <?php if ($end_page < $total_pages - 1): ?>
+      <span class="pagination-ellipsis">...</span>
+    <?php endif; ?>
+    <a href="?page=<?= $total_pages ?>" class="pagination-btn"><?= $total_pages ?></a>
+  <?php endif; ?>
+
+  <!-- Next button -->
+  <?php if ($current_page < $total_pages): ?>
+    <a href="?page=<?= $current_page + 1 ?>" class="pagination-btn">Next</a>
+  <?php endif; ?>
+</div>
+<?php endif; ?>
+
+<?php
 $conn->close();
 ?>
 </div>
