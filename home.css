@@ -23,12 +23,41 @@
   50% { transform: translateY(-20px) rotate(180deg); }
 }
 
-/* Interactive Manga Cards */
+/* Manga Grid - Center the manga cards */
+.manga-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Individual Manga Card Styling */
 .manga-card {
+  width: 200px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.manga-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.manga-card h3 {
+  margin-top: 10px;
+  font-size: 1.1em;
+  color: #fff;
 }
 
 .manga-card::before {
@@ -247,4 +276,4 @@
   background: linear-gradient(90deg, #ff7eb3, #ff758c);
   z-index: 10000;
   transition: width 0.1s ease;
-} 
+}
