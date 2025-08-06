@@ -304,7 +304,8 @@
 
 <h2 class="latest-heading">Latest Manga Updates</h2>
 
-<div class="manga-grid">
+<div class="manga-container">
+  <div class="manga-grid">
 <?php
 // Pagination variables
 $manga_per_page = 10;
@@ -361,11 +362,11 @@ if ($result->num_rows > 0):
 <?php endwhile; else: ?>
   <p style="color:#eee; text-align:center;">No manga added yet.</p>
 <?php endif; ?>
-</div>
+  </div>
 
-<!-- Pagination Controls -->
-<?php if ($total_pages > 1): ?>
-<div class="pagination">
+  <!-- Pagination Controls -->
+  <?php if ($total_pages > 1): ?>
+  <div class="pagination">
   <!-- Previous button -->
   <?php if ($current_page > 1): ?>
     <a href="?page=<?= $current_page - 1 ?>" class="pagination-btn">Previous</a>
@@ -405,13 +406,13 @@ if ($result->num_rows > 0):
   <?php if ($current_page < $total_pages): ?>
     <a href="?page=<?= $current_page + 1 ?>" class="pagination-btn">Next</a>
   <?php endif; ?>
+  </div>
+  <?php endif; ?>
 </div>
-<?php endif; ?>
 
 <?php
 $conn->close();
 ?>
-</div>
 
 <script>
 (function () {
