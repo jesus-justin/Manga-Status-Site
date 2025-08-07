@@ -63,7 +63,8 @@ if ($selected_category) {
 
   if ($manga_result && $manga_result->num_rows > 0):
 ?>
-  <div class="manga-grid">
+  <div class="manga-container">
+    <div class="manga-grid">
   <?php while ($manga = $manga_result->fetch_assoc()):
       $title = strtolower(trim($manga['title']));
       $filename = str_replace(' ', '_', $title) . '.jpeg';
@@ -98,12 +99,15 @@ if ($selected_category) {
       </div>
     </div>
   <?php endwhile; ?>
+    </div>
   </div>
 <?php else: ?>
-  <p style="color:#eee; text-align:center; margin-top: 2rem;">No manga found in this category.</p>
+  <div class="manga-container">
+    <p style="color:#eee; text-align:center; margin-top: 2rem;">No manga found in this category.</p>
+  </div>
 <?php endif;
 } else {
-    echo '<p style="color:#eee; text-align:center; margin-top: 2rem;">Please select a category above to see the manga.</p>';
+    echo '<div class="manga-container"><p style="color:#eee; text-align:center; margin-top: 2rem;">Please select a category above to see the manga.</p></div>';
 }
 
 $conn->close();
