@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($conn->query($sql) === TRUE) {
     // Try to fetch and save the manga cover
     fetchMangaCover($title);
-    header("Location: home.php");
+    header("Location: home.php?success=1");
     exit();
   } else {
     echo "Error: " . $conn->error;

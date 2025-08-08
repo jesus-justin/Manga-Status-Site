@@ -6,6 +6,7 @@
   <title>Manga Library</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     .scroll-progress {
       position: fixed;
@@ -100,6 +101,23 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+      // Check for success parameter and show SweetAlert
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('success') === '1') {
+        Swal.fire({
+          title: 'Manga Added!',
+          text: 'Your manga has been successfully added to the library.',
+          icon: 'success',
+          confirmButtonText: 'Great!',
+          confirmButtonColor: '#007bff',
+          timer: 3000,
+          timerProgressBar: true
+        });
+        
+        // Clean the URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
       function createParticles() {
         const container = document.createElement('div');
         container.className = 'particles-container';
