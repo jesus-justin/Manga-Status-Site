@@ -194,6 +194,10 @@
           <label for="comedy">Comedy</label>
         </div>
         <div class="genre-item">
+          <input type="checkbox" id="ecchi" name="category[]" value="ecchi">
+          <label for="ecchi">Ecchi</label>
+        </div>
+        <div class="genre-item">
           <input type="checkbox" id="school" name="category[]" value="School">
           <label for="school">School</label>
         </div>
