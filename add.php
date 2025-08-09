@@ -54,13 +54,13 @@ function getExternalMangaLinks($title) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $title = $conn->real_escape_string($_POST['title']);
   $status = $conn->real_escape_string($_POST['status']);
-  $category = trim($_POST['category']);
+  
+  // Handle multiple genres - convert array to comma-separated string
+  $categories = isset($_POST['category']) ? $_POST['category'] : [];
+  $category = !empty($categories) ? implode(', ', $categories) : 'Uncategorized';
+  
   $read_link = $conn->real_escape_string(trim($_POST['read_link']));
   $last_chapter = $conn->real_escape_string(trim($_POST['last_chapter']));
-
-  if ($category === '') {
-    $category = 'Uncategorized';
-  }
 
   $external_links = $conn->real_escape_string(getExternalMangaLinks($title));
 

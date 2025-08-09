@@ -10,13 +10,13 @@ if (!$id) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $status = $conn->real_escape_string($_POST['status']);
-  $category = trim($_POST['category']);
+  
+  // Handle multiple genres - convert array to comma-separated string
+  $categories = isset($_POST['category']) ? $_POST['category'] : [];
+  $category = !empty($categories) ? implode(', ', $categories) : 'Uncategorized';
+  
   $read_link = $conn->real_escape_string(trim($_POST['read_link']));
   $last_chapter = $conn->real_escape_string(trim($_POST['last_chapter']));
-
-  if ($category === '') {
-    $category = 'Uncategorized';
-  }
 
   $sql = "UPDATE manga 
           SET status='$status', 
@@ -36,6 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $sql = "SELECT * FROM manga WHERE id=$id";
 $result = $conn->query($sql);
 $manga = $result->fetch_assoc();
+
+// Split categories into array for checkbox handling
+$selected_categories = explode(', ', $manga['category']);
 ?>
 
 <!DOCTYPE html>
@@ -44,6 +47,34 @@ $manga = $result->fetch_assoc();
   <meta charset="UTF-8" />
   <title>Edit Manga</title>
   <link rel="stylesheet" href="edit.css">
+  <style>
+    .genre-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin: 10px 0;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .genre-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .genre-item input[type="checkbox"] {
+      margin: 0;
+      cursor: pointer;
+    }
+    
+    .genre-item label {
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
   <script>
     function toggleChapterField() {
       const status = document.querySelector('select[name="status"]').value;
@@ -86,16 +117,19 @@ $manga = $result->fetch_assoc();
       </div>
 
       <div class="form-group">
-        <label>Category:</label>
-        <select name="category">
+        <label>Genres:</label>
+        <div class="genre-container">
           <?php
-          $categories = ['Uncategorized', 'Action', 'Romance', 'Horror'];
-          foreach ($categories as $cat) {
-            $selected = ($cat == $manga['category']) ? 'selected' : '';
-            echo "<option value=\"$cat\" $selected>$cat</option>";
+          $available_categories = ['Action', 'Romance', 'Horror', 'Drama', 'Tragedy', 'Isekai', 'Adventure', 'Fantasy', 'Magic', 'Mystery', 'Gore', 'Mecha', 'Comedy', 'School', 'Slice of Life', 'Supernatural', 'Sci-Fi'];
+          foreach ($available_categories as $cat) {
+            $checked = in_array($cat, $selected_categories) ? 'checked' : '';
+            echo "<div class='genre-item'>
+                    <input type='checkbox' id='cat_$cat' name='category[]' value='$cat' $checked>
+                    <label for='cat_$cat'>$cat</label>
+                  </div>";
           }
           ?>
-        </select>
+        </div>
       </div>
 
       <div class="form-group">
@@ -105,7 +139,7 @@ $manga = $result->fetch_assoc();
 
       <div class="form-group" id="chapterField" style="display: <?php echo $manga['status'] === 'currently reading' ? 'block' : 'none'; ?>;">
         <label>Last Chapter:</label>
-        <input type="text" name="last_chapter" value="<?php echo htmlspecialchars($manga['last_chapter']); ?>" placeholder="Last Chapter">
+        <input type="text" name="last_chapter" value="<?php echo htmlspecialchars($manga['last_chapter']); ?>" placeholder="Last Chapter Read">
       </div>
 
       <div class="form-actions">
