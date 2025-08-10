@@ -55,6 +55,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $title = $conn->real_escape_string($_POST['title']);
   $status = $conn->real_escape_string($_POST['status']);
   
+  // Check if manga already exists
+  $check_sql = "SELECT id FROM manga WHERE title = '$title'";
+  $result = $conn->query($check_sql);
+  
+  if ($result->num_rows > 0) {
+    // Manga already exists
+    echo "<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Manga Already Added</title>
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    </head>
+    <body>
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Manga already added!',
+                text: 'This manga has already been added to your list.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'home.php';
+                }
+            });
+        </script>
+    </body>
+    </html>";
+    exit();
+  }
+  
   // Handle multiple genres - convert array to comma-separated string
   $categories = isset($_POST['category']) ? $_POST['category'] : [];
   $category = !empty($categories) ? implode(', ', $categories) : 'Uncategorized';
