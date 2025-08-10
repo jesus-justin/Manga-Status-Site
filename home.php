@@ -350,13 +350,21 @@ if ($result->num_rows > 0):
     $category = htmlspecialchars($row['category']);
     $status = htmlspecialchars($row['status']);
     $statusClass = strtolower(str_replace(' ', '-', $status));
-    $categoryBadge = $category ? '<span class="category-badge">' . $category . '</span>' : '';
+    // Split categories by comma and create individual badges
+    $categories = explode(',', $category);
+    $categoryBadges = '';
+    foreach ($categories as $cat) {
+        $cat = trim($cat);
+        if (!empty($cat)) {
+            $categoryBadges .= '<span class="category-badge">' . htmlspecialchars($cat) . '</span>';
+        }
+    }
 ?>
   <div class="manga-card" data-id="<?= $row['id'] ?>" data-title="<?= strtolower($row['title']) ?>" data-category="<?= strtolower($row['category']) ?>" data-status="<?= strtolower($row['status']) ?>">
     <img src="images/<?= htmlspecialchars($filename) ?>" alt="<?= htmlspecialchars($row['title']) ?>" onerror="this.src='images/default.jpg'" loading="lazy">
     <h3><?= htmlspecialchars($row['title']) ?></h3>
     <div class="status-label <?= $statusClass ?>">Status: <?= $status ?></div>
-    <?= $categoryBadge ?>
+    <div class="category-badges"><?= $categoryBadges ?></div>
     <?php if (!empty($row['last_chapter'])): ?>
       <p>Last Chapter: <?= htmlspecialchars($row['last_chapter']) ?></p>
     <?php endif; ?>
