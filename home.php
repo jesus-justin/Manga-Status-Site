@@ -238,31 +238,38 @@
       document.body.appendChild(floatingActions);
 
       const mangaCards = document.querySelectorAll('.manga-card');
-      const categories = new Set();
+
+      // Extract unique individual genres from manga cards
+      const genresSet = new Set();
       mangaCards.forEach(card => {
-        const category = card.getAttribute('data-category');
-        if (category) categories.add(category);
+        const categoryStr = card.getAttribute('data-category');
+        if (categoryStr) {
+          const genres = categoryStr.split(',').map(g => g.trim().toLowerCase());
+          genres.forEach(g => {
+            if (g) genresSet.add(g);
+          });
+        }
       });
 
-      if (categories.size > 0) {
+      if (genresSet.size > 0) {
         const filterContainer = document.createElement('div');
         filterContainer.className = 'category-filters';
         filterContainer.innerHTML = `
-          <div class="filter-pill active" onclick="filterByCategory('all', this)">All</div>
-          ${Array.from(categories).map(cat =>
-            `<div class="filter-pill" onclick="filterByCategory('${cat}', this)">${cat}</div>`
+          <div class="filter-pill active" onclick="filterByGenre('all', this)">All</div>
+          ${Array.from(genresSet).map(genre =>
+            `<div class="filter-pill" onclick="filterByGenre('${genre}', this)">${genre.charAt(0).toUpperCase() + genre.slice(1)}</div>`
           ).join('')}
         `;
         document.querySelector('.latest-heading').after(filterContainer);
       }
 
-      window.filterByCategory = function (category, el) {
+      window.filterByGenre = function (genre, el) {
         const cards = document.querySelectorAll('.manga-card');
         document.querySelectorAll('.filter-pill').forEach(pill => pill.classList.remove('active'));
         if (el) el.classList.add('active');
         cards.forEach(card => {
-          const cardCategory = card.getAttribute('data-category');
-          card.style.display = (category === 'all' || cardCategory === category) ? '' : 'none';
+          const categoryStr = card.getAttribute('data-category').toLowerCase();
+          card.style.display = (genre === 'all' || categoryStr.includes(genre)) ? '' : 'none';
         });
       };
 
