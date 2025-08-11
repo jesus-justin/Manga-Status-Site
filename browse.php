@@ -1,11 +1,25 @@
 <?php
 include 'db.php';
 
-// Get unique categories
-$sql_categories = "SELECT DISTINCT category FROM manga WHERE category IS NOT NULL AND category != '' ORDER BY category ASC";
-$categories_result = $conn->query($sql_categories);
+// Get all genres by splitting the category field
+$sql_all = "SELECT category FROM manga WHERE category IS NOT NULL AND category != ''";
+$all_result = $conn->query($sql_all);
 
-$selected_category = $_GET['category'] ?? null;
+$all_genres = [];
+while ($row = $all_result->fetch_assoc()) {
+    $genres = array_map('trim', explode(',', $row['category']));
+    foreach ($genres as $genre) {
+        if (!empty($genre)) {
+            $all_genres[] = $genre;
+        }
+    }
+}
+
+// Get unique genres
+$unique_genres = array_unique($all_genres);
+sort($unique_genres);
+
+$selected_genre = $_GET['genre'] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -38,27 +52,28 @@ $selected_category = $_GET['category'] ?? null;
   </div>
 </nav>
 
-<h1 class="page-heading">Browse by Category</h1>
+<h1 class="page-heading">Browse by Genre</h1>
 
 <div class="category-filters">
-<?php while ($row = $categories_result->fetch_assoc()):
-  $category_name = htmlspecialchars($row['category']);
-  $is_active = ($selected_category === $row['category']) ? 'active' : '';
+<?php foreach ($unique_genres as $genre):
+  $genre_name = htmlspecialchars($genre);
+  $is_active = ($selected_genre === $genre) ? 'active' : '';
 ?>
-  <a href="browse.php?category=<?php echo urlencode($row['category']); ?>">
+  <a href="browse.php?genre=<?php echo urlencode($genre); ?>">
     <div class="filter-pill <?php echo $is_active; ?>">
-      <?php echo $category_name; ?>
+      <?php echo $genre_name; ?>
     </div>
   </a>
-<?php endwhile; ?>
+<?php endforeach; ?>
 </div>
 
 <?php
-if ($selected_category) {
-  $cat_safe = $conn->real_escape_string($selected_category);
-  echo "<h2 class='latest-heading'>Category: " . htmlspecialchars($selected_category) . "</h2>";
+if ($selected_genre) {
+  $genre_safe = $conn->real_escape_string($selected_genre);
+  echo "<h2 class='latest-heading'>Genre: " . htmlspecialchars($selected_genre) . "</h2>";
 
-  $sql_manga = "SELECT * FROM manga WHERE category='$cat_safe' ORDER BY title ASC";
+  // Find manga that contain this genre
+  $sql_manga = "SELECT * FROM manga WHERE category LIKE '%$genre_safe%' ORDER BY title ASC";
   $manga_result = $conn->query($sql_manga);
 
   if ($manga_result && $manga_result->num_rows > 0):
@@ -71,13 +86,21 @@ if ($selected_category) {
       $category = htmlspecialchars($manga['category']);
       $status = htmlspecialchars($manga['status']);
       $statusClass = strtolower(str_replace(' ', '-', $status));
-      $categoryBadge = $category ? '<span class="category-badge">' . $category . '</span>' : '';
+      
+      // Split genres for display
+      $genres = array_map('trim', explode(',', $manga['category']));
+      $genre_badges = '';
+      foreach ($genres as $g) {
+          if (!empty($g)) {
+              $genre_badges .= '<span class="category-badge">' . htmlspecialchars($g) . '</span> ';
+          }
+      }
   ?>
     <div class="manga-card" data-id="<?= $manga['id'] ?>" data-title="<?= strtolower($manga['title']) ?>" data-category="<?= strtolower($manga['category']) ?>" data-status="<?= strtolower($manga['status']) ?>">
       <img src="images/<?= htmlspecialchars($filename) ?>" alt="<?= htmlspecialchars($manga['title']) ?>" onerror="this.src='images/default.jpg'" loading="lazy">
       <h3><?php echo htmlspecialchars($manga['title']); ?></h3>
       <div class="status-label <?= $statusClass ?>">Status: <?= $status ?></div>
-      <?= $categoryBadge ?>
+      <div class="genre-badges"><?= $genre_badges ?></div>
       <?php if (!empty($manga['last_chapter'])): ?>
         <p>Last Chapter: <?= htmlspecialchars($manga['last_chapter']) ?></p>
       <?php endif; ?>
@@ -103,11 +126,11 @@ if ($selected_category) {
   </div>
 <?php else: ?>
   <div class="manga-container">
-    <p style="color:#eee; text-align:center; margin-top: 2rem;">No manga found in this category.</p>
+    <p style="color:#eee; text-align:center; margin-top: 2rem;">No manga found in this genre.</p>
   </div>
 <?php endif;
 } else {
-    echo '<div class="manga-container"><p style="color:#eee; text-align:center; margin-top: 2rem;">Please select a category above to see the manga.</p></div>';
+    echo '<div class="manga-container"><p style="color:#eee; text-align:center; margin-top: 2rem;">Please select a genre above to see the manga.</p></div>';
 }
 
 $conn->close();
