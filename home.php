@@ -468,5 +468,69 @@ $conn->close();
 })();
 </script>
 
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h4>MangaLibrary</h4>
+      <p>Your personal manga collection manager</p>
+    </div>
+    <div class="footer-section">
+      <h4>Legal</h4>
+      <p>All manga content and images are property of their respective owners. This site is for personal collection management only.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>For issues or suggestions, contact the site administrator</p>
+      <p>Contact: mjesusjustin@gmail.com</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 MangaLibrary. All Rights Reserved. | Copyrights @2025 Manga Status Site</p>
+  </div>
+</footer>
+
+<style>
+.site-footer {
+  background: #1a1a1a;
+  color: #ccc;
+  padding: 40px 20px 20px;
+  margin-top: 60px;
+  border-top: 1px solid #333;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-section h4 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.footer-section p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+</style>
 </body>
 </html>
