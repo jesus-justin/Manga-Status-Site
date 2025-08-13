@@ -1,4 +1,14 @@
-<?php include 'db.php'; ?>
+<?php
+session_start();
+require_once 'auth.php';
+require_once 'db.php';
+
+$auth = new Auth($conn);
+if (!$auth->isLoggedIn()) {
+    header('Location: login_fixed.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
