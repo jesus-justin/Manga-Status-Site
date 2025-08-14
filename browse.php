@@ -1,4 +1,14 @@
 <?php
+// Start session and check authentication
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    // Redirect to login page with return URL
+    header("Location: login.php?redirect=browse.php");
+    exit();
+}
+
 include 'db.php';
 
 // Get all genres by splitting the category field
