@@ -1,4 +1,14 @@
 <?php
+// Start session and check authentication
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    // Redirect to login page with return URL
+    header("Location: login_fixed.php?redirect=add.php");
+    exit();
+}
+
 include 'db.php';
 
 function fetchMangaCover($title) {
@@ -44,9 +54,9 @@ function getExternalMangaLinks($title) {
   $sites = [
     ["name" => "WeebCentral", "url" => "https://weebcentral.com/search?query=$encoded"],
     ["name" => "MangaDex", "url" => "https://mangadex.org/search?title=$encoded"],
-    ["name" => "ToonClash", "url" => "https://toonclash.com/search?query=$encoded"],
-    ["name" => "MangaSee", "url" => "https://mangasee123.com/search/?keyword=$encoded"],
-    ["name" => "MangaReader", "url" => "https://www.mangareader.net/search/?w=$encoded"]
+    ["name" => "MangaReader.to", "url" => "https://mangareader.to/search?keyword=$encoded"],
+    ["name" => "Manga Plus", "url" => "https://mangaplus.shueisha.co.jp/updates"],
+    ["name" => "Viz", "url" => "https://www.viz.com/search/$encoded/all"]
   ];
   return json_encode($sites);
 }
@@ -54,13 +64,44 @@ function getExternalMangaLinks($title) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $title = $conn->real_escape_string($_POST['title']);
   $status = $conn->real_escape_string($_POST['status']);
-  $category = trim($_POST['category']);
+  
+  // Check if manga already exists
+  $check_sql = "SELECT id FROM manga WHERE title = '$title'";
+  $result = $conn->query($check_sql);
+  
+  if ($result->num_rows > 0) {
+    // Manga already exists
+    echo "<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Manga Already Added</title>
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    </head>
+    <body>
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Manga already added!',
+                text: 'This manga has already been added to your list.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'home.php';
+                }
+            });
+        </script>
+    </body>
+    </html>";
+    exit();
+  }
+  
+  // Handle multiple genres - convert array to comma-separated string
+  $categories = isset($_POST['category']) ? $_POST['category'] : [];
+  $category = !empty($categories) ? implode(', ', $categories) : 'Uncategorized';
+  
   $read_link = $conn->real_escape_string(trim($_POST['read_link']));
   $last_chapter = $conn->real_escape_string(trim($_POST['last_chapter']));
-
-  if ($category === '') {
-    $category = 'Uncategorized';
-  }
 
   $external_links = $conn->real_escape_string(getExternalMangaLinks($title));
 
@@ -74,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($conn->query($sql) === TRUE) {
     // Try to fetch and save the manga cover
     fetchMangaCover($title);
-    header("Location: home.php");
+    header("Location: home.php?success=1");
     exit();
   } else {
     echo "Error: " . $conn->error;
