@@ -8,7 +8,7 @@ $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $auth->register($_POST['username'], $_POST['email'], $_POST['password']);
     if ($result['success']) {
-        header('Location: login.php?registered=1');
+        header('Location: login_fixed.php?registered=1');
         exit();
     } else {
         $message = $result['message'];
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
         
         <div class="auth-links">
-            <p>Already have an account? <a href="login.php">Login here</a></p>
+            <p>Already have an account? <a href="login_fixed.php">Login here</a></p>
         </div>
     </div>
 </body>
