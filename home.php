@@ -320,7 +320,10 @@ if (!$auth->isLoggedIn()) {
   </div>
   <div class="nav-actions">
     <button id="darkModeToggle" title="Toggle dark mode">🌙</button>
-    
+    <div class="auth-buttons-container">
+      <a href="login_fixed.php" class="auth-btn" title="Login" style="display: block; margin-bottom: 8px; padding: 10px; font-size: 20px;">🔐</a>
+      <a href="register.php" class="auth-btn" title="Register" style="display: block; padding: 10px; font-size: 20px;">👤</a>
+    </div>
   </div>
   <div class="settings-tab-container" id="settingsTabContainer" style="display:none;">
     <div class="menu">
