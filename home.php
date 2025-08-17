@@ -314,6 +314,7 @@ if (!$auth->isLoggedIn()) {
   <ul>
     <li><a href="home.php">Home</a></li>
     <li><a href="browse.php">Browse</a></li>
+    <li><a href="user_progress.php">My Progress</a></li>
   </ul>
   <div class="search-box">
     <input type="text" id="searchInput" placeholder="Search manga..." aria-label="Search manga">
