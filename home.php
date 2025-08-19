@@ -304,6 +304,27 @@ if (!$auth->isLoggedIn()) {
       document.querySelector('.banner').after(statsContainer);
     });
   </script>
+  
+  <script>
+    function confirmLogout() {
+      Swal.fire({
+        title: 'Logout Confirmation',
+        text: 'Are you sure you want to logout?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout',
+        cancelButtonText: 'No, stay logged in'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // User clicked "Yes" - proceed with logout
+          window.location.href = 'logout.php?confirmed=true';
+        }
+        // If user clicks "No" or closes the dialog, nothing happens
+      });
+    }
+  </script>
 </head>
 <body>
 
@@ -324,7 +345,7 @@ if (!$auth->isLoggedIn()) {
     <div class="auth-buttons-container">
       <a href="login_fixed.php" class="auth-btn" title="Login" style="display: block; margin-bottom: 8px; padding: 10px; font-size: 20px;">🔐</a>
       <a href="register.php" class="auth-btn" title="Register" style="display: block; margin-bottom: 8px; padding: 10px; font-size: 20px;">👤</a>
-      <a href="logout.php" class="auth-btn" title="Logout" style="display: block; padding: 10px; font-size: 20px;">🚪</a>
+      <a href="#" onclick="confirmLogout()" class="auth-btn" title="Logout" style="display: block; padding: 10px; font-size: 20px;">🚪</a>
     </div>
   </div>
   <div class="settings-tab-container" id="settingsTabContainer" style="display:none;">
