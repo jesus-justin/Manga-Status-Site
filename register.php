@@ -66,11 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         @keyframes fall {
             0% {
-                transform: translateY(-100vh) rotate(0deg);
+                transform: translateY(-120vh) rotate(0deg);
                 opacity: 1;
             }
             100% {
-                transform: translateY(100vh) rotate(360deg);
+                transform: translateY(120vh) rotate(360deg);
                 opacity: 0;
             }
         }
