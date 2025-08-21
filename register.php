@@ -25,73 +25,198 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="home.css">
     <style>
-        .auth-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff7b7b 0%, #ff6b6b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
         .auth-container h2 {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             color: #fff;
+            font-size: 2.2em;
+            font-weight: 300;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
-        
+
+        .auth-form {
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
         .auth-form input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #444;
-            border-radius: 5px;
+            padding: 15px 20px;
             background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
             color: #fff;
             font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
         }
-        
+
+        .auth-form input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
         .auth-form input::placeholder {
-            color: #ccc;
+            color: rgba(255, 255, 255, 0.7);
         }
-        
+
         .auth-form button {
             width: 100%;
-            padding: 12px;
-            background: #007bff;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff7b7b, #ff6b6b);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        
+
         .auth-form button:hover {
-            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
-        
+
+        .auth-form button:active {
+            transform: translateY(0);
+        }
+
         .auth-links {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
         }
-        
+
         .auth-links a {
-            color: #007bff;
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
-        
+
         .auth-links a:hover {
+            color: #fff;
             text-decoration: underline;
         }
-        
+
         .error-message {
-            color: #ff6b6b;
             text-align: center;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(255, 107, 107, 0.1);
-            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 50px;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                margin: 20px;
+                padding: 40px 30px;
+            }
+            
+            .auth-container h2 {
+                font-size: 1.8em;
+            }
         }
     </style>
 </head>
