@@ -62,40 +62,22 @@ class Auth {
         // Hash password
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
         
-        // Generate verification token
-        $verification_token = bin2hex(random_bytes(32));
-        
-        // Insert user
-        $stmt = $this->conn->prepare("INSERT INTO users (username, email, password_hash, verification_token) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $username, $email, $password_hash, $verification_token);
+        // Insert user (simplified without verification token)
+        $stmt = $this->conn->prepare("INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $username, $email, $password_hash);
         
         if ($stmt->execute()) {
             $user_id = $this->conn->insert_id;
             
-            // Set default preferences
-            $stmt = $this->conn->prepare("INSERT INTO user_preferences (user_id) VALUES (?)");
-            $stmt->bind_param("i", $user_id);
-            $stmt->execute();
-            
-            return ['success' => true, 'message' => 'Registration successful. Please check your email to verify your account.'];
+            return ['success' => true, 'message' => 'Registration successful. You can now login.'];
         } else {
             return ['success' => false, 'message' => 'Registration failed'];
         }
     }
     
     public function login($username, $password) {
-        // Check rate limiting
-        $ip = $_SERVER['REMOTE_ADDR'];
-        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM login_attempts WHERE ip_address = ? AND attempt_time > DATE_SUB(NOW(), INTERVAL 15 MINUTE)");
-        $stmt->bind_param("s", $ip);
-        $stmt->execute();
-        $attempts = $stmt->get_result()->fetch_row()[0];
-        
-        if ($attempts >= 5) {
-            return ['success' => false, 'message' => 'Too many login attempts. Please try again later.'];
-        }
-        
-        $stmt = $this->conn->prepare("SELECT id, username, password_hash, email_verified FROM users WHERE username = ? OR email = ?");
+        // Simplified login without rate limiting and email verification
+        $stmt = $this->conn->prepare("SELECT id, username, password_hash FROM users WHERE username = ? OR email = ?");
         $stmt->bind_param("ss", $username, $username);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -103,18 +85,9 @@ class Auth {
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
             if (password_verify($password, $user['password_hash'])) {
-                if (!$user['email_verified']) {
-                    return ['success' => false, 'message' => 'Please verify your email address before logging in'];
-                }
-                
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['logged_in'] = true;
-                
-                // Update last login
-                $stmt = $this->conn->prepare("UPDATE users SET updated_at = NOW() WHERE id = ?");
-                $stmt->bind_param("i", $user['id']);
-                $stmt->execute();
                 
                 return ['success' => true, 'message' => 'Login successful'];
             }
