@@ -62,12 +62,15 @@ function getExternalMangaLinks($title) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $title = $conn->real_escape_string($_POST['title']);
-  $status = $conn->real_escape_string($_POST['status']);
+  $title = trim($_POST['title']);
+  $status = $_POST['status'];
   
-  // Check if manga already exists
-  $check_sql = "SELECT id FROM manga WHERE title = '$title'";
-  $result = $conn->query($check_sql);
+  // Check if manga already exists using prepared statement
+  $check_sql = "SELECT id FROM manga WHERE title = ?";
+  $stmt = $conn->prepare($check_sql);
+  $stmt->bind_param("s", $title);
+  $stmt->execute();
+  $result = $stmt->get_result();
   
   if ($result->num_rows > 0) {
     // Manga already exists
@@ -100,25 +103,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $categories = isset($_POST['category']) ? $_POST['category'] : [];
   $category = !empty($categories) ? implode(', ', $categories) : 'Uncategorized';
   
-  $read_link = $conn->real_escape_string(trim($_POST['read_link']));
-  $last_chapter = $conn->real_escape_string(trim($_POST['last_chapter']));
+  $read_link = trim($_POST['read_link']);
+  $last_chapter = trim($_POST['last_chapter']);
 
-  $external_links = $conn->real_escape_string(getExternalMangaLinks($title));
+  $external_links = getExternalMangaLinks($title);
 
+  // Use prepared statement for INSERT query
   $sql = "INSERT INTO manga (title, status, category, read_link, last_chapter, external_links)
-          VALUES ('$title', '$status', '$category', 
-          " . ($read_link !== '' ? "'$read_link'" : "NULL") . ",
-          " . ($status === 'currently reading' && $last_chapter !== '' ? "'$last_chapter'" : "NULL") . ",
-          '$external_links'
-          )";
+          VALUES (?, ?, ?, ?, ?, ?)";
+  
+  $stmt = $conn->prepare($sql);
+  
+  // Handle NULL values for optional fields
+  $read_link_value = ($read_link !== '') ? $read_link : NULL;
+  $last_chapter_value = ($status === 'currently reading' && $last_chapter !== '') ? $last_chapter : NULL;
+  
+  $stmt->bind_param("ssssss", $title, $status, $category, $read_link_value, $last_chapter_value, $external_links);
 
-  if ($conn->query($sql) === TRUE) {
+  if ($stmt->execute()) {
     // Try to fetch and save the manga cover
     fetchMangaCover($title);
     header("Location: home.php?success=1");
     exit();
   } else {
-    echo "Error: " . $conn->error;
+    echo "Error: " . $stmt->error;
   }
 }
 ?>
