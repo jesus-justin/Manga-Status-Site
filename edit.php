@@ -9,32 +9,45 @@ if (!$id) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $status = $conn->real_escape_string($_POST['status']);
+  $status = $_POST['status'];
   
   // Handle multiple genres - convert array to comma-separated string
   $categories = isset($_POST['category']) ? $_POST['category'] : [];
   $category = !empty($categories) ? implode(', ', $categories) : 'Uncategorized';
   
-  $read_link = $conn->real_escape_string(trim($_POST['read_link']));
-  $last_chapter = $conn->real_escape_string(trim($_POST['last_chapter']));
+  $read_link = trim($_POST['read_link']);
+  $last_chapter = trim($_POST['last_chapter']);
 
+  // Use prepared statement for UPDATE query
   $sql = "UPDATE manga 
-          SET status='$status', 
-              category='$category',
-              read_link=" . ($read_link !== '' ? "'$read_link'" : "NULL") . ",
-              last_chapter=" . ($status === 'currently reading' && $last_chapter !== '' ? "'$last_chapter'" : "NULL") . "
-          WHERE id=$id";
+          SET status = ?, 
+              category = ?,
+              read_link = ?,
+              last_chapter = ?
+          WHERE id = ?";
+  
+  $stmt = $conn->prepare($sql);
+  
+  // Handle NULL values for optional fields
+  $read_link_value = ($read_link !== '') ? $read_link : NULL;
+  $last_chapter_value = ($status === 'currently reading' && $last_chapter !== '') ? $last_chapter : NULL;
+  
+  $stmt->bind_param("ssssi", $status, $category, $read_link_value, $last_chapter_value, $id);
 
-  if ($conn->query($sql) === TRUE) {
+  if ($stmt->execute()) {
     header("Location: home.php");
     exit();
   } else {
-    echo "Error: " . $conn->error;
+    echo "Error: " . $stmt->error;
   }
 }
 
-$sql = "SELECT * FROM manga WHERE id=$id";
-$result = $conn->query($sql);
+// Use prepared statement for SELECT query
+$sql = "SELECT * FROM manga WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
 $manga = $result->fetch_assoc();
 
 // Split categories into array for checkbox handling

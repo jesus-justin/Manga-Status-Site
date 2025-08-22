@@ -19,9 +19,13 @@ if ($result && $result->num_rows > 0) {
   while ($row = $result->fetch_assoc()) {
     $id = $row['id'];
     $title = $row['title'];
-    $external_links = $conn->real_escape_string(getExternalMangaLinks($title));
-    $update = "UPDATE manga SET external_links='$external_links' WHERE id=$id";
-    $conn->query($update);
+    $external_links = getExternalMangaLinks($title);
+    
+    // Use prepared statement to prevent SQL injection
+    $update = "UPDATE manga SET external_links=? WHERE id=?";
+    $stmt = $conn->prepare($update);
+    $stmt->bind_param("si", $external_links, $id);
+    $stmt->execute();
   }
   echo "All manga external links updated successfully.";
 } else {

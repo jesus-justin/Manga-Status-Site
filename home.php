@@ -375,7 +375,7 @@ $manga_per_page = 10;
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $current_page = max(1, $current_page); // Ensure page is at least 1
 
-// Get total number of manga
+// Get total number of manga using prepared statement
 $count_sql = "SELECT COUNT(*) as total FROM manga";
 $count_result = $conn->query($count_sql);
 $total_manga = $count_result->fetch_assoc()['total'];
@@ -384,9 +384,12 @@ $total_pages = ceil($total_manga / $manga_per_page);
 // Calculate offset for SQL query
 $offset = ($current_page - 1) * $manga_per_page;
 
-// Fetch manga for current page
-$sql = "SELECT * FROM manga ORDER BY id DESC LIMIT $manga_per_page OFFSET $offset";
-$result = $conn->query($sql);
+// Fetch manga for current page using prepared statement
+$sql = "SELECT * FROM manga ORDER BY id DESC LIMIT ? OFFSET ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $manga_per_page, $offset);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0):
   while ($row = $result->fetch_assoc()):
