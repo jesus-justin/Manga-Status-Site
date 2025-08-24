@@ -213,6 +213,10 @@
           <input type="checkbox" id="sci-fi" name="category[]" value="Sci-Fi">
           <label for="sci-fi">Sci-Fi</label>
         </div>
+        <div class="genre-item">
+          <input type="checkbox" id="adult" name="category[]" value="Adult">
+          <label for="adult">Adult</label>
+        </div>
       </div>
     </div>
     
