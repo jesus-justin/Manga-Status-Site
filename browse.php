@@ -11,8 +11,8 @@ if (!isset($_SESSION['user_id'])) {
 
 include 'db.php';
 
-// Get all genres by splitting the category field using prepared statement
-$sql_all = "SELECT category FROM manga WHERE category IS NOT NULL AND category != ''";
+// Get all non-NSFW genres by splitting the category field using prepared statement
+$sql_all = "SELECT category FROM manga WHERE category IS NOT NULL AND category != '' AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%'";
 $all_result = $conn->query($sql_all);
 
 $all_genres = [];
@@ -81,8 +81,8 @@ $selected_genre = $_GET['genre'] ?? null;
 if ($selected_genre) {
   echo "<h2 class='latest-heading'>Genre: " . htmlspecialchars($selected_genre) . "</h2>";
 
-  // Find manga that contain this genre using prepared statement
-  $sql_manga = "SELECT * FROM manga WHERE category LIKE ? ORDER BY title ASC";
+  // Find non-NSFW manga that contain this genre using prepared statement
+  $sql_manga = "SELECT * FROM manga WHERE category LIKE ? AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%' ORDER BY title ASC";
   $stmt = $conn->prepare($sql_manga);
   $search_pattern = "%" . $selected_genre . "%";
   $stmt->bind_param("s", $search_pattern);
