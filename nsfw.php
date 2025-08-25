@@ -47,6 +47,25 @@ $result = $stmt->get_result();
   <title>NSFW Manga Library</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
+  <style>
+    .btn {
+      padding: 5px 10px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      margin-right: 5px;
+    }
+
+    .btn:hover {
+      background-color: #666;
+    }
+
+    .card-actions {
+      margin-top: 10px;
+    }
+  </style>
   <script>
     // Prevent any JavaScript from hiding manga cards on NSFW page
     document.addEventListener('DOMContentLoaded', function() {
@@ -117,6 +136,10 @@ $result = $stmt->get_result();
     <img src="images/<?= htmlspecialchars($filename) ?>" alt="<?= htmlspecialchars($row['title']) ?>" onerror="this.src='images/default.jpg'" loading="lazy">
     <h3><?= htmlspecialchars($row['title']) ?></h3>
     <div class="status-label <?= $statusClass ?>">Status: <?= $status ?></div>
+    <div class="card-actions">
+      <a href="edit.php?id=<?= $row['id'] ?>" class="btn">✏️ Edit</a>
+      <a href="delete.php?id=<?= $row['id'] ?>" class="btn" onclick="return confirm('Delete this manga?')">🗑️ Delete</a>
+    </div>
   </div>
 <?php endwhile; else: ?>
   <p style="color:#eee; text-align:center;">No NSFW manga added yet.</p>
