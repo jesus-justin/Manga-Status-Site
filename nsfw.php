@@ -102,11 +102,10 @@ $result = $stmt->get_result();
 </nav>
 
 <h2>NSFW Manga Collection</h2>
+<p style="color:#eee; text-align:center;">Total NSFW manga fetched: <?= $result->num_rows ?></p>
 <div class="manga-container">
   <div class="manga-grid">
-<?php
-echo "Total NSFW manga fetched: " . $result->num_rows . "<br>";
-if ($result->num_rows > 0):
+<?php if ($result->num_rows > 0):
   while ($row = $result->fetch_assoc()):
     $title = strtolower(trim($row['title']));
     $filename = str_replace(' ', '_', $title) . '.jpeg';
