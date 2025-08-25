@@ -136,6 +136,33 @@ $result = $stmt->get_result();
     <img src="images/<?= htmlspecialchars($filename) ?>" alt="<?= htmlspecialchars($row['title']) ?>" onerror="this.src='images/default.jpg'" loading="lazy">
     <h3><?= htmlspecialchars($row['title']) ?></h3>
     <div class="status-label <?= $statusClass ?>">Status: <?= $status ?></div>
+    <?php
+    // Split categories by comma and create individual badges
+    $categories = explode(',', $category);
+    $categoryBadges = '';
+    foreach ($categories as $cat) {
+        $cat = trim($cat);
+        if (!empty($cat)) {
+            $categoryBadges .= '<span class="category-badge">' . htmlspecialchars($cat) . '</span>';
+        }
+    }
+    ?>
+    <div class="category-badges"><?= $categoryBadges ?></div>
+    <?php if (!empty($row['last_chapter'])): ?>
+      <p>Last Chapter: <?= htmlspecialchars($row['last_chapter']) ?></p>
+    <?php endif; ?>
+    <?php if (!empty($row['read_link'])): ?>
+      <p><a href="<?= htmlspecialchars($row['read_link']) ?>" target="_blank">Read Here</a></p>
+    <?php endif; ?>
+    <?php if (!empty($row['external_links'])):
+      $links = json_decode($row['external_links'], true);
+      if ($links && is_array($links)): ?>
+      <div class="external-links"><strong>Read on:</strong><ul>
+        <?php foreach ($links as $link): ?>
+          <li><a href="<?= htmlspecialchars($link['url']) ?>" target="_blank"><?= htmlspecialchars($link['name']) ?></a></li>
+        <?php endforeach; ?>
+      </ul></div>
+    <?php endif; endif; ?>
     <div class="card-actions">
       <a href="edit.php?id=<?= $row['id'] ?>" class="btn">✏️ Edit</a>
       <a href="delete.php?id=<?= $row['id'] ?>" class="btn" onclick="return confirm('Delete this manga?')">🗑️ Delete</a>
