@@ -76,7 +76,6 @@ if ($result->num_rows > 0):
 </div>
 
 <?php
-// Pagination Controls
 if ($total_pages > 1): ?>
 <div class="pagination">
   <?php if ($current_page > 1): ?>
