@@ -133,7 +133,7 @@ $selected_categories = explode(', ', $manga['category']);
         <label>Genres:</label>
         <div class="genre-container">
           <?php
-          $available_categories = ['Action', 'Romance', 'Horror', 'Drama', 'Tragedy', 'Isekai', 'Adventure', 'Fantasy', 'Magic', 'Mystery', 'Gore', 'Mecha', 'Comedy', 'School', 'Slice of Life', 'Supernatural', 'Sci-Fi'];
+          $available_categories = ['Action', 'Adult', 'Adventure', 'Comedy', 'Drama', 'Ecchi', 'Fantasy', 'Gore', 'Horror', 'Isekai', 'Magic', 'Mecha', 'Mystery', 'Romance', 'School', 'Sci-Fi', 'Slice of Life', 'Supernatural', 'Tragedy'];
           foreach ($available_categories as $cat) {
             $checked = in_array($cat, $selected_categories) ? 'checked' : '';
             echo "<div class='genre-item'>
