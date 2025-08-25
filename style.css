@@ -226,8 +226,8 @@ body {
 
 /* Interactive Scroll Effects */
 .manga-card {
-  opacity: 0;
-  transform: translateY(30px);
+  opacity: 1; /* Set to 1 to ensure visibility */
+  transform: translateY(0); /* Reset transform */
   transition: all 0.6s ease;
 }
 

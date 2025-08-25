@@ -37,10 +37,6 @@ if (!$stmt->execute()) {
     echo "Error executing query: " . $stmt->error;
     exit();
 }
-if (!$stmt->execute()) {
-    echo "Error executing query: " . $stmt->error;
-    exit();
-}
 $result = $stmt->get_result();
 ?>
 
@@ -51,6 +47,48 @@ $result = $stmt->get_result();
   <title>NSFW Manga Library</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
+  <script>
+    // Prevent any JavaScript from hiding manga cards on NSFW page
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('NSFW page loaded - preventing any filtering/hiding behavior');
+      
+      // Override all potential filtering functions
+      if (typeof window.filterByGenre === 'function') {
+        window.filterByGenre = function() {
+          console.log('filterByGenre called but disabled for NSFW page');
+          // Do nothing - prevent filtering
+        };
+      }
+      
+      // Disable search functionality
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.removeEventListener('input', window.searchHandler);
+        searchInput.disabled = true;
+        searchInput.placeholder = 'Search disabled on NSFW page';
+      }
+      
+      // Ensure all manga cards are visible immediately
+      const cards = document.querySelectorAll('.manga-card');
+      console.log('Found ' + cards.length + ' manga cards');
+      cards.forEach(card => {
+        card.style.display = '';
+        card.style.visibility = 'visible';
+        card.style.opacity = '1';
+        card.classList.add('visible');
+      });
+      
+      // Remove any IntersectionObserver that might be hiding cards
+      if (window.mangaObserver) {
+        window.mangaObserver.disconnect();
+      }
+    });
+    
+    // Override the search handler globally to prevent it from running
+    window.searchHandler = function() {
+      console.log('Search handler disabled on NSFW page');
+    };
+  </script>
 </head>
 <body>
 <nav>
