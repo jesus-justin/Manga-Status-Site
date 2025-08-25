@@ -19,6 +19,10 @@ $current_page = max(1, $current_page); // Ensure page is at least 1
 // Get total number of NSFW manga using prepared statement
 $count_sql = "SELECT COUNT(*) as total FROM manga WHERE category LIKE '%ecchi%' OR category LIKE '%adult%'";
 $count_result = $conn->query($count_sql);
+if (!$count_result) {
+    echo "Error fetching total manga: " . $conn->error;
+    exit();
+}
 $total_manga = $count_result->fetch_assoc()['total'];
 $total_pages = ceil($total_manga / $manga_per_page);
 
@@ -29,7 +33,14 @@ $offset = ($current_page - 1) * $manga_per_page;
 $sql = "SELECT * FROM manga WHERE category LIKE '%ecchi%' OR category LIKE '%adult%' ORDER BY id DESC LIMIT ? OFFSET ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $manga_per_page, $offset);
-$stmt->execute();
+if (!$stmt->execute()) {
+    echo "Error executing query: " . $stmt->error;
+    exit();
+}
+if (!$stmt->execute()) {
+    echo "Error executing query: " . $stmt->error;
+    exit();
+}
 $result = $stmt->get_result();
 ?>
 
@@ -56,6 +67,7 @@ $result = $stmt->get_result();
 <div class="manga-container">
   <div class="manga-grid">
 <?php
+echo "Total NSFW manga fetched: " . $result->num_rows . "<br>";
 if ($result->num_rows > 0):
   while ($row = $result->fetch_assoc()):
     $title = strtolower(trim($row['title']));
