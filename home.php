@@ -173,12 +173,30 @@ if (!$auth->isLoggedIn()) {
           clearTimeout(searchTimeout);
           searchTimeout = setTimeout(() => {
             const query = this.value.toLowerCase();
-            document.querySelectorAll('.manga-card').forEach(card => {
+            const mangaCards = document.querySelectorAll('.manga-card');
+            let found = false; // Initialize found variable
+            
+            mangaCards.forEach(card => {
               const title = card.getAttribute('data-title');
               const category = card.getAttribute('data-category');
               const status = card.getAttribute('data-status');
-              card.style.display = (title.includes(query) || category.includes(query) || status.includes(query)) ? '' : 'none';
+              const isVisible = (title.includes(query) || category.includes(query) || status.includes(query));
+              card.style.display = isVisible ? '' : 'none';
+              if (isVisible) found = true; // Set found to true if a match is found
             });
+            
+            // Show SweetAlert only if search query is not empty and no manga found
+            if (query.trim() !== '' && !found) {
+              Swal.fire({
+                title: 'Manga Not Found',
+                text: 'The manga you searched for does not exist in your library.',
+                icon: 'error',
+                confirmButtonText: 'Okay',
+                confirmButtonColor: '#d33',
+                timer: 3000,
+                timerProgressBar: true
+              });
+            }
           }, 200);
         });
       }
