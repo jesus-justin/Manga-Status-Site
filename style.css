@@ -672,6 +672,13 @@ nav ul li a {
     color: #fff;
     text-decoration: none;
     font-weight: bold;
+    padding: 10px 15px; /* Increased padding for better clickability */
+    border-radius: 5px; /* Rounded corners for a better look */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Light background on hover */
 }
 
 nav .search-box input[type="text"] {

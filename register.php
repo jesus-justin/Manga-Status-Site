@@ -279,7 +279,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="leaf" style="left: 95%; animation-duration: 14.5s; animation-delay: 0.3s;"></div>
 
     <nav>
-        <div class="logo">MangaLibrary</div>
+        <div class="logo">
+          <a href="home.php" style="color: inherit; text-decoration: none; cursor: pointer;">MangaLibrary</a>
+        </div>
         <ul>
             <li><a href="home.php">Home</a></li>
             <li><a href="browse.php">Browse</a></li>
