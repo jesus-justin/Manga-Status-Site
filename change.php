@@ -8,7 +8,9 @@
 </head>
 <body>
 <nav>
-  <div class="logo">MangaLibrary</div>
+  <div class="logo">
+    <a href="home.php" style="color: inherit; text-decoration: none; cursor: pointer;">MangaLibrary</a>
+  </div>
   <ul>
     <li><a href="home.php">Home</a></li>
     <li><a href="browse.php">Browse</a></li>
