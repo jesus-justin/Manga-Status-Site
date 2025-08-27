@@ -234,28 +234,62 @@ if (!$auth->isLoggedIn()) {
         randomBtn.addEventListener('click', window.enhancedRandomManga);
       }
 
-      const themes = ['theme-red', 'theme-white', 'theme-green', 'theme-blue', 'theme-purple'];
-      const themeIcons = ['🌑', '☀️', '🌿', '🌊', '🟣'];
+      // Enhanced Theme System with Beautiful Backgrounds
+      const themes = [
+        'theme-red', 
+        'theme-white', 
+        'theme-green', 
+        'theme-blue', 
+        'theme-purple',
+        'theme-dark-mode',
+        'theme-sunset',
+        'theme-ocean',
+        'theme-forest',
+        'theme-galaxy'
+      ];
+      
+      const themeIcons = ['🌌', '🌅', '🌊', '🌲', '🌙', '🌸', '🌇', '💫', '🔮', '❄️'];
+      const themeNames = [
+        'Cosmic Purple', 'Sunset Orange', 'Ocean Blue', 'Forest Emerald', 
+        'Midnight Aurora', 'Cherry Blossom', 'Golden Hour', 'Neon Dream', 
+        'Mystic Lavender', 'Crystal Ice'
+      ];
+      
       const darkModeToggle = document.getElementById('darkModeToggle');
 
       function applyTheme(theme) {
-        document.body.style.transition = 'all 0.5s ease';
+        document.body.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
         document.body.classList.remove(...themes);
         document.body.classList.add(theme);
         localStorage.setItem('themeMode', theme);
         if (darkModeToggle) {
           const idx = themes.indexOf(theme);
           darkModeToggle.innerText = themeIcons[idx] || '🎨';
+          darkModeToggle.title = themeNames[idx] || 'Change Theme';
         }
+        
+        // Add subtle animation effect when theme changes
+        document.body.style.opacity = '0.8';
+        setTimeout(() => {
+          document.body.style.opacity = '1';
+        }, 300);
       }
 
-      const savedTheme = localStorage.getItem('themeMode') || 'theme-red';
+      const savedTheme = localStorage.getItem('themeMode') || 'theme-cosmic-purple';
       applyTheme(savedTheme);
+      
       if (darkModeToggle) {
         darkModeToggle.addEventListener('click', function () {
-          let idx = themes.indexOf(document.body.classList.value.split(' ').find(c => themes.includes(c)));
+          let currentTheme = document.body.classList.value.split(' ').find(c => themes.includes(c));
+          let idx = themes.indexOf(currentTheme);
           idx = (idx + 1) % themes.length;
           applyTheme(themes[idx]);
+          
+          // Add a subtle bounce effect to the toggle button
+          this.style.transform = 'scale(1.2)';
+          setTimeout(() => {
+            this.style.transform = 'scale(1)';
+          }, 150);
         });
       }
 
