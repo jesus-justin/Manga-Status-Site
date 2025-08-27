@@ -1,645 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap');
 
-/* Additional Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideInFromLeft {
-  from { opacity: 0; transform: translateX(-50px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInFromRight {
-  from { opacity: 0; transform: translateX(50px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-  60% { transform: translateY(-5px); }
-}
-
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(255, 126, 179, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(255, 126, 179, 0.8), 0 0 30px rgba(255, 126, 179, 0.6); }
-}
-
-/* Enhanced Manga Card Animations */
-.manga-card {
-  animation: fadeIn 0.6s ease-out;
-}
-
-.manga-card:nth-child(odd) {
-  animation: slideInFromLeft 0.6s ease-out;
-}
-
-.manga-card:nth-child(even) {
-  animation: slideInFromRight 0.6s ease-out;
-}
-
-/* Interactive Hover Effects */
-.manga-card img {
-  transition: all 0.3s ease;
-}
-
-.manga-card:hover img {
-  transform: scale(1.1);
-  filter: brightness(1.1) contrast(1.1);
-}
-
-/* Enhanced Button Animations */
-.button, #randomMangaBtn {
-  position: relative;
-  overflow: hidden;
-}
-
-.button::before, #randomMangaBtn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.button:hover::before, #randomMangaBtn:hover::before {
-  left: 100%;
-}
-
-/* Animated Stats */
-.stat-item {
-  animation: fadeIn 0.8s ease-out;
-}
-
-.stat-item:nth-child(1) { animation-delay: 0.1s; }
-.stat-item:nth-child(2) { animation-delay: 0.2s; }
-.stat-item:nth-child(3) { animation-delay: 0.3s; }
-
-/* Enhanced Navigation */
-nav {
-  position: relative;
-  overflow: hidden;
-}
-
-nav::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: shimmer 4s infinite;
-}
-
-/* Animated Logo */
-.logo {
-  position: relative;
-  overflow: hidden;
-}
-
-.logo::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: shimmer 3s infinite;
-}
-
-/* Enhanced Search Box */
-.search-box input {
-  position: relative;
-  overflow: hidden;
-}
-
-.search-box input::placeholder {
-  transition: all 0.3s ease;
-}
-
-.search-box input:focus::placeholder {
-  opacity: 0.5;
-  transform: translateX(10px);
-}
-
-/* Animated Category Badges */
-.category-badge {
-  animation: bounce 2s infinite;
-  animation-delay: calc(var(--animation-order, 0) * 0.1s);
-}
-
-/* Enhanced Status Labels */
-.status-label {
-  position: relative;
-  overflow: hidden;
-}
-
-.status-label::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
-}
-
-.status-label:hover::before {
-  left: 100%;
-}
-
-/* Floating Elements */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-.floating-actions {
-  animation: float 3s ease-in-out infinite;
-}
-
-/* Enhanced Theme Transitions */
-body {
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Interactive Loading States */
-.loading {
-  animation: spin 1s linear infinite;
-}
-
-/* Enhanced Toast Notifications */
-.toast {
-  animation: slideInFromRight 0.3s ease-out;
-}
-
-.toast.show {
-  animation: bounce 0.5s ease-out;
-}
-
-/* Responsive Animations */
-@media (max-width: 768px) {
-  .manga-card {
-    animation: fadeIn 0.4s ease-out;
-  }
-  
-  .floating-actions {
-    animation: none;
-  }
-}
-
-/* Enhanced Focus States */
-.manga-card:focus,
-.button:focus,
-.filter-pill:focus {
-  outline: 2px solid #ff7eb3;
-  outline-offset: 2px;
-}
-
-/* Animated Background Patterns */
-.banner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 80%, rgba(255, 126, 179, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 117, 140, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(255, 126, 179, 0.05) 0%, transparent 50%);
-  animation: float 6s ease-in-out infinite;
-}
-
-/* Enhanced Grid Layout */
-.manga-grid {
-  animation: fadeIn 0.8s ease-out;
-}
-
-/* Interactive Scroll Effects */
-.manga-card {
-  opacity: 1; /* Set to 1 to ensure visibility */
-  transform: translateY(0); /* Reset transform */
-  transition: all 0.6s ease;
-}
-
-.manga-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Enhanced Random Manga Highlight */
-.highlight-manga {
-  animation: glow 2s ease-in-out infinite;
-}
-
-/* Animated Category Filters */
-.filter-pill {
-  position: relative;
-  overflow: hidden;
-}
-
-.filter-pill::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.filter-pill:hover::before {
-  left: 100%;
-}
-
-/* Enhanced Stats Counter */
-.stat-number {
-  animation: fadeIn 1s ease-out;
-}
-
-/* Interactive Particle Effects */
-.particle {
-  transition: all 0.3s ease;
-}
-
-.particle:hover {
-  transform: scale(2);
-  opacity: 0.8;
-}
-
-/* Enhanced Banner Content */
-.banner-content {
-  animation: fadeIn 1s ease-out;
-}
-
-.banner-content h1 {
-  animation: slideInFromLeft 1s ease-out;
-}
-
-.banner-content p {
-  animation: slideInFromRight 1s ease-out;
-  animation-delay: 0.2s;
-}
-
-/* Responsive Design Enhancements */
-@media (max-width: 480px) {
-  .stats-container {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .category-filters {
-    justify-content: center;
-  }
-  
-  .floating-actions {
-    bottom: 20px;
-    right: 20px;
-  }
-  
-  .floating-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-  }
-}
-
-/* Enhanced Accessibility */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Ripple Effect Animation */
-@keyframes ripple {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
-
-/* Confetti Fall Animation */
-@keyframes fall {
-  to {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-/* Enhanced Manga Card Click Effect */
-.manga-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.manga-card:active {
-  transform: scale(0.98);
-}
-
-/* Enhanced Focus States for Better Accessibility */
-.manga-card:focus-visible,
-.button:focus-visible,
-.filter-pill:focus-visible {
-  outline: 2px solid #ff7eb3;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(255, 126, 179, 0.2);
-}
-
-/* Enhanced Loading States */
-.loading-spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 126, 179, 0.3);
-  border-radius: 50%;
-  border-top-color: #ff7eb3;
-  animation: spin 1s ease-in-out infinite;
-}
-
-/* Enhanced Toast Animations */
-.toast {
-  animation: slideInFromRight 0.3s ease-out;
-}
-
-.toast.show {
-  animation: bounce 0.5s ease-out;
-}
-
-/* Enhanced Particle Interactions */
-.particle {
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.particle:hover {
-  transform: scale(2);
-  opacity: 0.8;
-  filter: brightness(1.2);
-}
-
-/* Enhanced External Links */
-.external-links a {
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.external-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #ff7eb3;
-  transition: width 0.3s ease;
-}
-
-.external-links a:hover::after {
-  width: 100%;
-}
-
-/* Enhanced Stats Counter Animation */
-.stat-number {
-  animation: fadeIn 1s ease-out;
-  display: inline-block;
-}
-
-/* Enhanced Category Badge Animation */
-.category-badge {
-  animation: bounce 2s infinite;
-  animation-delay: calc(var(--animation-order, 0) * 0.1s);
-}
-
-/* Enhanced Status Label Animation */
-.status-label {
-  position: relative;
-  overflow: hidden;
-}
-
-.status-label::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
-}
-
-.status-label:hover::before {
-  left: 100%;
-}
-
-/* Enhanced Floating Button Animations */
-.floating-btn {
-  position: relative;
-  overflow: hidden;
-}
-
-.floating-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.floating-btn:hover::before {
-  width: 100%;
-  height: 100%;
-}
-
-/* Enhanced Search Box Focus */
-.search-box input:focus {
-  border-color: #ff7eb3;
-  box-shadow: 0 0 20px rgba(255, 126, 179, 0.3);
-  transform: scale(1.02);
-}
-
-/* Enhanced Banner Shimmer Effect */
-.banner::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 126, 179, 0.1), transparent);
-  animation: shimmer 3s infinite;
-}
-
-/* Enhanced Navigation Logo */
-.logo {
-  position: relative;
-  overflow: hidden;
-}
-
-.logo::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: shimmer 3s infinite;
-}
-
-/* Enhanced Filter Pills */
-.filter-pill {
-  position: relative;
-  overflow: hidden;
-}
-
-.filter-pill::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.filter-pill:hover::before {
-  left: 100%;
-}
-
-/* Enhanced Scroll Progress Bar */
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 3px;
-  background: linear-gradient(90deg, #ff7eb3, #ff758c);
-  z-index: 10000;
-  transition: width 0.1s ease;
-  box-shadow: 0 0 10px rgba(255, 126, 179, 0.5);
-}
-
-/* Enhanced Random Manga Highlight */
-.highlight-manga {
-  animation: glow 2s ease-in-out infinite;
-  border: 3px solid #ff7eb3 !important;
-  box-shadow: 0 0 18px 4px #ff7eb3cc !important;
-}
-
-/* Enhanced Stats Container */
-.stats-container {
-  animation: fadeIn 0.8s ease-out;
-}
-
-/* Enhanced Category Filters */
-.category-filters {
-  animation: slideInFromLeft 0.6s ease-out;
-}
-
-/* Enhanced Banner Content */
-.banner-content {
-  animation: fadeIn 1s ease-out;
-}
-
-.banner-content h1 {
-  animation: slideInFromLeft 1s ease-out;
-}
-
-.banner-content p {
-  animation: slideInFromRight 1s ease-out;
-  animation-delay: 0.2s;
-}
-
-/* Enhanced Manga Grid */
-.manga-grid {
-  animation: fadeIn 0.8s ease-out;
-}
-
-/* Enhanced Theme Transitions */
-body {
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Enhanced Interactive Elements */
-.manga-card,
-.button,
-.filter-pill,
-.floating-btn {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Enhanced Loading States */
-.loading {
-  animation: spin 1s linear infinite;
-}
-
-/* Enhanced Toast Notifications */
-.toast {
-  animation: slideInFromRight 0.3s ease-out;
-}
-
-.toast.show {
-  animation: bounce 0.5s ease-out;
-}
-
-/* Enhanced Responsive Design */
-@media (max-width: 768px) {
-  .manga-card {
-    animation: fadeIn 0.4s ease-out;
-  }
-  
-  .floating-actions {
-    animation: none;
-  }
-  
-  .stats-container {
-    flex-direction: column;
-    gap: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .category-filters {
-    justify-content: center;
-  }
-  
-  .floating-actions {
-    bottom: 20px;
-    right: 20px;
-  }
-  
-  .floating-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-  }
-}
-
+/* Base Styles */
 body {
     font-family: 'Noto Sans JP', Arial, sans-serif;
     background: #111;
     color: #eee;
     margin: 0;
     padding: 0;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 nav {
@@ -672,13 +40,13 @@ nav ul li a {
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    padding: 10px 15px; /* Increased padding for better clickability */
-    border-radius: 5px; /* Rounded corners for a better look */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 nav ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Light background on hover */
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 nav .search-box input[type="text"] {
@@ -776,247 +144,30 @@ button:hover, a.button:hover {
     padding: 0 30px;
 }
 
-/* --- Manga Card Hover Effect --- */
 .manga-card {
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border-radius: 12px;
-  overflow: hidden;
-  background: #23272f;
-  position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #23272f;
+    position: relative;
 }
+
 .manga-card:hover {
-  transform: scale(1.04) translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-  z-index: 2;
+    transform: scale(1.04) translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    z-index: 2;
 }
 
-/* --- Category Badge --- */
-.category-badge {
-  display: inline-block;
-  background: #ffb347;
-  color: #222;
-  font-size: 0.85em;
-  font-weight: bold;
-  border-radius: 8px;
-  padding: 2px 10px;
-  margin: 6px 0 10px 0;
-  letter-spacing: 0.5px;
-}
-
-/* --- Status Color Coding --- */
-.status-label {
-  display: inline-block;
-  font-size: 0.9em;
-  font-weight: bold;
-  border-radius: 8px;
-  padding: 2px 10px;
-  margin-bottom: 6px;
-}
-.status-label.will-read {
-  background: #b3e5fc;
-  color: #01579b;
-}
-.status-label.currently-reading {
-  background: #ffe082;
-  color: #ff6f00;
-}
-.status-label.stopped {
-  background: #ffcdd2;
-  color: #b71c1c;
-}
-.status-label.finished {
-  background: #c8e6c9;
-  color: #1b5e20;
-}
-
-/* --- Improved Buttons --- */
-.button, #randomMangaBtn, #darkModeToggle {
-  background: linear-gradient(90deg, #ff758c 0%, #ff7eb3 100%);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 18px;
-  font-weight: bold;
-  cursor: pointer;
-  margin: 4px 2px;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-.button:hover, #randomMangaBtn:hover, #darkModeToggle:hover {
-  background: linear-gradient(90deg, #ff7eb3 0%, #ff758c 100%);
-  box-shadow: 0 4px 16px rgba(255,118,140,0.18);
-}
-#darkModeToggle {
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  margin-right: 0;
-  color: #fff;
-  vertical-align: middle;
-  transition: color 0.2s;
-}
-#darkModeToggle:hover {
-  color: #ffd700;
-}
-#settingsBtn {
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  margin-left: 0;
-  color: #fff;
-  vertical-align: middle;
-  transition: color 0.2s;
-}
-#settingsBtn:hover {
-  color: #ffd700;
-}
-
-/* --- THEME: RED (Default) --- */
-.theme-red {
-  background: #181a20;
-  color: #e0e0e0;
-}
-.theme-red nav, .theme-red .banner, .theme-red .manga-card {
-  background: #23272f !important;
-  color: #e0e0e0;
-}
-.theme-red .category-badge {
-  background: #ffd580;
-  color: #23272f;
-}
-.theme-red .status-label.will-read { background: #4fc3f7; color: #fff; }
-.theme-red .status-label.currently-reading { background: #ffd54f; color: #ff6f00; }
-.theme-red .status-label.stopped { background: #e57373; color: #fff; }
-.theme-red .status-label.finished { background: #81c784; color: #fff; }
-.theme-red .button, .theme-red #randomMangaBtn, .theme-red #darkModeToggle {
-  background: linear-gradient(90deg, #ff758c 0%, #ff7eb3 100%);
-  color: #fff;
-}
-.theme-red .button:hover, .theme-red #randomMangaBtn:hover, .theme-red #darkModeToggle:hover {
-  background: linear-gradient(90deg, #ff7eb3 0%, #ff758c 100%);
-  color: #fff;
-}
-
-/* --- THEME: WHITE (Light) --- */
-.theme-white {
-  background: #f7f7f7;
-  color: #23272f;
-}
-.theme-white nav, .theme-white .banner, .theme-white .manga-card {
-  background: #fff !important;
-  color: #23272f;
-}
-.theme-white .category-badge {
-  background: #e0e0e0;
-  color: #23272f;
-}
-.theme-white .status-label.will-read { background: #b3e5fc; color: #01579b; }
-.theme-white .status-label.currently-reading { background: #ffe082; color: #ff6f00; }
-.theme-white .status-label.stopped { background: #ffcdd2; color: #b71c1c; }
-.theme-white .status-label.finished { background: #c8e6c9; color: #1b5e20; }
-.theme-white .button, .theme-white #randomMangaBtn, .theme-white #darkModeToggle {
-  background: linear-gradient(90deg, #e0e0e0 0%, #ffd580 100%);
-  color: #23272f;
-}
-.theme-white .button:hover, .theme-white #randomMangaBtn:hover, .theme-white #darkModeToggle:hover {
-  background: linear-gradient(90deg, #ffd580 0%, #e0e0e0 100%);
-  color: #23272f;
-}
-
-/* --- THEME: GREEN --- */
-.theme-green {
-  background: #e8f5e9;
-  color: #1b5e20;
-}
-.theme-green nav, .theme-green .banner, .theme-green .manga-card, .theme-green .add-form, .theme-green .edit-container, .theme-green input[type="text"], .theme-green input[type="url"], .theme-green select, .theme-green .latest-heading {
-  background: #b9f6ca !important;
-  color: #1b5e20 !important;
-}
-.theme-green .category-badge {
-  background: #a5d6a7;
-  color: #1b5e20;
-}
-.theme-green .status-label.will-read { background: #b2dfdb; color: #00695c; }
-.theme-green .status-label.currently-reading { background: #dcedc8; color: #558b2f; }
-.theme-green .status-label.stopped { background: #ffccbc; color: #d84315; }
-.theme-green .status-label.finished { background: #81c784; color: #fff; }
-.theme-green .button, .theme-green #randomMangaBtn, .theme-green #darkModeToggle {
-  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
-  color: #1b5e20;
-}
-.theme-green .button:hover, .theme-green #randomMangaBtn:hover, .theme-green #darkModeToggle:hover {
-  background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
-  color: #1b5e20;
-}
-
-/* --- THEME: BLUE --- */
-.theme-blue {
-  background: #e3f2fd;
-  color: #0d47a1;
-}
-.theme-blue nav, .theme-blue .banner, .theme-blue .manga-card, .theme-blue .add-form, .theme-blue .edit-container, .theme-blue input[type="text"], .theme-blue input[type="url"], .theme-blue select, .theme-blue .latest-heading {
-  background: #b3e5fc !important;
-  color: #0d47a1 !important;
-}
-.theme-blue .category-badge {
-  background: #90caf9;
-  color: #0d47a1;
-}
-.theme-blue .status-label.will-read { background: #b3e5fc; color: #01579b; }
-.theme-blue .status-label.currently-reading { background: #ffe082; color: #ff6f00; }
-.theme-blue .status-label.stopped { background: #ffcdd2; color: #b71c1c; }
-.theme-blue .status-label.finished { background: #c8e6c9; color: #1b5e20; }
-.theme-blue .button, .theme-blue #randomMangaBtn, .theme-blue #darkModeToggle {
-  background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
-  color: #fff;
-}
-.theme-blue .button:hover, .theme-blue #randomMangaBtn:hover, .theme-blue #darkModeToggle:hover {
-  background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
-  color: #fff;
-}
-
-/* --- THEME: PURPLE --- */
-.theme-purple {
-  background: #f3e5f5;
-  color: #4a148c;
-}
-.theme-purple nav, .theme-purple .banner, .theme-purple .manga-card, .theme-purple .add-form, .theme-purple .edit-container, .theme-purple input[type="text"], .theme-purple input[type="url"], .theme-purple select, .theme-purple .latest-heading {
-  background: #e1bee7 !important;
-  color: #4a148c !important;
-}
-.theme-purple .category-badge {
-  background: #ba68c8;
-  color: #fff;
-}
-.theme-purple .status-label.will-read { background: #b39ddb; color: #4527a0; }
-.theme-purple .status-label.currently-reading { background: #ffd54f; color: #ff6f00; }
-.theme-purple .status-label.stopped { background: #f8bbd0; color: #ad1457; }
-.theme-purple .status-label.finished { background: #c8e6c9; color: #1b5e20; }
-.theme-purple .button, .theme-purple #randomMangaBtn, .theme-purple #darkModeToggle {
-  background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
-  color: #4a148c;
-}
-.theme-purple .button:hover, .theme-purple #randomMangaBtn:hover, .theme-purple #darkModeToggle:hover {
-  background: linear-gradient(90deg, #fbc2eb 0%, #a18cd1 100%);
-  color: #4a148c;
-}
-
-/* Remove old dark-mode class if present */
-body.dark-mode { background: unset !important; color: unset !important; }
-
-/* --- Manga Card Image Size Fix --- */
 .manga-card img {
-  width: 100%;
-  max-width: 140px;
-  max-height: 200px;
-  object-fit: cover;
-  display: block;
-  margin: 16px auto 8px auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    width: 100%;
+    max-width: 140px;
+    max-height: 200px;
+    object-fit: cover;
+    display: block;
+    margin: 16px auto 8px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
 }
 
 .manga-card h3 {
@@ -1035,284 +186,654 @@ body.dark-mode { background: unset !important; color: unset !important; }
     margin: 50px auto;
 }
 
-/* --- Card Actions (Edit/Delete) Lowered --- */
 .card-actions {
-  margin-top: 18px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
-/* --- Highlighted Manga Card (Randomizer) --- */
-.highlight-manga {
-  border: 3px solid #ff7eb3 !important;
-  box-shadow: 0 0 18px 4px #ff7eb3cc !important;
-  transition: border 0.2s, box-shadow 0.2s;
+/* Enhanced Theme Backgrounds */
+.theme-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.9;
 }
 
-/* --- Add Manga Button: Theme Accent --- */
-.theme-red .add-form button[type="submit"] {
-  background: linear-gradient(90deg, #e50914 0%, #ff7eb3 100%);
-  color: #fff;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 12px rgba(229,9,20,0.15);
-}
-.theme-green .add-form button[type="submit"] {
-  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
-  color: #1b5e20;
-  border: 2px solid #1b5e20;
-  box-shadow: 0 2px 12px rgba(67,233,123,0.15);
-}
-.theme-blue .add-form button[type="submit"] {
-  background: linear-gradient(90deg, #2196f3 0%, #43cea2 100%);
-  color: #fff;
-  border: 2px solid #0d47a1;
-  box-shadow: 0 2px 12px rgba(33,150,243,0.15);
-}
-.theme-purple .add-form button[type="submit"] {
-  background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
-  color: #4a148c;
-  border: 2px solid #4a148c;
-  box-shadow: 0 2px 12px rgba(161,140,209,0.15);
-}
-.theme-white .add-form button[type="submit"] {
-  background: linear-gradient(90deg, #ffd580 0%, #e0e0e0 100%);
-  color: #23272f;
-  border: 2px solid #23272f;
-  box-shadow: 0 2px 12px rgba(255,213,128,0.15);
-}
-.theme-red .add-form button[type="submit"]:hover {
-  background: linear-gradient(90deg, #ff7eb3 0%, #e50914 100%);
-}
-.theme-green .add-form button[type="submit"]:hover {
-  background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
-}
-.theme-blue .add-form button[type="submit"]:hover {
-  background: linear-gradient(90deg, #43cea2 0%, #2196f3 100%);
-}
-.theme-purple .add-form button[type="submit"]:hover {
-  background: linear-gradient(90deg, #fbc2eb 0%, #a18cd1 100%);
-}
-.theme-white .add-form button[type="submit"]:hover {
-  background: linear-gradient(90deg, #e0e0e0 0%, #ffd580 100%);
+/* THEME: RED (Akatsuki Inspired) */
+.theme-red {
+    background: linear-gradient(135deg, #2a0c0c 0%, #1a0505 50%, #0d0202 100%);
+    color: #ffd1d1;
+    position: relative;
+    overflow: hidden;
 }
 
-/* --- Enhanced Category List Styling --- */
-.category-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 32px 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-}
-.category-list li {
-  margin: 0;
-  transition: transform 0.18s;
-}
-.category-list li:hover {
-  transform: translateY(-3px) scale(1.06);
-  z-index: 1;
-}
-.category-list a {
-  display: block;
-  background: linear-gradient(90deg, #23272f 60%, #181a20 100%);
-  color: #ff7eb3;
-  padding: 12px 28px;
-  border-radius: 16px;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.08em;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-  border: 2px solid #ff7eb3;
-  transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
-}
-.category-list a:hover, .category-list a:focus {
-  background: linear-gradient(90deg, #ff7eb3 0%, #ff758c 100%);
-  color: #23272f;
-  border: 2px solid #fff;
-  box-shadow: 0 4px 24px rgba(255,126,179,0.18);
-  text-shadow: 0 1px 6px #fff2;
+.theme-red::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(229, 9, 20, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 0, 0, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 30%, rgba(255, 0, 0, 0.05) 50%, transparent 70%);
+    animation: redPulse 8s ease-in-out infinite;
+    z-index: -1;
 }
 
-/* --- Manga Grid Spacing --- */
-.manga-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 28px;
-  margin: 32px 0 24px 0;
-  padding: 0 10px;
+@keyframes redPulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.02); }
 }
 
-/* --- Headings and Back Button --- */
-h1, h2 {
-  text-align: center;
-  margin-top: 24px;
-  margin-bottom: 18px;
-  letter-spacing: 1px;
+.theme-red nav, .theme-red .banner, .theme-red .manga-card {
+    background: #23272f !important;
+    color: #e0e0e0 !important;
 }
 
-.button {
-  margin: 24px auto 0 auto;
-  display: block;
-  max-width: 180px;
-  text-align: center;
+.theme-red .category-badge {
+    background: #ffd580;
+    color: #23272f;
 }
 
-/* Settings Dropdown Styles */
-.settings-dropdown-container {
-  position: relative;
-  display: inline-block;
-  margin-left: 10px;
-  z-index: 1100;
-}
-.settings-dropdown {
-  display: none;
-  position: absolute;
-  top: 120%;
-  left: 0;
-  background: #232323;
-  min-width: 240px;
-  min-height: 90px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-  border-radius: 18px;
-  z-index: 1000;
-  padding: 18px 0 18px 0;
-  opacity: 1;
-  border: none;
-}
-.settings-dropdown .settings-action {
-  display: block;
-  width: 100%;
-  padding: 16px 28px;
-  color: #fff;
-  text-decoration: none;
-  font-size: 1.12em;
-  text-align: left;
-  background: none;
-  border: none;
-  outline: none;
-  transition: background 0.2s, color 0.2s;
-  border-radius: 8px;
-  margin: 2px 0;
-  cursor: pointer;
-}
-.settings-dropdown .settings-action:hover {
-  background: #383838;
-  color: #ffd700;
+.theme-red .status-label.will-read { background: #4fc3f7; color: #fff; }
+.theme-red .status-label.currently-reading { background: #ffd54f; color: #ff6f00; }
+.theme-red .status-label.stopped { background: #e57373; color: #fff; }
+.theme-red .status-label.finished { background: #81c784; color: #fff; }
+
+.theme-red .button, .theme-red #randomMangaBtn, .theme-red #darkModeToggle {
+    background: linear-gradient(90deg, #ff758c 0%, #ff7eb3 100%);
+    color: #fff;
 }
 
-.menu {
-  margin: 0;
-  display: flex;
-  width: 20em;
-  font-size: 1.5em;
-  padding: 0.5em 1em;
-  position: relative;
-  align-items: center;
-  background-color: var(--bgColorMenu, #222);
-  justify-content: center;
-  border-radius: 1.5em;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  gap: 1em;
-}
-.menu__item {
-  all: unset;
-  flex-grow: 1;
-  z-index: 100;
-  display: flex;
-  cursor: pointer;
-  position: relative;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5em 0.5em;
-  transition: background 0.2s, transform 0.2s;
-}
-.menu__item:hover {
-  background: #444;
-  transform: scale(1.1);
-}
-.tab-label {
-  margin-left: 0.5em;
-  font-size: 0.8em;
-  color: #fff;
-}
-.settings-tab-container {
-  position: absolute;
-  right: 2em;
-  top: 3.5em;
-  z-index: 200;
+.theme-red .button:hover, .theme-red #randomMangaBtn:hover, .theme-red #darkModeToggle:hover {
+    background: linear-gradient(90deg, #ff7eb3 0%, #ff758c 100%);
+    color: #fff;
 }
 
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.1em;
+/* THEME: WHITE (Zen Garden Inspired) */
+.theme-white {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+    color: #2b2d42;
+    position: relative;
+    overflow: hidden;
 }
 
-/* --- Random Manga Result Image Styles --- */
-.random-manga-img-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.random-manga-img {
-  max-width: 120px;
-  max-height: 160px;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-  border: 2px solid #fff;
-  background: #222;
-  object-fit: cover;
-}
-#randomMangaResult {
-  background: rgba(30,30,40,0.95);
-  border-radius: 12px;
-  padding: 18px 12px 10px 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  max-width: 220px;
-  margin: 0 auto;
-  text-align: center;
-  color: #fff;
+.theme-white::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(248, 249, 250, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(233, 236, 239, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 30%, rgba(222, 226, 230, 0.05) 50%, transparent 70%);
+    animation: whitePulse 8s ease-in-out infinite;
+    z-index: -1;
 }
 
-/* --- Random Manga Result Side-by-Side Styles --- */
-.random-manga-flex {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  justify-content: flex-start;
+@keyframes whitePulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.02); }
 }
-.random-manga-img-side {
-  width: auto;
-  max-width: 28px;
-  max-height: 38px;
-  object-fit: cover;
-  display: block;
-  margin: 0 8px 0 0;
-  border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.10);
-  border: 1px solid #fff;
-  background: #222;
-  flex-shrink: 0;
+
+.theme-white nav, .theme-white .banner, .theme-white .manga-card {
+    background: #fff !important;
+    color: #23272f !important;
 }
-.random-manga-info {
-  text-align: left;
-  color: #fff;
-  font-size: 1em;
-  line-height: 1.3;
+
+.theme-white .category-badge {
+    background: #e0e0e0;
+    color: #23272f;
 }
-#randomMangaResult {
-  background: rgba(30,30,40,0.95);
-  border-radius: 12px;
-  padding: 12px 12px 10px 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  max-width: 320px;
-  margin: 0 auto;
-  color: #fff;
-  text-align: left;
+
+.theme-white .status-label.will-read { background: #b3e5fc; color: #01579b; }
+.theme-white .status-label.currently-reading { background: #ffe082; color: #ff6f00; }
+.theme-white .status-label.stopped { background: #ffcdd2; color: #b71c1c; }
+.theme-white .status-label.finished { background: #c8e6c9; color: #1b5e20; }
+
+.theme-white .button, .theme-white #randomMangaBtn, .theme-white #darkModeToggle {
+    background: linear-gradient(90deg, #e0e0e0 0%, #ffd580 100%);
+    color: #23272f;
+}
+
+.theme-white .button:hover, .theme-white #randomMangaBtn:hover, .theme-white #darkModeToggle:hover {
+    background: linear-gradient(90deg, #ffd580 0%, #e0e0e0 100%);
+    color: #23272f;
+}
+
+/* THEME: BLUE (Ocean Inspired) */
+.theme-blue {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+    color: #0d47a1;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-blue::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(0, 123, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(0, 0, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 30%, rgba(0, 123, 255, 0.05) 50%, transparent 70%);
+    animation: bluePulse 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes bluePulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.02); }
+}
+
+.theme-blue nav, .theme-blue .banner, .theme-blue .manga-card {
+    background: #b3e5fc !important;
+    color: #0d47a1 !important;
+}
+
+.theme-blue .category-badge {
+    background: #90caf9;
+    color: #0d47a1;
+}
+
+.theme-blue .status-label.will-read { background: #b3e5fc; color: #01579b; }
+.theme-blue .status-label.currently-reading { background: #ffe082; color: #ff6f00; }
+.theme-blue .status-label.stopped { background: #ffcdd2; color: #b71c1c; }
+.theme-blue .status-label.finished { background: #c8e6c9; color: #1b5e20; }
+
+.theme-blue .button, .theme-blue #randomMangaBtn, .theme-blue #darkModeToggle {
+    background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+    color: #fff;
+}
+
+.theme-blue .button:hover, .theme-blue #randomMangaBtn:hover, .theme-blue #darkModeToggle:hover {
+    background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
+    color: #fff;
+}
+
+/* THEME: GREEN (Forest Inspired) */
+.theme-green {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+    color: #1b5e20;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-green::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(76, 175, 80, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(0, 128, 0, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 30%, rgba(76, 175, 80, 0.05) 50%, transparent 70%);
+    animation: greenPulse 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes greenPulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.02); }
+}
+
+.theme-green nav, .theme-green .banner, .theme-green .manga-card {
+    background: #b9f6ca !important;
+    color: #1b5e20 !important;
+}
+
+.theme-green .category-badge {
+    background: #a5d6a7;
+    color: #1b5e20;
+}
+
+.theme-green .status-label.will-read { background: #b2dfdb; color: #00695c; }
+.theme-green .status-label.currently-reading { background: #dcedc8; color: #558b2f; }
+.theme-green .status-label.stopped { background: #ffccbc; color: #d84315; }
+.theme-green .status-label.finished { background: #81c784; color: #fff; }
+
+.theme-green .button, .theme-green #randomMangaBtn, .theme-green #darkModeToggle {
+    background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+    color: #1b5e20;
+}
+
+.theme-green .button:hover, .theme-green #randomMangaBtn:hover, .theme-green #darkModeToggle:hover {
+    background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+    color: #1b5e20;
+}
+
+/* THEME: PURPLE (Royal Inspired) */
+.theme-purple {
+    background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 50%, #ce93d8 100%);
+    color: #4a148c;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-purple::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(156, 39, 176, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(103, 58, 183, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 30%, rgba(156, 39, 176, 0.05) 50%, transparent 70%);
+    animation: purplePulse 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes purplePulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.02); }
+}
+
+.theme-purple nav, .theme-purple .banner, .theme-purple .manga-card {
+    background: #e1bee7 !important;
+    color: #4a148c !important;
+}
+
+.theme-purple .category-badge {
+    background: #ba68c8;
+    color: #fff;
+}
+
+.theme-purple .status-label.will-read { background: #b39ddb; color: #4527a0; }
+.theme-purple .status-label.currently-reading { background: #ffd54f; color: #ff6f00; }
+.theme-purple .status-label.stopped { background: #f8bbd0; color: #ad1457; }
+.theme-purple .status-label.finished { background: #c8e6c9; color: #1b5e20; }
+
+.theme-purple .button, .theme-purple #randomMangaBtn, .theme-purple #darkModeToggle {
+    background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+    color: #4a148c;
+}
+
+.theme-purple .button:hover, .theme-purple #randomMangaBtn:hover, .theme-purple #darkModeToggle:hover {
+    background: linear-gradient(90deg, #fbc2eb 0%, #a18cd1 100%);
+    color: #4a148c;
+}
+
+/* Enhanced Theme Backgrounds - Beautiful and Unique */
+.theme-cosmic-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-cosmic-purple::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+    animation: cosmicFloat 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes cosmicFloat {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.02) rotate(2deg); }
+}
+
+.theme-sunset-orange {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-sunset-orange::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.08) 50%, transparent 60%);
+    animation: sunsetGlow 6s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes sunsetGlow {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.03); }
+}
+
+.theme-ocean-blue {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-ocean-blue::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+        linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, 0.06) 50%, transparent 70%);
+    animation: oceanWave 10s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes oceanWave {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-10px) scale(1.02); }
+}
+
+.theme-forest-emerald {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-forest-emerald::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+        linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.06) 50%, transparent 65%);
+    animation: forestBreeze 7s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes forestBreeze {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.01) rotate(1deg); }
+}
+
+.theme-midnight-aurora {
+    background: linear-gradient(135deg, #0c0c0c 0%, #2d1b69 100%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-midnight-aurora::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(75, 0, 130, 0.12) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 30%, rgba(148, 0, 211, 0.08) 50%, transparent 70%);
+    animation: auroraDance 12s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes auroraDance {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 0.95; transform: scale(1.04); }
+}
+
+.theme-cherry-blossom {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: #4a148c;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-cherry-blossom::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+        linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+    animation: blossomFall 9s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes blossomFall {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+.theme-golden-hour {
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+    color: #1a1a1a;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-golden-hour::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+        linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%);
+    animation: goldenGlow 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes goldenGlow {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.03); }
+}
+
+.theme-neon-dream {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    color: #2d1b69;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-neon-dream::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 60% 60%, rgba(255, 255, 255, 0.25) 0%, transparent 50%),
+        linear-gradient(135deg, transparent 35%, rgba(255, 255, 255, 0.2) 50%, transparent 65%);
+    animation: neonPulse 7s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes neonPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.theme-mystic-lavender {
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    color: #4a148c;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-mystic-lavender::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 35% 65%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 65% 35%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+        linear-gradient(120deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+    animation: mysticSwirl 10s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes mysticSwirl {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(3deg) scale(1.01); }
+}
+
+.theme-crystal-ice {
+    background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+    color: #0c0c0c;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-crystal-ice::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35) 0%, transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.25) 0%, transparent 50%),
+        linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+    animation: iceShimmer 9s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes iceShimmer {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 0.95; transform: scale(1.02); }
+}
+
+/* Remove old dark-mode class if present */
+body.dark-mode { background: unset !important; color: unset !important; }
+
+/* Enhanced Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInFromLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInFromRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.manga-card {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.manga-card:nth-child(odd) {
+    animation: slideInFromLeft 0.6s ease-out;
+}
+
+.manga-card:nth-child(even) {
+    animation: slideInFromRight 0.6s ease-out;
+}
+
+/* Enhanced Hover Effects */
+.manga-card:hover {
+    transform: scale(1.04) translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+
+/* Enhanced Button Effects */
+.button, #randomMangaBtn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.button::before, #randomMangaBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.button:hover::before, #randomMangaBtn:hover::before {
+    left: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .manga-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+        padding: 0 20px;
+    }
+    
+    nav {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    nav ul {
+        margin-top: 10px;
+    }
+    
+    .banner-content h1 {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .manga-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    
+    .banner-content h1 {
+        font-size: 28px;
+    }
+    
+    nav .search-box input[type="text"] {
+        width: 200px;
+    }
 }
