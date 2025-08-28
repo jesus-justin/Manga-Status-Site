@@ -20,12 +20,13 @@ if (!$auth->isLoggedIn()) {
   <link rel="stylesheet" href="home.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 5px;
-      background: #f00;
+    html, body {
+      height: auto;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+    
+    . background: #f00;
       width: 0%;
       z-index: 9999;
     }
@@ -423,7 +424,7 @@ if (!$auth->isLoggedIn()) {
 <h2 class="latest-heading">Latest Manga Updates</h2>
 
 <div class="manga-container">
-  <div class="manga-grid">
+  <div class="manga-grid" style="min-height: 500px;">
 <?php
 // Pagination variables
 $manga_per_page = 10;
