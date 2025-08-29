@@ -26,7 +26,8 @@ if (!$auth->isLoggedIn()) {
       overflow-y: auto;
     }
     
-    . background: #f00;
+    .scroll-progress {
+      background: #f00;
       width: 0%;
       z-index: 9999;
     }
