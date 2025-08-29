@@ -20,13 +20,11 @@ if (!$auth->isLoggedIn()) {
   <link rel="stylesheet" href="home.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    html, body {
-      height: auto;
-      min-height: 100vh;
-      overflow-y: auto;
-    }
-    
     .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 5px;
       background: #f00;
       width: 0%;
       z-index: 9999;
@@ -175,30 +173,12 @@ if (!$auth->isLoggedIn()) {
           clearTimeout(searchTimeout);
           searchTimeout = setTimeout(() => {
             const query = this.value.toLowerCase();
-            const mangaCards = document.querySelectorAll('.manga-card');
-            let found = false; // Initialize found variable
-            
-            mangaCards.forEach(card => {
+            document.querySelectorAll('.manga-card').forEach(card => {
               const title = card.getAttribute('data-title');
               const category = card.getAttribute('data-category');
               const status = card.getAttribute('data-status');
-              const isVisible = (title.includes(query) || category.includes(query) || status.includes(query));
-              card.style.display = isVisible ? '' : 'none';
-              if (isVisible) found = true; // Set found to true if a match is found
+              card.style.display = (title.includes(query) || category.includes(query) || status.includes(query)) ? '' : 'none';
             });
-            
-            // Show SweetAlert only if search query is not empty and no manga found
-            if (query.trim() !== '' && !found) {
-              Swal.fire({
-                title: 'Manga Not Found',
-                text: 'The manga you searched for does not exist in your library.',
-                icon: 'error',
-                confirmButtonText: 'Okay',
-                confirmButtonColor: '#d33',
-                timer: 3000,
-                timerProgressBar: true
-              });
-            }
           }, 200);
         });
       }
@@ -236,62 +216,28 @@ if (!$auth->isLoggedIn()) {
         randomBtn.addEventListener('click', window.enhancedRandomManga);
       }
 
-      // Enhanced Theme System with Beautiful Backgrounds
-      const themes = [
-        'theme-red', 
-        'theme-white', 
-        'theme-green', 
-        'theme-blue', 
-        'theme-purple',
-        'theme-dark-mode',
-        'theme-sunset',
-        'theme-ocean',
-        'theme-forest',
-        'theme-galaxy'
-      ];
-      
-      const themeIcons = ['🌌', '🌅', '🌊', '🌲', '🌙', '🌸', '🌇', '💫', '🔮', '❄️'];
-      const themeNames = [
-        'Cosmic Purple', 'Sunset Orange', 'Ocean Blue', 'Forest Emerald', 
-        'Midnight Aurora', 'Cherry Blossom', 'Golden Hour', 'Neon Dream', 
-        'Mystic Lavender', 'Crystal Ice'
-      ];
-      
+      const themes = ['theme-red', 'theme-white', 'theme-green', 'theme-blue', 'theme-purple'];
+      const themeIcons = ['🌑', '☀️', '🌿', '🌊', '🟣'];
       const darkModeToggle = document.getElementById('darkModeToggle');
 
       function applyTheme(theme) {
-        document.body.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+        document.body.style.transition = 'all 0.5s ease';
         document.body.classList.remove(...themes);
         document.body.classList.add(theme);
         localStorage.setItem('themeMode', theme);
         if (darkModeToggle) {
           const idx = themes.indexOf(theme);
           darkModeToggle.innerText = themeIcons[idx] || '🎨';
-          darkModeToggle.title = themeNames[idx] || 'Change Theme';
         }
-        
-        // Add subtle animation effect when theme changes
-        document.body.style.opacity = '0.8';
-        setTimeout(() => {
-          document.body.style.opacity = '1';
-        }, 300);
       }
 
-      const savedTheme = localStorage.getItem('themeMode') || 'theme-cosmic-purple';
+      const savedTheme = localStorage.getItem('themeMode') || 'theme-red';
       applyTheme(savedTheme);
-      
       if (darkModeToggle) {
         darkModeToggle.addEventListener('click', function () {
-          let currentTheme = document.body.classList.value.split(' ').find(c => themes.includes(c));
-          let idx = themes.indexOf(currentTheme);
+          let idx = themes.indexOf(document.body.classList.value.split(' ').find(c => themes.includes(c)));
           idx = (idx + 1) % themes.length;
           applyTheme(themes[idx]);
-          
-          // Add a subtle bounce effect to the toggle button
-          this.style.transform = 'scale(1.2)';
-          setTimeout(() => {
-            this.style.transform = 'scale(1)';
-          }, 150);
         });
       }
 
@@ -357,25 +303,21 @@ if (!$auth->isLoggedIn()) {
       `;
       document.querySelector('.banner').after(statsContainer);
     });
-  </script>
-  
-  <script>
+
     function confirmLogout() {
       Swal.fire({
-        title: 'Logout Confirmation',
+        title: 'Logout?',
         text: 'Are you sure you want to logout?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, logout',
-        cancelButtonText: 'No, stay logged in'
+        confirmButtonColor: '#007bff',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, logout!',
+        cancelButtonText: 'Cancel'
       }).then((result) => {
         if (result.isConfirmed) {
-          // User clicked "Yes" - proceed with logout
-          window.location.href = 'logout.php?confirmed=true';
+          window.location.href = 'logout.php';
         }
-        // If user clicks "No" or closes the dialog, nothing happens
       });
     }
   </script>
@@ -425,15 +367,15 @@ if (!$auth->isLoggedIn()) {
 <h2 class="latest-heading">Latest Manga Updates</h2>
 
 <div class="manga-container">
-  <div class="manga-grid" style="min-height: 500px;">
+  <div class="manga-grid">
 <?php
 // Pagination variables
 $manga_per_page = 10;
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $current_page = max(1, $current_page); // Ensure page is at least 1
 
-// Get total number of non-NSFW manga using prepared statement
-$count_sql = "SELECT COUNT(*) as total FROM manga WHERE category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%'";
+// Get total number of manga
+$count_sql = "SELECT COUNT(*) as total FROM manga";
 $count_result = $conn->query($count_sql);
 $total_manga = $count_result->fetch_assoc()['total'];
 $total_pages = ceil($total_manga / $manga_per_page);
@@ -441,12 +383,9 @@ $total_pages = ceil($total_manga / $manga_per_page);
 // Calculate offset for SQL query
 $offset = ($current_page - 1) * $manga_per_page;
 
-// Fetch non-NSFW manga for current page using prepared statement
-$sql = "SELECT * FROM manga WHERE category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%' ORDER BY id DESC LIMIT ? OFFSET ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $manga_per_page, $offset);
-$stmt->execute();
-$result = $stmt->get_result();
+// Fetch manga for current page
+$sql = "SELECT * FROM manga ORDER BY id DESC LIMIT $manga_per_page OFFSET $offset";
+$result = $conn->query($sql);
 
 if ($result->num_rows > 0):
   while ($row = $result->fetch_assoc()):
@@ -551,17 +490,6 @@ $conn->close();
   const tabContainer = document.getElementById('settingsTabContainer');
   let tabOpen = false;
   if (settingsBtn && tabContainer) {
-    settingsBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      tabOpen = !tabOpen;
-      tabContainer.style.display = tabOpen ? 'block' : 'none';
-    });
-    document.addEventListener('click', function () {
-      if (tabOpen) {
-        tabContainer.style.display = 'none';
-        tabOpen = false;
-      }
-    });
   }
 })();
 </script>
@@ -625,8 +553,6 @@ $conn->close();
 
 @media (max-width: 768px) {
   .footer-content {
-    grid-template-columns: 1fr;
-    text-align: center;
   }
 }
 </style>
