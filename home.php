@@ -19,6 +19,7 @@ if (!$auth->isLoggedIn()) {
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="animations.js"></script>
   <style>
     .scroll-progress {
       position: fixed;
