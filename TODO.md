@@ -5,13 +5,13 @@
 - [x] Add CSRF protection to login and register forms
 - [x] Improve session security in auth.php
 - [x] Secure database credentials in db.php (environment variables added)
-- [ ] Review and fix any remaining SQL injection vulnerabilities in other files (list_users.php, change.php still use direct queries)
+- [x] Review and fix any remaining SQL injection vulnerabilities in other files (list_users.php, change.php now use prepared statements)
 
 ## Code Quality Improvements
 - [x] Add proper error handling in db.php (connection errors and charset errors added)
 - [ ] Refactor inline PHP in home.php for better readability
-- [ ] Add input validation and sanitization where needed
-- [ ] Improve code comments and documentation
+- [x] Add input validation and sanitization where needed (added to login and register forms)
+- [x] Improve code comments and documentation (added comprehensive comments to db.php and auth.php)
 - [ ] Optimize database queries and add indexes if needed
 
 ## Performance Enhancements

@@ -1,22 +1,54 @@
 <?php
+/**
+ * Authentication and Authorization Class
+ *
+ * Handles user authentication, registration, session management, and CSRF protection
+ * for the Manga Library application. Implements security best practices including
+ * password hashing, prepared statements, and session security.
+ *
+ * @author Manga Library Development Team
+ * @version 1.0
+ * @since 2024
+ */
+
+// Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 require_once 'db.php';
 
+/**
+ * Authentication Class
+ *
+ * Provides secure user authentication and session management functionality.
+ * Includes CSRF protection, password hashing, and session security measures.
+ */
 class Auth {
+    /**
+     * Database connection object
+     * @var mysqli
+     */
     private $conn;
-    
+
+    /**
+     * Constructor - Initialize authentication system
+     *
+     * Sets up secure session management and CSRF protection.
+     * Regenerates session ID for security and generates CSRF token.
+     *
+     * @param mysqli $conn Database connection object
+     */
     public function __construct($conn) {
         $this->conn = $conn;
 
-        // Regenerate session ID for security
+        // Regenerate session ID to prevent session fixation attacks
         if (!isset($_SESSION['initiated'])) {
             session_regenerate_id(true);
             $_SESSION['initiated'] = true;
         }
 
-        // Generate CSRF token if not exists
+        // Generate cryptographically secure CSRF token
         if (!isset($_SESSION['csrf_token'])) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }

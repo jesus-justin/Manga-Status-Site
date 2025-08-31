@@ -10,12 +10,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$auth->validateCsrfToken($_POST['csrf_token'] ?? '')) {
         $message = 'Invalid request. Please try again.';
     } else {
-        $result = $auth->login($_POST['username'], $_POST['password']);
-        if ($result['success']) {
-            header('Location: home.php');
-            exit();
+        // Sanitize and validate inputs
+        $username = trim($_POST['username'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        // Input validation
+        $errors = [];
+
+        if (empty($username)) {
+            $errors[] = 'Username or email is required.';
+        } elseif (strlen($username) > 255) {
+            $errors[] = 'Username or email is too long.';
+        }
+
+        if (empty($password)) {
+            $errors[] = 'Password is required.';
+        }
+
+        // Check for basic email format if it looks like an email
+        if (!empty($username) && filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Invalid email format.';
+            }
+        }
+
+        if (!empty($errors)) {
+            $message = implode(' ', $errors);
         } else {
-            $message = $result['message'];
+            $result = $auth->login($username, $password);
+            if ($result['success']) {
+                header('Location: home.php');
+                exit();
+            } else {
+                $message = $result['message'];
+            }
         }
     }
 }

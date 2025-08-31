@@ -1,8 +1,9 @@
 <?php
 require_once 'db.php';
 
-$sql = "SELECT username, email FROM users"; // Adjust the query based on the actual table structure
-$result = $conn->query($sql);
+$stmt = $conn->prepare("SELECT username, email FROM users");
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {

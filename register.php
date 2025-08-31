@@ -10,12 +10,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$auth->validateCsrfToken($_POST['csrf_token'] ?? '')) {
         $message = 'Invalid request. Please try again.';
     } else {
-        $result = $auth->register($_POST['username'], $_POST['email'], $_POST['password']);
-        if ($result['success']) {
-            header('Location: login_fixed.php?registered=1');
-            exit();
+        // Sanitize and validate inputs
+        $username = trim($_POST['username'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        // Input validation
+        $errors = [];
+
+        if (empty($username)) {
+            $errors[] = 'Username is required.';
+        } elseif (strlen($username) < 3) {
+            $errors[] = 'Username must be at least 3 characters long.';
+        } elseif (strlen($username) > 50) {
+            $errors[] = 'Username must be less than 50 characters.';
+        } elseif (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+            $errors[] = 'Username can only contain letters, numbers, and underscores.';
+        }
+
+        if (empty($email)) {
+            $errors[] = 'Email is required.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Invalid email format.';
+        } elseif (strlen($email) > 255) {
+            $errors[] = 'Email is too long.';
+        }
+
+        if (empty($password)) {
+            $errors[] = 'Password is required.';
+        } elseif (strlen($password) < 6) {
+            $errors[] = 'Password must be at least 6 characters long.';
+        } elseif (strlen($password) > 255) {
+            $errors[] = 'Password is too long.';
+        }
+
+        if (!empty($errors)) {
+            $message = implode(' ', $errors);
         } else {
-            $message = $result['message'];
+            $result = $auth->register($username, $email, $password);
+            if ($result['success']) {
+                header('Location: login_fixed.php?registered=1');
+                exit();
+            } else {
+                $message = $result['message'];
+            }
         }
     }
 }
