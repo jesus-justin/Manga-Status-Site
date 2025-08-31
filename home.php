@@ -401,9 +401,12 @@ $total_pages = ceil($total_manga / $manga_per_page);
 // Calculate offset for SQL query
 $offset = ($current_page - 1) * $manga_per_page;
 
-// Fetch manga for current page
-$sql = "SELECT * FROM manga ORDER BY id DESC LIMIT $manga_per_page OFFSET $offset";
-$result = $conn->query($sql);
+// Fetch manga for current page using prepared statement
+$sql = "SELECT * FROM manga ORDER BY id DESC LIMIT ? OFFSET ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $manga_per_page, $offset);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0):
   while ($row = $result->fetch_assoc()):

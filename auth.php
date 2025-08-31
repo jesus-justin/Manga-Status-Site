@@ -9,11 +9,16 @@ class Auth {
     
     public function __construct($conn) {
         $this->conn = $conn;
-        
+
         // Regenerate session ID for security
         if (!isset($_SESSION['initiated'])) {
             session_regenerate_id(true);
             $_SESSION['initiated'] = true;
+        }
+
+        // Generate CSRF token if not exists
+        if (!isset($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
     }
     
@@ -123,6 +128,14 @@ class Auth {
             header('Location: login_new.php');
             exit();
         }
+    }
+
+    public function getCsrfToken() {
+        return $_SESSION['csrf_token'];
+    }
+
+    public function validateCsrfToken($token) {
+        return isset($token) && hash_equals($_SESSION['csrf_token'], $token);
     }
 }
 ?>

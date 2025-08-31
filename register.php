@@ -6,12 +6,17 @@ $auth = new Auth($conn);
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $result = $auth->register($_POST['username'], $_POST['email'], $_POST['password']);
-    if ($result['success']) {
-        header('Location: login_fixed.php?registered=1');
-        exit();
+    // Validate CSRF token
+    if (!$auth->validateCsrfToken($_POST['csrf_token'] ?? '')) {
+        $message = 'Invalid request. Please try again.';
     } else {
-        $message = $result['message'];
+        $result = $auth->register($_POST['username'], $_POST['email'], $_POST['password']);
+        if ($result['success']) {
+            header('Location: login_fixed.php?registered=1');
+            exit();
+        } else {
+            $message = $result['message'];
+        }
     }
 }
 ?>
@@ -296,6 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
         
         <form class="auth-form" method="POST">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
             <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required minlength="6">
