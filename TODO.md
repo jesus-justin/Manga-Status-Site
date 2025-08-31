@@ -21,7 +21,7 @@
 - [ ] Minimize CSS and JS files
 
 ## User Experience Improvements
-- [ ] Add loading indicators for AJAX requests
+- [x] Add loading indicators for AJAX requests (added to login and register forms)
 - [ ] Improve responsive design
 - [ ] Add accessibility features (ARIA labels, keyboard navigation)
 - [ ] Enhance error messages and user feedback
