@@ -33,8 +33,9 @@
 <h2 class="latest-heading">Edit or Delete Manga</h2>
 <div class="manga-grid">
 <?php
-$sql = "SELECT * FROM manga ORDER BY id DESC";
-$result = $conn->query($sql);
+$stmt = $conn->prepare("SELECT * FROM manga ORDER BY id DESC");
+$stmt->execute();
+$result = $stmt->get_result();
 if ($result->num_rows > 0):
   while ($row = $result->fetch_assoc()):
     $title = strtolower(trim($row['title']));

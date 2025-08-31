@@ -6,12 +6,45 @@ $auth = new Auth($conn);
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $result = $auth->login($_POST['username'], $_POST['password']);
-    if ($result['success']) {
-        header('Location: home.php');
-        exit();
+    // Validate CSRF token
+    if (!$auth->validateCsrfToken($_POST['csrf_token'] ?? '')) {
+        $message = 'Invalid request. Please try again.';
     } else {
-        $message = $result['message'];
+        // Sanitize and validate inputs
+        $username = trim($_POST['username'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        // Input validation
+        $errors = [];
+
+        if (empty($username)) {
+            $errors[] = 'Username or email is required.';
+        } elseif (strlen($username) > 255) {
+            $errors[] = 'Username or email is too long.';
+        }
+
+        if (empty($password)) {
+            $errors[] = 'Password is required.';
+        }
+
+        // Check for basic email format if it looks like an email
+        if (!empty($username) && filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Invalid email format.';
+            }
+        }
+
+        if (!empty($errors)) {
+            $message = implode(' ', $errors);
+        } else {
+            $result = $auth->login($username, $password);
+            if ($result['success']) {
+                header('Location: home.php');
+                exit();
+            } else {
+                $message = $result['message'];
+            }
+        }
     }
 }
 ?>
@@ -367,16 +400,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="error-message"><?= htmlspecialchars($message) ?></div>
         <?php endif; ?>
         
-        <form class="auth-form" method="POST">
+        <form class="auth-form" method="POST" id="loginForm">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
             <input type="text" name="username" placeholder="Username or Email" required>
             <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+            <button type="submit" id="loginBtn">
+                <span class="btn-text">Login</span>
+                <span class="loading-spinner" style="display: none;"></span>
+            </button>
         </form>
         
         <div class="auth-links">
             <p>Don't have an account? <a href="register.php">Register here</a></p>
         </div>
     </div>
+
+    <style>
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .auth-form button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .auth-form button:disabled:hover {
+            transform: none !important;
+            box-shadow: 0 8px 25px rgba(179, 146, 89, 0.3), 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+    </style>
 
     <script>
         // Create tech particles effect
@@ -394,25 +459,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             for (let i = 0; i < 20; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                
+
                 // Random size between 2-6px
                 const size = Math.random() * 4 + 2;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
-                
+
                 // Random position
                 particle.style.left = `${Math.random() * 100}%`;
                 particle.style.top = `${Math.random() * 100}%`;
-                
+
                 // Random animation delay
                 particle.style.animationDelay = `${Math.random() * 6}s`;
-                
+
                 particlesContainer.appendChild(particle);
             }
         }
 
-        // Initialize particles when page loads
-        document.addEventListener('DOMContentLoaded', createParticles);
+        // Form submission with loading indicator
+        function handleFormSubmission() {
+            const form = document.getElementById('loginForm');
+            const submitBtn = document.getElementById('loginBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const spinner = submitBtn.querySelector('.loading-spinner');
+
+            form.addEventListener('submit', function(e) {
+                // Show loading state
+                submitBtn.disabled = true;
+                btnText.textContent = 'Logging in...';
+                spinner.style.display = 'inline-block';
+
+                // Add visual feedback
+                submitBtn.style.transform = 'scale(0.98)';
+
+                // The form will submit normally, but we show loading state
+                // In a real AJAX implementation, we'd prevent default and use fetch()
+            });
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            handleFormSubmission();
+        });
     </script>
 </body>
 </html>

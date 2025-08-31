@@ -6,12 +6,55 @@ $auth = new Auth($conn);
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $result = $auth->register($_POST['username'], $_POST['email'], $_POST['password']);
-    if ($result['success']) {
-        header('Location: login_fixed.php?registered=1');
-        exit();
+    // Validate CSRF token
+    if (!$auth->validateCsrfToken($_POST['csrf_token'] ?? '')) {
+        $message = 'Invalid request. Please try again.';
     } else {
-        $message = $result['message'];
+        // Sanitize and validate inputs
+        $username = trim($_POST['username'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        // Input validation
+        $errors = [];
+
+        if (empty($username)) {
+            $errors[] = 'Username is required.';
+        } elseif (strlen($username) < 3) {
+            $errors[] = 'Username must be at least 3 characters long.';
+        } elseif (strlen($username) > 50) {
+            $errors[] = 'Username must be less than 50 characters.';
+        } elseif (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+            $errors[] = 'Username can only contain letters, numbers, and underscores.';
+        }
+
+        if (empty($email)) {
+            $errors[] = 'Email is required.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Invalid email format.';
+        } elseif (strlen($email) > 255) {
+            $errors[] = 'Email is too long.';
+        }
+
+        if (empty($password)) {
+            $errors[] = 'Password is required.';
+        } elseif (strlen($password) < 6) {
+            $errors[] = 'Password must be at least 6 characters long.';
+        } elseif (strlen($password) > 255) {
+            $errors[] = 'Password is too long.';
+        }
+
+        if (!empty($errors)) {
+            $message = implode(' ', $errors);
+        } else {
+            $result = $auth->register($username, $email, $password);
+            if ($result['success']) {
+                header('Location: login_fixed.php?registered=1');
+                exit();
+            } else {
+                $message = $result['message'];
+            }
+        }
     }
 }
 ?>
@@ -250,10 +293,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 margin: 20px;
                 padding: 40px 30px;
             }
-            
+
             .auth-container h2 {
                 font-size: 1.8em;
             }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .auth-form button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .auth-form button:disabled:hover {
+            transform: none !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
         }
     </style>
 </head>
@@ -295,16 +364,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="error-message"><?= htmlspecialchars($message) ?></div>
         <?php endif; ?>
         
-        <form class="auth-form" method="POST">
+        <form class="auth-form" method="POST" id="registerForm">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
             <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required minlength="6">
-            <button type="submit">Register</button>
+            <button type="submit" id="registerBtn">
+                <span class="btn-text">Register</span>
+                <span class="loading-spinner" style="display: none;"></span>
+            </button>
         </form>
         
         <div class="auth-links">
             <p>Already have an account? <a href="login_fixed.php">Login here</a></p>
         </div>
     </div>
+
+    <script>
+        // Form submission with loading indicator
+        function handleFormSubmission() {
+            const form = document.getElementById('registerForm');
+            const submitBtn = document.getElementById('registerBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const spinner = submitBtn.querySelector('.loading-spinner');
+
+            form.addEventListener('submit', function(e) {
+                // Show loading state
+                submitBtn.disabled = true;
+                btnText.textContent = 'Creating account...';
+                spinner.style.display = 'inline-block';
+
+                // Add visual feedback
+                submitBtn.style.transform = 'scale(0.98)';
+
+                // The form will submit normally, but we show loading state
+                // In a real AJAX implementation, we'd prevent default and use fetch()
+            });
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            handleFormSubmission();
+        });
+    </script>
 </body>
 </html>
