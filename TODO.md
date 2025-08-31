@@ -12,7 +12,7 @@
 - [ ] Refactor inline PHP in home.php for better readability
 - [x] Add input validation and sanitization where needed (added to login and register forms)
 - [x] Improve code comments and documentation (added comprehensive comments to db.php and auth.php)
-- [ ] Optimize database queries and add indexes if needed
+- [x] Optimize database queries and add indexes if needed (created database_optimizations.sql with recommended indexes)
 
 ## Performance Enhancements
 - [ ] Implement caching for frequently accessed data
