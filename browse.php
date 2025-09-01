@@ -11,25 +11,31 @@ if (!isset($_SESSION['user_id'])) {
 
 include 'db.php';
 
-// Get all non-NSFW genres by splitting the category field using prepared statement
-$sql_all = "SELECT category FROM manga WHERE category IS NOT NULL AND category != '' AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%'";
-$all_result = $conn->query($sql_all);
+try {
+    // Get all non-NSFW genres by splitting the category field using prepared statement
+    $sql_all = "SELECT category FROM manga WHERE category IS NOT NULL AND category != '' AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%'";
+    $all_result = $conn->query($sql_all);
 
-$all_genres = [];
-while ($row = $all_result->fetch_assoc()) {
-    $genres = array_map('trim', explode(',', $row['category']));
-    foreach ($genres as $genre) {
-        if (!empty($genre)) {
-            $all_genres[] = $genre;
+    $all_genres = [];
+    while ($row = $all_result->fetch_assoc()) {
+        $genres = array_map('trim', explode(',', $row['category']));
+        foreach ($genres as $genre) {
+            if (!empty($genre)) {
+                $all_genres[] = $genre;
+            }
         }
     }
+
+    // Get unique genres
+    $unique_genres = array_unique($all_genres);
+    sort($unique_genres);
+
+    $selected_genre = $_GET['genre'] ?? null;
+} catch (Exception $e) {
+    error_log("Error fetching genres: " . $e->getMessage());
+    $unique_genres = [];
+    $selected_genre = null;
 }
-
-// Get unique genres
-$unique_genres = array_unique($all_genres);
-sort($unique_genres);
-
-$selected_genre = $_GET['genre'] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -81,17 +87,33 @@ $selected_genre = $_GET['genre'] ?? null;
 
 <?php
 if ($selected_genre) {
-  echo "<h2 class='latest-heading'>Genre: " . htmlspecialchars($selected_genre) . "</h2>";
+    try {
+        echo "<h2 class='latest-heading'>Genre: " . htmlspecialchars($selected_genre) . "</h2>";
 
-  // Find non-NSFW manga that contain this genre using prepared statement
-  $sql_manga = "SELECT * FROM manga WHERE category LIKE ? AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%' ORDER BY title ASC";
-  $stmt = $conn->prepare($sql_manga);
-  $search_pattern = "%" . $selected_genre . "%";
-  $stmt->bind_param("s", $search_pattern);
-  $stmt->execute();
-  $manga_result = $stmt->get_result();
+        // Pagination variables for genre filtering
+        $manga_per_page = 10;
+        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $current_page = max(1, $current_page);
+        $offset = ($current_page - 1) * $manga_per_page;
 
-  if ($manga_result && $manga_result->num_rows > 0):
+        // Count total manga for selected genre
+        $count_sql = "SELECT COUNT(*) as total FROM manga WHERE category LIKE ? AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%'";
+        $count_stmt = $conn->prepare($count_sql);
+        $search_pattern = "%" . $selected_genre . "%";
+        $count_stmt->bind_param("s", $search_pattern);
+        $count_stmt->execute();
+        $count_result = $count_stmt->get_result();
+        $total_manga = $count_result->fetch_assoc()['total'];
+        $total_pages = ceil($total_manga / $manga_per_page);
+
+        // Fetch manga for current page with pagination
+        $sql_manga = "SELECT * FROM manga WHERE category LIKE ? AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%' ORDER BY title ASC LIMIT ? OFFSET ?";
+        $stmt = $conn->prepare($sql_manga);
+        $stmt->bind_param("sii", $search_pattern, $manga_per_page, $offset);
+        $stmt->execute();
+        $manga_result = $stmt->get_result();
+
+        if ($manga_result && $manga_result->num_rows > 0):
 ?>
   <div class="manga-container">
     <div class="manga-grid">
@@ -143,7 +165,57 @@ if ($selected_genre) {
   <div class="manga-container">
     <p style="color:#eee; text-align:center; margin-top: 2rem;">No manga found in this genre.</p>
   </div>
-<?php endif;
+<?php endif; ?>
+
+<!-- Pagination Controls -->
+<?php if ($total_pages > 1): ?>
+  <div class="pagination">
+    <!-- Previous button -->
+    <?php if ($current_page > 1): ?>
+      <a href="?genre=<?= urlencode($selected_genre) ?>&page=<?= $current_page - 1 ?>" class="pagination-btn">Previous</a>
+    <?php endif; ?>
+
+    <!-- Page numbers -->
+    <?php
+    $start_page = max(1, $current_page - 2);
+    $end_page = min($total_pages, $current_page + 2);
+
+    // Show first page if not in range
+    if ($start_page > 1): ?>
+      <a href="?genre=<?= urlencode($selected_genre) ?>&page=1" class="pagination-btn">1</a>
+      <?php if ($start_page > 2): ?>
+        <span class="pagination-ellipsis">...</span>
+      <?php endif; ?>
+    <?php endif; ?>
+
+    <!-- Page number buttons -->
+    <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+      <?php if ($i == $current_page): ?>
+        <span class="pagination-btn current"><?= $i ?></span>
+      <?php else: ?>
+        <a href="?genre=<?= urlencode($selected_genre) ?>&page=<?= $i ?>" class="pagination-btn"><?= $i ?></a>
+      <?php endif; ?>
+    <?php endfor; ?>
+
+    <!-- Show last page if not in range -->
+    <?php if ($end_page < $total_pages): ?>
+      <?php if ($end_page < $total_pages - 1): ?>
+        <span class="pagination-ellipsis">...</span>
+      <?php endif; ?>
+      <a href="?genre=<?= urlencode($selected_genre) ?>&page=<?= $total_pages ?>" class="pagination-btn"><?= $total_pages ?></a>
+    <?php endif; ?>
+
+    <!-- Next button -->
+    <?php if ($current_page < $total_pages): ?>
+      <a href="?genre=<?= urlencode($selected_genre) ?>&page=<?= $current_page + 1 ?>" class="pagination-btn">Next</a>
+    <?php endif; ?>
+  </div>
+<?php endif; ?>
+<?php
+    } catch (Exception $e) {
+        error_log("Error fetching manga for genre: " . $e->getMessage());
+        echo '<div class="manga-container"><p style="color:#eee; text-align:center; margin-top: 2rem;">Error loading manga for this genre.</p></div>';
+    }
 } else {
     echo '<div class="manga-container"><p style="color:#eee; text-align:center; margin-top: 2rem;">Please select a genre above to see the manga.</p></div>';
 }
