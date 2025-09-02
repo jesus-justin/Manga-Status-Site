@@ -115,24 +115,77 @@ class Auth {
     }
     
     public function login($username, $password) {
-        // Simplified login without rate limiting and email verification
+        // Rate limiting: Check login attempts
+        $this->checkLoginAttempts($username);
+
         $stmt = $this->conn->prepare("SELECT id, username, password_hash FROM users WHERE username = ? OR email = ?");
         $stmt->bind_param("ss", $username, $username);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
             if (password_verify($password, $user['password_hash'])) {
+                // Reset login attempts on successful login
+                $this->resetLoginAttempts($username);
+
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['logged_in'] = true;
-                
+
                 return ['success' => true, 'message' => 'Login successful'];
             }
         }
-        
+
+        // Record failed attempt
+        $this->recordFailedAttempt($username);
+
         return ['success' => false, 'message' => 'Invalid username or password'];
+    }
+
+    /**
+     * Check login attempts for rate limiting
+     */
+    private function checkLoginAttempts($username) {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $time_window = 15 * 60; // 15 minutes
+        $max_attempts = 5;
+
+        // Clean old attempts
+        $stmt = $this->conn->prepare("DELETE FROM login_attempts WHERE attempt_time < ?");
+        $stmt->bind_param("i", (time() - $time_window));
+        $stmt->execute();
+
+        // Check attempts
+        $stmt = $this->conn->prepare("SELECT COUNT(*) as attempts FROM login_attempts WHERE ip = ? AND username = ? AND attempt_time > ?");
+        $stmt->bind_param("ssi", $ip, $username, (time() - $time_window));
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $attempts = $result->fetch_assoc()['attempts'];
+
+        if ($attempts >= $max_attempts) {
+            throw new Exception('Too many login attempts. Please try again later.');
+        }
+    }
+
+    /**
+     * Record failed login attempt
+     */
+    private function recordFailedAttempt($username) {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $stmt = $this->conn->prepare("INSERT INTO login_attempts (ip, username, attempt_time) VALUES (?, ?, ?)");
+        $stmt->bind_param("ssi", $ip, $username, time());
+        $stmt->execute();
+    }
+
+    /**
+     * Reset login attempts on successful login
+     */
+    private function resetLoginAttempts($username) {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $stmt = $this->conn->prepare("DELETE FROM login_attempts WHERE ip = ? AND username = ?");
+        $stmt->bind_param("ss", $ip, $username);
+        $stmt->execute();
     }
     
     public function logout() {

@@ -1,28 +1,28 @@
-# Optimization Plan to Prevent Crashes and Improve Performance
+# Enhancement Plan Implementation
 
-## Critical Fixes to Prevent Crashes
-- [x] Add pagination to browse.php to prevent loading all manga at once
-- [ ] Fix stats calculation in home.php to be server-side and accurate
-- [ ] Add comprehensive error handling with try-catch blocks
-- [ ] Add memory and timeout limits for large data processing
-- [ ] Optimize database queries with proper indexes
+## Security Enhancements
+- [ ] Add login attempt throttling in auth.php
+- [ ] Add CSRF protection to create.php form
+- [ ] Add security headers and session improvements in auth.php
+- [ ] Add input validation and sanitization to create.php backend
 
-## Performance Enhancements
-- [ ] Implement query result limits to prevent memory exhaustion
-- [ ] Optimize JavaScript loading and execution
-- [ ] Add lazy loading for images (already partially implemented)
-- [ ] Minimize CSS and JS files
+## Performance Optimizations
+- [ ] Apply database indexes from database_optimizations.sql
+- [ ] Optimize SQL queries in browse.php and other files
+- [ ] Refactor repeated theme toggling JS into shared function
+- [ ] Add query result limits to prevent memory exhaustion
+
+## UI/UX Improvements
+- [ ] Add AJAX form submission to register.php and login_fixed.php
+- [ ] Improve error messages and user feedback consistency
+- [ ] Add loading indicators for better UX
+- [ ] Improve accessibility and responsiveness in style.css
 
 ## Code Quality Improvements
+- [ ] Add comprehensive error handling with try-catch blocks
 - [ ] Refactor large inline PHP blocks for better readability
-- [ ] Add input validation and sanitization
-- [ ] Improve error messages and user feedback
-- [ ] Add loading indicators for better UX
-
-## Database Optimizations
-- [ ] Apply indexes from database_optimizations.sql
-- [ ] Optimize query structures for better performance
-- [ ] Add query execution time monitoring
+- [ ] Add memory and timeout limits for large data processing
+- [ ] Optimize JavaScript loading and execution
 
 ## Testing and Validation
 - [ ] Test with large datasets to ensure stability
