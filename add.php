@@ -10,6 +10,8 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 include 'db.php';
+include 'auth.php';
+$auth = new Auth($conn);
 
 function fetchMangaCover($title) {
   // Use Jikan API to search for manga
@@ -62,6 +64,11 @@ function getExternalMangaLinks($title) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  // Validate CSRF token
+  if (!isset($_POST['csrf_token']) || !$auth->validateCsrfToken($_POST['csrf_token'])) {
+    die("CSRF token validation failed");
+  }
+
   $title = trim($_POST['title']);
   $status = $_POST['status'];
   
