@@ -10,6 +10,34 @@ if (!$auth->isLoggedIn()) {
     header('Location: login_fixed.php');
     exit();
 }
+
+try {
+    // Pagination variables
+    $manga_per_page = 10;
+    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $current_page = max(1, $current_page); // Ensure page is at least 1
+
+    // Get total number of manga
+    $count_sql = "SELECT COUNT(*) as total FROM manga";
+    $count_result = $conn->query($count_sql);
+    $total_manga = $count_result->fetch_assoc()['total'];
+    $total_pages = ceil($total_manga / $manga_per_page);
+
+    // Calculate offset for SQL query
+    $offset = ($current_page - 1) * $manga_per_page;
+
+    // Fetch manga for current page using prepared statement
+    $sql = "SELECT * FROM manga ORDER BY id DESC LIMIT ? OFFSET ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $manga_per_page, $offset);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} catch (Exception $e) {
+    error_log("Error fetching manga for home page: " . $e->getMessage());
+    $result = null;
+    $total_pages = 0;
+    $current_page = 1;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -352,230 +380,3 @@ if (!$auth->isLoggedIn()) {
     <li><a href="home.php">Home</a></li>
     <li><a href="browse.php">Browse</a></li>
     <li><a href="user_progress.php">My Progress</a></li>
-    <li><a href="nsfw.php">NSFW Mode</a></li>
-  </ul>
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search manga..." aria-label="Search manga">
-  </div>
-  <div class="nav-actions">
-    <button id="darkModeToggle" title="Toggle dark mode">🌙</button>
-    <div class="auth-buttons-container">
-      <a href="login_fixed.php" class="auth-btn" title="Login" style="display: block; margin-bottom: 8px; padding: 10px; font-size: 20px;">🔐</a>
-      <a href="register.php" class="auth-btn" title="Register" style="display: block; margin-bottom: 8px; padding: 10px; font-size: 20px;">👤</a>
-      <a href="#" onclick="confirmLogout()" class="auth-btn" title="Logout" style="display: block; padding: 10px; font-size: 20px;">🚪</a>
-    </div>
-  </div>
-  <div class="settings-tab-container" id="settingsTabContainer" style="display:none;">
-    <div class="menu">
-      <div class="menu__item" onclick="window.location='create.php'" title="Create">📝<span class="tab-label">Create</span></div>
-      <div class="menu__item" onclick="window.location='change.php'" title="Change">✏️<span class="tab-label">Change</span></div>
-    </div>
-  </div>
-</nav>
-
-<div class="banner">
-  <div class="banner-content">
-    <h1>Welcome to your MANGA LIBRARY</h1>
-    <p>Manage your collection easily with cover images, categories, and reading links.</p>
-    <button id="randomMangaBtn" aria-label="Random Manga">🎲 Random Manga</button>
-    <div id="randomMangaResult"></div>
-  </div>
-</div>
-
-<h2 class="latest-heading">Latest Manga Updates</h2>
-
-<div class="manga-container">
-  <div class="manga-grid">
-<?php
-// Pagination variables
-$manga_per_page = 10;
-$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$current_page = max(1, $current_page); // Ensure page is at least 1
-
-// Get total number of manga
-$count_sql = "SELECT COUNT(*) as total FROM manga";
-$count_result = $conn->query($count_sql);
-$total_manga = $count_result->fetch_assoc()['total'];
-$total_pages = ceil($total_manga / $manga_per_page);
-
-// Calculate offset for SQL query
-$offset = ($current_page - 1) * $manga_per_page;
-
-// Fetch manga for current page using prepared statement
-$sql = "SELECT * FROM manga ORDER BY id DESC LIMIT ? OFFSET ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $manga_per_page, $offset);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows > 0):
-  while ($row = $result->fetch_assoc()):
-    $title = strtolower(trim($row['title']));
-    $filename = str_replace(' ', '_', $title) . '.jpeg';
-    $category = htmlspecialchars($row['category']);
-    $status = htmlspecialchars($row['status']);
-    $statusClass = strtolower(str_replace(' ', '-', $status));
-    // Split categories by comma and create individual badges
-    $categories = explode(',', $category);
-    $categoryBadges = '';
-    foreach ($categories as $cat) {
-        $cat = trim($cat);
-        if (!empty($cat)) {
-            $categoryBadges .= '<span class="category-badge">' . htmlspecialchars($cat) . '</span>';
-        }
-    }
-?>
-  <div class="manga-card" data-id="<?= $row['id'] ?>" data-title="<?= strtolower($row['title']) ?>" data-category="<?= strtolower($row['category']) ?>" data-status="<?= strtolower($row['status']) ?>">
-    <img src="images/<?= htmlspecialchars($filename) ?>" alt="<?= htmlspecialchars($row['title']) ?>" onerror="this.src='images/default.jpg'" loading="lazy">
-    <h3><?= htmlspecialchars($row['title']) ?></h3>
-    <div class="status-label <?= $statusClass ?>">Status: <?= $status ?></div>
-    <div class="category-badges"><?= $categoryBadges ?></div>
-    <?php if (!empty($row['last_chapter'])): ?>
-      <p>Last Chapter: <?= htmlspecialchars($row['last_chapter']) ?></p>
-    <?php endif; ?>
-    <?php if (!empty($row['read_link'])): ?>
-      <p><a href="<?= htmlspecialchars($row['read_link']) ?>" target="_blank">Read Here</a></p>
-    <?php endif; ?>
-    <?php if (!empty($row['external_links'])):
-      $links = json_decode($row['external_links'], true);
-      if ($links && is_array($links)): ?>
-      <div class="external-links"><strong>Read on:</strong><ul>
-        <?php foreach ($links as $link): ?>
-          <li><a href="<?= htmlspecialchars($link['url']) ?>" target="_blank"><?= htmlspecialchars($link['name']) ?></a></li>
-        <?php endforeach; ?>
-      </ul></div>
-    <?php endif; endif; ?>
-    <div class="card-actions">
-      <a href="edit.php?id=<?= $row['id'] ?>" class="btn">✏️ Edit</a>
-      <a href="delete.php?id=<?= $row['id'] ?>" class="btn" onclick="return confirm('Delete this manga?')">🗑️ Delete</a>
-    </div>
-  </div>
-<?php endwhile; else: ?>
-  <p style="color:#eee; text-align:center;">No manga added yet.</p>
-<?php endif; ?>
-  </div>
-
-  <!-- Pagination Controls -->
-  <?php if ($total_pages > 1): ?>
-  <div class="pagination">
-  <!-- Previous button -->
-  <?php if ($current_page > 1): ?>
-    <a href="?page=<?= $current_page - 1 ?>" class="pagination-btn">Previous</a>
-  <?php endif; ?>
-
-  <!-- Page numbers -->
-  <?php
-  $start_page = max(1, $current_page - 2);
-  $end_page = min($total_pages, $current_page + 2);
-  
-  // Show first page if not in range
-  if ($start_page > 1): ?>
-    <a href="?page=1" class="pagination-btn">1</a>
-    <?php if ($start_page > 2): ?>
-      <span class="pagination-ellipsis">...</span>
-    <?php endif; ?>
-  <?php endif; ?>
-  
-  <!-- Page number buttons -->
-  <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
-    <?php if ($i == $current_page): ?>
-      <span class="pagination-btn current"><?= $i ?></span>
-    <?php else: ?>
-      <a href="?page=<?= $i ?>" class="pagination-btn"><?= $i ?></a>
-    <?php endif; ?>
-  <?php endfor; ?>
-  
-  <!-- Show last page if not in range -->
-  <?php if ($end_page < $total_pages): ?>
-    <?php if ($end_page < $total_pages - 1): ?>
-      <span class="pagination-ellipsis">...</span>
-    <?php endif; ?>
-    <a href="?page=<?= $total_pages ?>" class="pagination-btn"><?= $total_pages ?></a>
-  <?php endif; ?>
-
-  <!-- Next button -->
-  <?php if ($current_page < $total_pages): ?>
-    <a href="?page=<?= $current_page + 1 ?>" class="pagination-btn">Next</a>
-  <?php endif; ?>
-  </div>
-  <?php endif; ?>
-</div>
-
-<?php
-$conn->close();
-?>
-
-<script>
-(function () {
-  const settingsBtn = document.getElementById('settingsBtn');
-  const tabContainer = document.getElementById('settingsTabContainer');
-  let tabOpen = false;
-  if (settingsBtn && tabContainer) {
-  }
-})();
-</script>
-
-<footer class="site-footer">
-  <div class="footer-content">
-    <div class="footer-section">
-      <h4>MangaLibrary</h4>
-      <p>Your personal manga collection manager</p>
-    </div>
-    <div class="footer-section">
-      <h4>Legal</h4>
-      <p>All manga content and images are property of their respective owners. This site is for personal collection management only.</p>
-    </div>
-    <div class="footer-section">
-      <h4>Contact</h4>
-      <p>For issues or suggestions, contact the site administrator</p>
-      <p>Contact: mjesusjustin@gmail.com</p>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; 2025 MangaLibrary. All Rights Reserved. | Copyrights @2025 Manga Status Site</p>
-  </div>
-</footer>
-
-<style>
-.site-footer {
-  background: #1a1a1a;
-  color: #ccc;
-  padding: 40px 20px 20px;
-  margin-top: 60px;
-  border-top: 1px solid #333;
-}
-
-.footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.footer-section h4 {
-  color: #fff;
-  margin-bottom: 15px;
-  font-size: 18px;
-}
-
-.footer-section p {
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.footer-bottom {
-  text-align: center;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #333;
-  font-size: 14px;
-}
-
-@media (max-width: 768px) {
-  .footer-content {
-  }
-}
-</style>
-</body>
-</html>
