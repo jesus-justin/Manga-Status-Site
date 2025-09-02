@@ -1,7 +1,7 @@
 # Enhancement Plan Implementation
 
 ## Security Enhancements
-- [ ] Add login attempt throttling in auth.php
+- [x] Add login attempt throttling in auth.php
 - [ ] Add CSRF protection to create.php form
 - [ ] Add security headers and session improvements in auth.php
 - [ ] Add input validation and sanitization to create.php backend

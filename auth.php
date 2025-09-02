@@ -1,4 +1,4 @@
-<?php
+-m <?php
 /**
  * Authentication and Authorization Class
  *
