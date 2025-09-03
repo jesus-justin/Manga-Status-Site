@@ -3,6 +3,20 @@
 -- Run these commands on your MySQL database to improve query performance
 
 -- =====================================================
+-- TABLE CREATIONS
+-- =====================================================
+
+-- Create login_attempts table for rate limiting
+CREATE TABLE IF NOT EXISTS login_attempts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ip VARCHAR(45) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    attempt_time INT NOT NULL,
+    INDEX idx_login_attempts_ip_username (ip, username),
+    INDEX idx_login_attempts_time (attempt_time)
+);
+
+-- =====================================================
 -- INDEX OPTIMIZATIONS
 -- =====================================================
 

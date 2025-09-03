@@ -1,4 +1,8 @@
-<?php include 'db.php'; ?>
+<?php
+include 'db.php';
+include 'auth.php';
+$auth = new Auth($conn);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,6 +136,7 @@
 </nav>
 <div class="add-form">
   <form action="add.php" method="POST">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
     <input type="text" name="title" placeholder="Enter Manga Title" required>
     <select name="status" required>
       <option value="will read">Will Read</option>
