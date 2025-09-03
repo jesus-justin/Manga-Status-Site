@@ -1,30 +1,33 @@
-# Enhancement Plan Implementation
+# Site Loading and Code Cleanup Plan
 
-## Security Enhancements
-- [x] Add login attempt throttling in auth.php
-- [x] Add CSRF protection to create.php form
-- [ ] Add security headers and session improvements in auth.php
-- [ ] Add input validation and sanitization to create.php backend
+## Database and Connection Issues
+- [ ] Verify database connection in db.php and ensure manga_library database exists
+- [ ] Check for database connection errors preventing site load
+- [ ] Run users_complete.sql to set up required tables if missing
+- [ ] Add better error display for database connection failures
 
-## Performance Optimizations
-- [ ] Apply database indexes from database_optimizations.sql
-- [ ] Optimize SQL queries in browse.php and other files
-- [ ] Refactor repeated theme toggling JS into shared function
-- [ ] Add query result limits to prevent memory exhaustion
+## Code Cleanup and Duplicates Removal
+- [ ] Review home.php for duplicate CSS/JS includes and unused code blocks
+- [ ] Review login_fixed.php for duplicate styles and redundant JavaScript
+- [ ] Remove duplicate particle creation code between home.php and login_fixed.php
+- [ ] Consolidate theme toggling JavaScript into a shared function
+- [ ] Remove unused inline styles and consolidate into CSS files
+- [ ] Check auth.php for redundant methods or unused code
 
-## UI/UX Improvements
-- [ ] Add AJAX form submission to register.php and login_fixed.php
-- [ ] Improve error messages and user feedback consistency
-- [ ] Add loading indicators for better UX
-- [ ] Improve accessibility and responsiveness in style.css
+## Design Preservation
+- [ ] Ensure all design elements (particles, animations, themes) are preserved
+- [ ] Keep responsive design and accessibility features
+- [ ] Maintain loading indicators and user feedback elements
+- [ ] Preserve SweetAlert integrations and form validations
 
-## Code Quality Improvements
-- [ ] Add comprehensive error handling with try-catch blocks
-- [ ] Refactor large inline PHP blocks for better readability
-- [ ] Add memory and timeout limits for large data processing
-- [ ] Optimize JavaScript loading and execution
+## Error Handling and Debugging
+- [ ] Add error logging to catch runtime errors
+- [ ] Improve error messages for better debugging
+- [ ] Add try-catch blocks around database operations
+- [ ] Test site loading on localhost after each major change
 
 ## Testing and Validation
-- [ ] Test with large datasets to ensure stability
-- [ ] Validate all optimizations work correctly
-- [ ] Monitor memory usage and performance metrics
+- [ ] Test login functionality after cleanup
+- [ ] Test pagination and search features
+- [ ] Verify theme switching and animations work
+- [ ] Check for any broken links or missing assets
