@@ -20,6 +20,9 @@ try {
     // Get total number of manga
     $count_sql = "SELECT COUNT(*) as total FROM manga";
     $count_result = $conn->query($count_sql);
+    if (!$count_result) {
+        throw new Exception("Failed to count manga: " . $conn->error);
+    }
     $total_manga = $count_result->fetch_assoc()['total'];
     $total_pages = ceil($total_manga / $manga_per_page);
 
@@ -29,6 +32,9 @@ try {
     // Fetch manga for current page using prepared statement
     $sql = "SELECT * FROM manga ORDER BY id DESC LIMIT ? OFFSET ?";
     $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception("Failed to prepare statement: " . $conn->error);
+    }
     $stmt->bind_param("ii", $manga_per_page, $offset);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -380,3 +386,101 @@ try {
     <li><a href="home.php">Home</a></li>
     <li><a href="browse.php">Browse</a></li>
     <li><a href="user_progress.php">My Progress</a></li>
+  </ul>
+  <button id="darkModeToggle" title="Toggle theme">🎨</button>
+</nav>
+
+<main>
+  <h1 class="latest-heading">Latest Manga</h1>
+  <div class="manga-container">
+    <div class="manga-grid">
+      <?php if ($result && $result->num_rows > 0): ?>
+        <?php while ($row = $result->fetch_assoc()): ?>
+          <?php
+            $title = strtolower(trim($row['title']));
+            $filename = str_replace(' ', '_', $title) . '.jpeg';
+            $category = htmlspecialchars($row['category']);
+            $status = htmlspecialchars($row['status']);
+            $statusClass = strtolower(str_replace(' ', '-', $status));
+            $genres = array_map('trim', explode(',', $row['category']));
+            $genre_badges = '';
+            foreach ($genres as $g) {
+                if (!empty($g)) {
+                    $genre_badges .= '<span class="category-badge">' . htmlspecialchars($g) . '</span> ';
+                }
+            }
+          ?>
+          <div class="manga-card" data-id="<?= $row['id'] ?>" data-title="<?= strtolower($row['title']) ?>" data-category="<?= strtolower($row['category']) ?>" data-status="<?= strtolower($row['status']) ?>">
+            <img src="images/<?= htmlspecialchars($filename) ?>" alt="<?= htmlspecialchars($row['title']) ?>" onerror="this.src='images/default.jpg'" loading="lazy">
+            <h3><?= htmlspecialchars($row['title']) ?></h3>
+            <div class="status-label <?= $statusClass ?>">Status: <?= $status ?></div>
+            <div class="genre-badges"><?= $genre_badges ?></div>
+            <?php if (!empty($row['last_chapter'])): ?>
+              <p>Last Chapter: <?= htmlspecialchars($row['last_chapter']) ?></p>
+            <?php endif; ?>
+            <?php if (!empty($row['read_link'])): ?>
+              <p><a href="<?= htmlspecialchars($row['read_link']) ?>" target="_blank">Read Here</a></p>
+            <?php endif; ?>
+            <?php if (!empty($row['external_links'])):
+              $links = json_decode($row['external_links'], true);
+              if ($links && is_array($links)): ?>
+              <div class="external-links"><strong>Read on:</strong><ul>
+                <?php foreach ($links as $link): ?>
+                  <li><a href="<?= htmlspecialchars($link['url']) ?>" target="_blank"><?= htmlspecialchars($link['name']) ?></a></li>
+                <?php endforeach; ?>
+              </ul></div>
+            <?php endif; endif; ?>
+            <div class="card-actions">
+              <a href="edit.php?id=<?= $row['id'] ?>" class="btn">✏️ Edit</a>
+              <a href="delete.php?id=<?= $row['id'] ?>" class="btn" onclick="return confirm('Delete this manga?')">🗑️ Delete</a>
+            </div>
+          </div>
+        <?php endwhile; ?>
+      <?php else: ?>
+        <p style="color:#eee; text-align:center; margin-top: 2rem;">No manga found.</p>
+      <?php endif; ?>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <?php if ($total_pages > 1): ?>
+    <div class="pagination">
+      <?php if ($current_page > 1): ?>
+        <a href="?page=<?= $current_page - 1 ?>" class="pagination-btn">Previous</a>
+      <?php endif; ?>
+
+      <?php
+      $start_page = max(1, $current_page - 2);
+      $end_page = min($total_pages, $current_page + 2);
+
+      if ($start_page > 1): ?>
+        <a href="?page=1" class="pagination-btn">1</a>
+        <?php if ($start_page > 2): ?>
+          <span class="pagination-ellipsis">...</span>
+        <?php endif; ?>
+      <?php endif; ?>
+
+      <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+        <?php if ($i == $current_page): ?>
+          <span class="pagination-btn current"><?= $i ?></span>
+        <?php else: ?>
+          <a href="?page=<?= $i ?>" class="pagination-btn"><?= $i ?></a>
+        <?php endif; ?>
+      <?php endfor; ?>
+
+      <?php if ($end_page < $total_pages): ?>
+        <?php if ($end_page < $total_pages - 1): ?>
+          <span class="pagination-ellipsis">...</span>
+        <?php endif; ?>
+        <a href="?page=<?= $total_pages ?>" class="pagination-btn"><?= $total_pages ?></a>
+      <?php endif; ?>
+
+      <?php if ($current_page < $total_pages): ?>
+        <a href="?page=<?= $current_page + 1 ?>" class="pagination-btn">Next</a>
+      <?php endif; ?>
+    </div>
+  <?php endif; ?>
+</main>
+
+</body>
+</html>
