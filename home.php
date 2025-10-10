@@ -378,20 +378,40 @@ try {
 
 <div class="scroll-progress"></div>
 
-<nav>
-  <div class="logo">
-    <a href="home.php" style="color: inherit; text-decoration: none; cursor: pointer;">MangaLibrary</a>
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-bg-elements">
+    <div class="hero-bg-element"></div>
+    <div class="hero-bg-element"></div>
+    <div class="hero-bg-element"></div>
   </div>
-  <ul>
-    <li><a href="home.php">Home</a></li>
-    <li><a href="browse.php">Browse</a></li>
-    <li><a href="user_progress.php">My Progress</a></li>
-  </ul>
-  <button id="darkModeToggle" title="Toggle theme">🎨</button>
+  <div class="hero-content">
+    <h1 class="hero-title">Manga Library</h1>
+    <p class="hero-subtitle">Discover, track, and manage your favorite manga collection</p>
+    <div class="hero-buttons">
+      <a href="add.php" class="hero-btn hero-btn-primary">Add New Manga</a>
+      <a href="browse.php" class="hero-btn hero-btn-secondary">Browse Collection</a>
+    </div>
+  </div>
+</section>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-container">
+    <a href="home.php" class="nav-logo">MangaLibrary</a>
+    <ul class="nav-menu">
+      <li><a href="home.php">Home</a></li>
+      <li><a href="browse.php">Browse</a></li>
+      <li><a href="user_progress.php">My Progress</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="darkModeToggle" class="theme-toggle" title="Toggle theme">🎨</button>
+    </div>
+  </div>
 </nav>
 
 <main>
-  <h1 class="latest-heading">Latest Manga</h1>
+  <h1 class="latest-heading fade-in-up">Latest Manga</h1>
   <div class="manga-container">
     <div class="manga-grid">
       <?php if ($result && $result->num_rows > 0): ?>
@@ -481,6 +501,36 @@ try {
     </div>
   <?php endif; ?>
 </main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>About MangaLibrary</h3>
+      <p>Your personal manga collection manager. Track your reading progress, discover new series, and organize your favorite manga all in one place.</p>
+    </div>
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <div class="footer-links">
+        <a href="home.php" class="footer-link">Home</a>
+        <a href="browse.php" class="footer-link">Browse</a>
+        <a href="add.php" class="footer-link">Add Manga</a>
+        <a href="user_progress.php" class="footer-link">My Progress</a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h3>Connect</h3>
+      <p>Follow us for the latest manga updates and recommendations.</p>
+      <div class="footer-links">
+        <span class="footer-link">📱 Social Media</span>
+        <span class="footer-link">📧 Contact</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 MangaLibrary. Built with ❤️ for manga enthusiasts.</p>
+  </div>
+</footer>
 
 </body>
 </html>
