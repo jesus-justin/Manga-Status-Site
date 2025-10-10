@@ -1,33 +1,30 @@
-# Site Loading and Code Cleanup Plan
+# SitedLoad ngdded CodC Cleaaupup Plan
 
-## Database and Connection Issues
-- [ ] Verify database connection in db.php and ensure manga_library database exists
-- [ ] Check for database connection errors preventing site load
-- [ ] Run users_complete.sql to set up required tables if missing
-- [ ] Add better error display for database connection failures
+## Database aad Cannece andIssunsion Issues
+- [i]aVerefncdit b .epconnecthop ensdb.p a n_dydnsutig_lbrry daabase exts
+- [ ] C[ hkkffr dar batbecotnec err erroros rtvene loaielo
+- [s]lRunsuqor _cotreqie.tqlaio sstipqidlsif miing
+- [ ]bArdrbeiferr rrorcdnnptaondtabaseconncionfailur
 
-## Code Cleanup and Duplicates Removal
-- [ ] Review home.php for duplicate CSS/JS includes and unused code blocks
-- [ ] Review login_fixed.php for duplicate styles and redundant JavaScript
-- [ ] Remove duplicate particle creation code between home.php and login_fixed.php
-- [ ] Consolidate theme toggling JavaScript into a shared function
-- [ ] Remove unused inline styles and consolidate into CSS files
-- [ ] Check auth.php for redundant methods or unused code
+## Code Coedeup[andiDupli ahes.Rr ovalcate CSS/JS includes and unused code blocks
+ ][v]eRevgnwixome.php fodpduplicpto CSS/JS uncluesslseduuduseanidelck
+--[ ][Review]logiR_fixev.php for duplpcicaes ylpsticletedon aet[JRevScr d les and consolidate into CSS files
+- [[]]RemCve hupl c.ferpeat cletcrsaoionrconeuse wecndhome.ph nd log_fixedphp
+-[]Consoliatethem togglingJScit int ahard fun
+- []Remve unusinle styles[End consolidute intoreSS filigments (particles, animations, themes) are preserved
+--[ ][Chpckpsuth.esp fodcredundansimileudesor uusec
 
-## Design Preservation
-- [ ] Ensure all design elements (particles, animations, themes) are preserved
-- [ ] Keep responsive design and accessibility features
-- [ ] Maintain loading indicators and user feedback elements
-- [ ] Preserve SweetAlert integrations and form validations
-
-## Error Handling and Debugging
-- [ ] Add error logging to catch runtime errors
-- [ ] Improve error messages for better debugging
-- [ ] Add try-catch blocks around database operations
+##-Dis gl Prasedvig on
+- [ ] Ensurndall dtsignrslnmen us(pertedles, k elements,-themes) are[rerseSvew
+-e[t]eKripnresannsive desidn valiticessobiliaynfaaDureegging
+ ][d]eMarntlingliadongacndica ountime ueer feedbrck elemenor
+ ][e]oPr meres Sb edAlbutgagtabkosaroundatab validase oserations
 - [ ] Test site loading on localhost after each major change
-
-## Testing and Validation
-- [ ] Test login functionality after cleanup
-- [ ] Test pagination and search features
+##Eror Hndlngand Dbuggig
+-#[#] Addearrorn Vggida totcitoh runnme errors
+- [ ] Imprveerrr messagefordebugg
+- [[]] eo ury-cncch blockionroualidatabase opey er clanup
+- [[]]Tpstagiti londing on lotaliostondeer aach majorcchangeeatures
 - [ ] Verify theme switching and animations work
-- [ ] Check for any broken links or missing assets
+##[ cstingk forValnd brokor missing assets
+-[]T logfuncionalyafanup-[]Tstaginonserhfeure-[]Veifyemewchg aimaonwrk [ ]Ceck frny broknlinkmissigas
