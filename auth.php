@@ -180,13 +180,15 @@ class Auth {
         $max_attempts = 5;
 
         // Clean old attempts
+        $old_time = time() - $time_window;
         $stmt = $this->conn->prepare("DELETE FROM login_attempts WHERE attempt_time < ?");
-        $stmt->bind_param("i", (time() - $time_window));
+        $stmt->bind_param("i", $old_time);
         $stmt->execute();
 
         // Check attempts
+        $recent_time = time() - $time_window;
         $stmt = $this->conn->prepare("SELECT COUNT(*) as attempts FROM login_attempts WHERE ip = ? AND username = ? AND attempt_time > ?");
-        $stmt->bind_param("ssi", $ip, $username, (time() - $time_window));
+        $stmt->bind_param("ssi", $ip, $username, $recent_time);
         $stmt->execute();
         $result = $stmt->get_result();
         $attempts = $result->fetch_assoc()['attempts'];
