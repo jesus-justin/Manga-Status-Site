@@ -65,6 +65,15 @@ try {
       z-index: 9999;
     }
 
+    /* Local layout for action buttons under the nav */
+    .cta-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+
     .btn {
       padding: 5px 10px;
       background-color: #444;
@@ -409,6 +418,13 @@ try {
     </div>
   </div>
 </nav>
+
+<!-- Action buttons: Add + Browse (non-floating, same design) -->
+<div class="cta-bar">
+  <a href="create.php" class="button">➕ Add New Manga</a>
+  <a href="browse.php" class="button">📚 Browse Collection</a>
+  
+</div>
 
 <main>
   <h1 class="latest-heading fade-in-up">Latest Manga</h1>

@@ -10,6 +10,8 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 include 'db.php';
+include 'auth.php';
+$auth = new Auth($conn);
 
 try {
     // Get all non-NSFW genres by splitting the category field using prepared statement
@@ -53,6 +55,40 @@ try {
       font-size: 2.5rem;
       color: #eee;
     }
+
+    /* Local action bar for Browse button (scoped to this page) */
+    .cta-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+
+    /* Browse Collection button matching Add Manga submit button style */
+    .browse-action-btn {
+      background: #e50914;
+      color: #fff;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      font-family: 'Noto Sans JP', Arial, sans-serif;
+      font-weight: bold;
+    }
+
+    .browse-action-btn:hover {
+      background: #c2080f;
+      transform: scale(1.05);
+    }
+
+    .browse-action-btn:active {
+      transform: scale(0.98);
+    }
   </style>
 </head>
 <body>
@@ -70,6 +106,12 @@ try {
   </div>
 </nav>
 
+<!-- Action buttons with same design as Add Manga button -->
+<div class="cta-bar">
+  <a href="create.php" class="button">➕ Add New Manga</a>
+  <button class="browse-action-btn" id="browseCollectionBtn" onclick="scrollToGenres()">📚 Browse Collection</button>
+</div>
+
 <h1 class="page-heading">Browse by Genre</h1>
 
 <div class="category-filters">
@@ -83,6 +125,43 @@ try {
     </div>
   </a>
 <?php endforeach; ?>
+</div>
+
+<!-- Add New Manga form (copied from create.php/add.php) -->
+<div class="add-form" style="margin: 2rem auto; max-width: 900px;">
+  <form action="add.php" method="POST">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
+    <input type="text" name="title" placeholder="Enter Manga Title" required>
+    <select name="status" required>
+      <option value="will read">Will Read</option>
+      <option value="currently reading">Currently Reading</option>
+      <option value="stopped">Stopped</option>
+      <option value="finished">Finished</option>
+    </select>
+    
+    <div class="genre-section">
+      <h4 style="color:#eee;">Select Genres (multiple allowed):</h4>
+      <div class="genre-container">
+        <?php
+        // Reuse the same genre checklist as create.php for consistency
+        $genresList = ['Action','Adult','Adventure','Comedy','Drama','ecchi','Fantasy','Gore','Horror','Isekai','Magic','Mecha','Mystery','Romance','School','Sci-Fi','Slice of Life','Supernatural','Tragedy'];
+        foreach ($genresList as $g):
+          $id = strtolower(str_replace(' ', '-', $g));
+        ?>
+          <div class="genre-item">
+            <input type="checkbox" id="<?= $id ?>" name="category[]" value="<?= htmlspecialchars($g) ?>">
+            <label for="<?= $id ?>"><?= htmlspecialchars($g) ?></label>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+    
+    <input type="url" name="read_link" placeholder="Link to read manga (optional)">
+    <div id="chapterField" style="display:none;">
+      <input type="text" name="last_chapter" placeholder="Last Chapter Read">
+    </div>
+    <button type="submit">Add Manga</button>
+  </form>
 </div>
 
 <?php
@@ -224,6 +303,20 @@ $conn->close();
 ?>
 
 <script>
+// Scroll to genres function for Browse Collection button
+function scrollToGenres() {
+  const genreSection = document.querySelector('.category-filters');
+  if (genreSection) {
+    genreSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Add a subtle highlight effect
+    genreSection.style.transition = 'all 0.3s ease';
+    genreSection.style.transform = 'scale(1.02)';
+    setTimeout(() => {
+      genreSection.style.transform = 'scale(1)';
+    }, 300);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   // --- Intersection Observer for revealing cards on scroll ---
   // This fixes the issue where cards would disappear after loading.
@@ -266,6 +359,19 @@ document.addEventListener('DOMContentLoaded', function () {
       const idx = (themes.indexOf(currentTheme) + 1) % themes.length;
       applyTheme(themes[idx]);
     });
+  }
+  
+  // --- Toggle chapter field for Add New Manga form ---
+  function toggleChapterField() {
+    const statusEl = document.querySelector('.add-form select[name="status"]');
+    const chapterField = document.getElementById('chapterField');
+    if (!statusEl || !chapterField) return;
+    chapterField.style.display = (statusEl.value === 'currently reading') ? 'block' : 'none';
+  }
+  const statusEl = document.querySelector('.add-form select[name="status"]');
+  if (statusEl) {
+    toggleChapterField();
+    statusEl.addEventListener('change', toggleChapterField);
   }
 });
 </script>
