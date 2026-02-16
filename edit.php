@@ -1,5 +1,9 @@
 <?php
-include 'db.php';
+require_once 'db.php';
+require_once 'auth.php';
+
+$auth = new Auth($conn);
+$auth->requireLogin();
 
 $id = $_GET['id'] ?? null;
 
@@ -9,6 +13,10 @@ if (!$id) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (!isset($_POST['csrf_token']) || !$auth->validateCsrfToken($_POST['csrf_token'])) {
+    die("CSRF token validation failed");
+  }
+
   $status = $_POST['status'];
   
   // Handle multiple genres - convert array to comma-separated string
@@ -116,6 +124,7 @@ $selected_categories = explode(', ', $manga['category']);
   <div class="edit-container">
     <h1>Edit Manga</h1>
     <form method="POST">
+      <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($auth->getCsrfToken()); ?>">
       <div class="form-group">
         <label>Title:</label>
         <div class="readonly-title"><?php echo htmlspecialchars($manga['title']); ?></div>
