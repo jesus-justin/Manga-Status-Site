@@ -62,13 +62,20 @@ class ButtonAnimations {
     }
 
     animateHover(button, isHovering) {
+        const accentGlow = this.getAccentGlow();
         if (isHovering) {
             button.style.transform = 'scale(1.05) translateZ(10px)';
-            button.style.boxShadow = '0 8px 25px rgba(255, 126, 179, 0.4)';
+            button.style.boxShadow = `0 8px 25px ${accentGlow}`;
         } else {
             button.style.transform = '';
             button.style.boxShadow = '';
         }
+    }
+
+    getAccentGlow() {
+        const root = document.documentElement;
+        const value = getComputedStyle(root).getPropertyValue('--accent-glow').trim();
+        return value || 'rgba(215, 38, 61, 0.35)';
     }
 
     // Click animations with bounce effect
