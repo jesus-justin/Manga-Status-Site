@@ -1,7 +1,9 @@
 <?php
-include 'db.php';
-include 'auth.php';
+require_once 'db.php';
+require_once 'auth.php';
+
 $auth = new Auth($conn);
+$auth->requireLogin();
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,17 +1,9 @@
 <?php
-// Start session and check authentication
-session_start();
+require_once 'db.php';
+require_once 'auth.php';
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to login page with return URL
-    header("Location: login_fixed.php?redirect=add.php");
-    exit();
-}
-
-include 'db.php';
-include 'auth.php';
 $auth = new Auth($conn);
+$auth->requireLogin();
 
 function fetchMangaCover($title) {
   // Use Jikan API to search for manga
