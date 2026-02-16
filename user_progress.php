@@ -43,15 +43,16 @@ $user_id = $_SESSION['user_id'];
         }
         
         .stat-card {
-            background: #2a2a2a;
+            background: var(--card);
             padding: 20px;
             border-radius: 8px;
             text-align: center;
+            border: 1px solid var(--border);
         }
         
         .stat-number {
             font-size: 2em;
-            color: #007bff;
+            color: var(--accent);
             font-weight: bold;
         }
         
@@ -64,7 +65,7 @@ $user_id = $_SESSION['user_id'];
         
         .filter-btn {
             padding: 8px 16px;
-            background: #444;
+            background: #2a2420;
             color: white;
             border: none;
             border-radius: 4px;
@@ -73,7 +74,7 @@ $user_id = $_SESSION['user_id'];
         }
         
         .filter-btn.active {
-            background: #007bff;
+            background: var(--accent);
         }
         
         .progress-grid {
@@ -83,10 +84,11 @@ $user_id = $_SESSION['user_id'];
         }
         
         .progress-card {
-            background: #2a2a2a;
+            background: var(--card);
             border-radius: 8px;
             padding: 20px;
             position: relative;
+            border: 1px solid var(--border);
         }
         
         .progress-cover {
@@ -99,11 +101,11 @@ $user_id = $_SESSION['user_id'];
         
         .progress-info h3 {
             margin: 0 0 10px 0;
-            color: #fff;
+            color: var(--ink);
         }
         
         .progress-bar {
-            background: #444;
+            background: #e8dcc7;
             height: 8px;
             border-radius: 4px;
             overflow: hidden;
@@ -111,7 +113,7 @@ $user_id = $_SESSION['user_id'];
         }
         
         .progress-fill {
-            background: #007bff;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
             height: 100%;
             transition: width 0.3s;
         }
@@ -124,7 +126,7 @@ $user_id = $_SESSION['user_id'];
         
         .progress-btn {
             padding: 5px 10px;
-            background: #007bff;
+            background: var(--accent);
             color: white;
             border: none;
             border-radius: 4px;
@@ -147,10 +149,11 @@ $user_id = $_SESSION['user_id'];
         .status-hold { background: #6c757d; }
         
         .add-progress-form {
-            background: #2a2a2a;
+            background: var(--card);
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 30px;
+            border: 1px solid var(--border);
         }
         
         .form-row {
@@ -163,16 +166,16 @@ $user_id = $_SESSION['user_id'];
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            color: #ccc;
+            color: var(--muted);
         }
         
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 8px;
-            background: #444;
-            border: 1px solid #666;
+            background: #fffdf7;
+            border: 1px solid var(--border);
             border-radius: 4px;
-            color: #fff;
+            color: var(--ink);
         }
     </style>
 </head>
@@ -241,6 +244,7 @@ $user_id = $_SESSION['user_id'];
     <div id="addProgressForm" class="add-progress-form" style="display: none;">
         <h3>Add New Reading Progress</h3>
         <form action="save_progress.php" method="POST">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
             <div class="form-row">
                 <div class="form-group">
                     <label for="manga_id">Select Manga</label>
@@ -315,12 +319,12 @@ $user_id = $_SESSION['user_id'];
     ?>
 
     <div class="progress-filters">
-        <button class="filter-btn active" onclick="filterProgress('all')">All</button>
-        <button class="filter-btn" onclick="filterProgress('reading')">Reading</button>
-        <button class="filter-btn" onclick="filterProgress('completed')">Completed</button>
-        <button class="filter-btn" onclick="filterProgress('plan_to_read')">Plan to Read</button>
-        <button class="filter-btn" onclick="filterProgress('dropped')">Dropped</button>
-        <button class="filter-btn" onclick="filterProgress('on_hold')">On Hold</button>
+        <button class="filter-btn active" onclick="filterProgress('all', event)">All</button>
+        <button class="filter-btn" onclick="filterProgress('reading', event)">Reading</button>
+        <button class="filter-btn" onclick="filterProgress('completed', event)">Completed</button>
+        <button class="filter-btn" onclick="filterProgress('plan_to_read', event)">Plan to Read</button>
+        <button class="filter-btn" onclick="filterProgress('dropped', event)">Dropped</button>
+        <button class="filter-btn" onclick="filterProgress('on_hold', event)">On Hold</button>
     </div>
 
     <div class="progress-grid" id="progressGrid">
@@ -360,6 +364,11 @@ $user_id = $_SESSION['user_id'];
     </div>
 </div>
 
+<form id="deleteProgressForm" method="POST" action="delete_progress.php" style="display:none;">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
+    <input type="hidden" name="id" id="deleteProgressId">
+</form>
+
 <script>
 function showAddForm() {
     document.getElementById('addProgressForm').style.display = 'block';
@@ -369,12 +378,14 @@ function hideAddForm() {
     document.getElementById('addProgressForm').style.display = 'none';
 }
 
-function filterProgress(status) {
+function filterProgress(status, event) {
     const cards = document.querySelectorAll('.progress-card');
     const buttons = document.querySelectorAll('.filter-btn');
     
     buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
     
     cards.forEach(card => {
         if (status === 'all' || card.dataset.status === status) {
@@ -392,7 +403,8 @@ function editProgress(id) {
 
 function deleteProgress(id) {
     if (confirm('Are you sure you want to delete this progress?')) {
-        window.location.href = 'delete_progress.php?id=' + id;
+        document.getElementById('deleteProgressId').value = id;
+        document.getElementById('deleteProgressForm').submit();
     }
 }
 </script>
