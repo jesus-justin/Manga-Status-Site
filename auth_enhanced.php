@@ -183,7 +183,7 @@ class Auth {
     public function requireLogin() {
         if (!$this->isLoggedIn()) {
             $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
-            header('Location: login_new.php');
+            header('Location: login_fixed.php');
             exit();
         }
     }
