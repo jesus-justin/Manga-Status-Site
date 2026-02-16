@@ -4,14 +4,24 @@ require_once 'db.php';
 
 $auth = new Auth($conn);
 $message = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $result = $auth->forgotPassword($_POST['email']);
-    $message = $result['message'];
-}
+$is_error = false;
 
 // Generate CSRF token
-$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $token = $_POST['csrf_token'] ?? '';
+    if (!hash_equals($_SESSION['csrf_token'], $token)) {
+        $message = 'Invalid request. Please try again.';
+        $is_error = true;
+    } else {
+        $result = $auth->forgotPassword($_POST['email']);
+        $message = $result['message'];
+        $is_error = !$result['success'];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -126,7 +136,7 @@ $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         <p class="info-text">Enter your email address and we'll send you instructions to reset your password.</p>
         
         <?php if ($message): ?>
-            <div class="success-message"><?= htmlspecialchars($message) ?></div>
+            <div class="<?= $is_error ? 'error-message' : 'success-message' ?>"><?= htmlspecialchars($message) ?></div>
         <?php endif; ?>
         
         <form class="auth-form" method="POST">
@@ -136,7 +146,7 @@ $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         </form>
         
         <div class="auth-links">
-            <p>Remember your password? <a href="login_new.php">Back to login</a></p>
+            <p>Remember your password? <a href="login_fixed.php">Back to login</a></p>
         </div>
     </div>
 </body>
