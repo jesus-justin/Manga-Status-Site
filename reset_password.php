@@ -2,6 +2,7 @@
 require_once 'auth_enhanced.php';
 require_once 'db.php';
 
+$auth = new Auth($conn);
 $error = '';
 $success = '';
 
@@ -13,43 +14,41 @@ if (!isset($_GET['token'])) {
 
 $token = $_GET['token'];
 
-// Verify token
-try {
-    $stmt = $pdo->prepare("SELECT * FROM password_resets WHERE token = ? AND expires_at > NOW()");
-    $stmt->execute([$token]);
-    $reset_request = $stmt->fetch(PDO::FETCH_ASSOC);
+// Generate CSRF token
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
-    if (!$reset_request) {
-        $error = "Invalid or expired reset link.";
-    }
-} catch (PDOException $e) {
-    $error = "Database error occurred.";
+// Verify token for display
+$stmt = $conn->prepare("SELECT id FROM password_resets WHERE token = ? AND expires_at > NOW() AND used = FALSE");
+$stmt->bind_param("s", $token);
+$stmt->execute();
+$reset_request = $stmt->get_result()->fetch_assoc();
+if (!$reset_request) {
+    $error = "Invalid or expired reset link.";
 }
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
-    $password = $_POST['password'] ?? '';
-    $confirm_password = $_POST['confirm_password'] ?? '';
-
-    // Validate passwords
-    if (strlen($password) < 8) {
-        $error = "Password must be at least 8 characters long.";
-    } elseif ($password !== $confirm_password) {
-        $error = "Passwords do not match.";
+    $csrf = $_POST['csrf_token'] ?? '';
+    if (!hash_equals($_SESSION['csrf_token'], $csrf)) {
+        $error = "Invalid request. Please try again.";
     } else {
-        try {
-            // Update user password
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE email = ?");
-            $stmt->execute([$hashed_password, $reset_request['email']]);
+        $password = $_POST['password'] ?? '';
+        $confirm_password = $_POST['confirm_password'] ?? '';
 
-            // Delete used token
-            $stmt = $pdo->prepare("DELETE FROM password_resets WHERE token = ?");
-            $stmt->execute([$token]);
-
-            $success = "Your password has been reset successfully. You can now <a href='login.php'>login</a>.";
-        } catch (PDOException $e) {
-            $error = "Failed to reset password. Please try again.";
+        // Validate passwords
+        if (strlen($password) < 8) {
+            $error = "Password must be at least 8 characters long.";
+        } elseif ($password !== $confirm_password) {
+            $error = "Passwords do not match.";
+        } else {
+            $result = $auth->resetPassword($token, $password);
+            if ($result['success']) {
+                $success = "Your password has been reset successfully. You can now <a href='login_fixed.php'>login</a>.";
+            } else {
+                $error = $result['message'];
+            }
         }
     }
 }
@@ -75,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
             <div class="success"><?php echo $success; ?></div>
         <?php else: ?>
             <form method="POST">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                 <div class="form-group">
                     <label for="password">New Password:</label>
                     <input type="password" id="password" name="password" required minlength="8">
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
             </form>
         <?php endif; ?>
         
-        <p><a href="login.php">Back to Login</a></p>
+        <p><a href="login_fixed.php">Back to Login</a></p>
     </div>
 </body>
 </html>
