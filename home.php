@@ -60,15 +60,15 @@ try {
       top: 0;
       left: 0;
       height: 5px;
-      background: #f00;
+      background: var(--accent);
       width: 0%;
       z-index: 9999;
     }
 
     .btn {
       padding: 5px 10px;
-      background-color: #444;
-      color: white;
+      background-color: var(--accent);
+      color: #fff7ea;
       border: none;
       border-radius: 4px;
       text-decoration: none;
@@ -76,7 +76,7 @@ try {
     }
 
     .btn:hover {
-      background-color: #666;
+      background-color: #b91e32;
     }
 
     .card-actions {
@@ -100,19 +100,19 @@ try {
       display: inline-block;
       padding: 8px 16px;
       margin: 0 4px;
-      background-color: #444;
-      color: white;
+      background-color: #2a2420;
+      color: #fff7ea;
       text-decoration: none;
       border-radius: 4px;
       transition: background-color 0.3s;
     }
 
     .pagination-btn:hover {
-      background-color: #666;
+      background-color: #3b312c;
     }
 
     .pagination-btn.current {
-      background-color: #007bff;
+      background-color: var(--accent);
       cursor: default;
     }
 
@@ -439,20 +439,24 @@ try {
               <p>Last Chapter: <?= htmlspecialchars($row['last_chapter']) ?></p>
             <?php endif; ?>
             <?php if (!empty($row['read_link'])): ?>
-              <p><a href="<?= htmlspecialchars($row['read_link']) ?>" target="_blank">Read Here</a></p>
+              <p><a href="<?= htmlspecialchars($row['read_link']) ?>" target="_blank" rel="noopener noreferrer">Read Here</a></p>
             <?php endif; ?>
             <?php if (!empty($row['external_links'])):
               $links = json_decode($row['external_links'], true);
               if ($links && is_array($links)): ?>
               <div class="external-links"><strong>Read on:</strong><ul>
                 <?php foreach ($links as $link): ?>
-                  <li><a href="<?= htmlspecialchars($link['url']) ?>" target="_blank"><?= htmlspecialchars($link['name']) ?></a></li>
+                  <li><a href="<?= htmlspecialchars($link['url']) ?>" target="_blank" rel="noopener noreferrer"><?= htmlspecialchars($link['name']) ?></a></li>
                 <?php endforeach; ?>
               </ul></div>
             <?php endif; endif; ?>
             <div class="card-actions">
               <a href="edit.php?id=<?= $row['id'] ?>" class="btn">✏️ Edit</a>
-              <a href="delete.php?id=<?= $row['id'] ?>" class="btn" onclick="return confirm('Delete this manga?')">🗑️ Delete</a>
+              <form method="POST" action="delete.php" onsubmit="return confirm('Delete this manga?');" style="display:inline;">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
+                <input type="hidden" name="id" value="<?= (int)$row['id'] ?>">
+                <button type="submit" class="btn">🗑️ Delete</button>
+              </form>
             </div>
           </div>
         <?php endwhile; ?>
