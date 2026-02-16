@@ -1,25 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Shippori+Mincho:wght@400;600;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
+
+:root {
+  --paper: #f5efe3;
+  --paper-deep: #efe1c7;
+  --ink: #141414;
+  --muted: #5f5750;
+  --accent: #d7263d;
+  --accent-2: #f2a900;
+  --accent-glow: rgba(215, 38, 61, 0.35);
+  --card: #fff8ee;
+  --border: rgba(20, 20, 20, 0.2);
+}
 
 body {
   margin: 0;
-  font-family: 'Noto Sans JP', sans-serif;
-  background: #111;
-  color: #f0f0f0;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(0, 0, 0, 0.04) 0 2px, transparent 2px),
+    linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
+  background-size: 48px 48px, auto;
+  color: var(--ink);
 }
 
 nav {
-  background: #1a1a1a;
+  background: linear-gradient(90deg, #1c1517 0%, #2a0e12 60%, #3b0f12 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1.2rem 2rem;
-  border-bottom: 1px solid #333;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 nav .logo {
-  font-size: 1.7rem;
-  font-weight: bold;
-  color: #fff;
+  font-size: 1.9rem;
+  font-weight: 400;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
+  color: #f7efe2;
 }
 
 nav ul {
@@ -32,13 +51,13 @@ nav ul {
 
 nav ul li a {
   text-decoration: none;
-  color: #ccc;
+  color: #f1e5cf;
   font-weight: 500;
   transition: color 0.3s;
 }
 
 nav ul li a:hover {
-  color: #fff;
+  color: var(--accent-2);
 }
 
 main {
@@ -48,20 +67,23 @@ main {
 }
 
 .edit-container {
-  background: linear-gradient(145deg, #1f1f1f, #292929);
+  background: var(--card);
   max-width: 550px;
   width: 100%;
   padding: 2.5rem;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 18px 30px rgba(20, 20, 20, 0.2);
   margin: 4rem auto;
+  border: 1px solid var(--border);
 }
 
 .edit-container h1 {
   text-align: center;
   margin-bottom: 2rem;
-  font-size: 1.8rem;
-  color: #ff4d4d;
+  font-size: 2rem;
+  color: var(--ink);
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
 }
 
 .edit-container form {
@@ -74,17 +96,18 @@ main {
 }
 
 .readonly-title {
-  background: #2b2b2b;
+  background: #f3e7d3;
   padding: 0.8rem 1rem;
   border-radius: 6px;
   font-size: 1rem;
+  border: 1px solid var(--border);
 }
 
 .edit-container label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: bold;
-  color: #ddd;
+  color: var(--muted);
 }
 
 .edit-container input[type="text"],
@@ -92,17 +115,17 @@ main {
 .edit-container select {
   width: 100%;
   padding: 0.8rem 1rem;
-  border: none;
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background: #2c2c2c;
-  color: #f0f0f0;
+  background: #fffdf7;
+  color: var(--ink);
   transition: box-shadow 0.2s;
 }
 
 .edit-container input:focus,
 .edit-container select:focus {
   outline: none;
-  box-shadow: 0 0 5px #ff4d4d;
+  box-shadow: 0 0 0 3px rgba(215, 38, 61, 0.2);
 }
 
 .form-actions {
@@ -114,7 +137,7 @@ main {
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, #ff4d4d, #e13c3c);
+  background: linear-gradient(135deg, #d7263d, #b91e32);
   border: none;
   padding: 0.9rem 2rem;
   border-radius: 6px;
@@ -128,12 +151,12 @@ main {
 
 .primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(255,77,77,0.4);
+  box-shadow: 0 10px 18px rgba(215, 38, 61, 0.35);
 }
 
 .secondary-btn {
-  background: #333;
-  color: #ccc;
+  background: #2a2420;
+  color: #f1e5cf;
   padding: 0.9rem 2rem;
   border-radius: 6px;
   text-decoration: none;
@@ -143,7 +166,7 @@ main {
 }
 
 .secondary-btn:hover {
-  background: #444;
-  color: #fff;
+  background: #3b312c;
+  color: #fff5e6;
   transform: translateY(-2px);
 } 
