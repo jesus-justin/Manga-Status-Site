@@ -1,5 +1,9 @@
 <?php
-include 'db.php';
+require_once 'db.php';
+require_once 'auth.php';
+
+$auth = new Auth($conn);
+$auth->requireLogin();
 
 function getExternalMangaLinks($title) {
   $encoded = urlencode($title);
