@@ -1,4 +1,10 @@
-<?php include 'db.php'; ?>
+<?php
+require_once 'db.php';
+require_once 'auth.php';
+
+$auth = new Auth($conn);
+$auth->requireLogin();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +60,7 @@ if ($result->num_rows > 0):
       <p>Last Chapter: <?php echo htmlspecialchars($row['last_chapter']); ?></p>
     <?php endif; ?>
     <?php if (!empty($row['read_link'])): ?>
-      <p><a href="<?php echo htmlspecialchars($row['read_link']); ?>" target="_blank">Read Here</a></p>
+      <p><a href="<?php echo htmlspecialchars($row['read_link']); ?>" target="_blank" rel="noopener noreferrer">Read Here</a></p>
     <?php endif; ?>
     <?php if (!empty($row['external_links'])): ?>
       <?php $links = json_decode($row['external_links'], true); if ($links && is_array($links)): ?>
@@ -62,7 +68,7 @@ if ($result->num_rows > 0):
           <strong>Read on:</strong>
           <ul>
             <?php foreach ($links as $link): ?>
-              <li><a href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank"><?php echo htmlspecialchars($link['name']); ?></a></li>
+              <li><a href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank" rel="noopener noreferrer"><?php echo htmlspecialchars($link['name']); ?></a></li>
             <?php endforeach; ?>
           </ul>
         </div>
@@ -70,7 +76,11 @@ if ($result->num_rows > 0):
     <?php endif; ?>
     <div class="card-actions">
       <a href="edit.php?id=<?php echo $row['id']; ?>" class="button">Edit</a>
-      <a href="delete.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Delete this manga?');" class="button">Delete</a>
+      <form method="POST" action="delete.php" onsubmit="return confirm('Delete this manga?');" style="display:inline;">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($auth->getCsrfToken()); ?>">
+        <input type="hidden" name="id" value="<?php echo (int)$row['id']; ?>">
+        <button type="submit" class="button">Delete</button>
+      </form>
     </div>
   </div>
 <?php endwhile; else: ?>
