@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Register - Manga Library</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="home.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -75,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Zen Kaku Gothic New', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
                         url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><defs><linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:%2387CEEB"/><stop offset="100%" style="stop-color:%23228B22"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23sky)"/><path d="M0,800 Q480,700 960,800 T1920,800 L1920,1080 L0,1080 Z" fill="%23006400"/><path d="M0,850 Q320,750 640,850 T1280,850 L1280,1080 L0,1080 Z" fill="%23228B22"/><path d="M640,900 Q960,800 1280,900 T1920,900 L1920,1080 L640,1080 Z" fill="%23006400"/></svg>');
             background-size: cover;
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             position: absolute;
             width: 20px;
             height: 20px;
-            background: linear-gradient(45deg, #ff6b35, #f7931e, #ffcc02);
+            background: linear-gradient(45deg, #d7263d, #f2a900, #ffcc02);
             border-radius: 0 100% 0 100%;
             opacity: 0.8;
             animation: fall linear infinite;
@@ -103,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .leaf:nth-child(odd) {
-            background: linear-gradient(45deg, #e63946, #f77f00, #fcbf49);
+            background: linear-gradient(45deg, #b91e32, #d87c00, #f2a900);
             border-radius: 100% 0 100% 0;
         }
 
@@ -123,10 +124,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 100%;
             max-width: 420px;
             padding: 60px 40px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(20, 12, 14, 0.75);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(215, 38, 61, 0.35);
             box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
             overflow: hidden;
             z-index: 10;
@@ -139,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(215, 38, 61, 0.15), transparent);
             transform: rotate(45deg);
             animation: shine 3s linear infinite;
         }
@@ -156,9 +157,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .auth-container h2 {
             text-align: center;
             margin-bottom: 40px;
-            color: #fff;
-            font-size: 2.2em;
-            font-weight: 300;
+            color: #f2a900;
+            font-size: 2.4em;
+            font-weight: 700;
+            font-family: 'Bebas Neue', sans-serif;
             letter-spacing: 1px;
             position: relative;
             z-index: 1;
@@ -178,8 +180,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .auth-form input {
             width: 100%;
             padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(20, 12, 14, 0.7);
+            border: 1px solid rgba(215, 38, 61, 0.35);
             border-radius: 50px;
             color: #fff;
             font-size: 16px;
@@ -188,13 +190,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .auth-form input:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            background: rgba(20, 12, 14, 0.8);
+            border-color: rgba(242, 169, 0, 0.6);
+            box-shadow: 0 0 15px rgba(215, 38, 61, 0.3);
         }
 
         .auth-form input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(242, 169, 0, 0.7);
         }
 
         .auth-form button {
