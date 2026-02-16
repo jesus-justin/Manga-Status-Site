@@ -74,7 +74,7 @@ class Auth {
         header("Referrer-Policy: strict-origin-when-cross-origin");
 
         // Content Security Policy (basic)
-        header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.googleapis.com; connect-src 'self' https://api.jikan.moe");
+        header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' https://api.jikan.moe");
 
         // HSTS (HTTP Strict Transport Security) - only if using HTTPS
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
@@ -144,7 +144,11 @@ class Auth {
     
     public function login($username, $password) {
         // Rate limiting: Check login attempts
-        $this->checkLoginAttempts($username);
+        try {
+            $this->checkLoginAttempts($username);
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
 
         $stmt = $this->conn->prepare("SELECT id, username, password_hash FROM users WHERE username = ? OR email = ?");
         $stmt->bind_param("ss", $username, $username);
@@ -180,15 +184,15 @@ class Auth {
         $max_attempts = 5;
 
         // Clean old attempts
-        $old_time = time() - $time_window;
+        $cutoff = date('Y-m-d H:i:s', time() - $time_window);
         $stmt = $this->conn->prepare("DELETE FROM login_attempts WHERE attempt_time < ?");
-        $stmt->bind_param("i", $old_time);
+        $stmt->bind_param("s", $cutoff);
         $stmt->execute();
 
         // Check attempts
-        $recent_time = time() - $time_window;
-        $stmt = $this->conn->prepare("SELECT COUNT(*) as attempts FROM login_attempts WHERE ip = ? AND username = ? AND attempt_time > ?");
-        $stmt->bind_param("ssi", $ip, $username, $recent_time);
+        $cutoff = date('Y-m-d H:i:s', time() - $time_window);
+        $stmt = $this->conn->prepare("SELECT COUNT(*) as attempts FROM login_attempts WHERE ip_address = ? AND username = ? AND attempt_time > ?");
+        $stmt->bind_param("sss", $ip, $username, $cutoff);
         $stmt->execute();
         $result = $stmt->get_result();
         $attempts = $result->fetch_assoc()['attempts'];
@@ -203,8 +207,9 @@ class Auth {
      */
     private function recordFailedAttempt($username) {
         $ip = $_SERVER['REMOTE_ADDR'];
-        $stmt = $this->conn->prepare("INSERT INTO login_attempts (ip, username, attempt_time) VALUES (?, ?, ?)");
-        $stmt->bind_param("ssi", $ip, $username, time());
+        $attempt_time = date('Y-m-d H:i:s');
+        $stmt = $this->conn->prepare("INSERT INTO login_attempts (ip_address, username, attempt_time) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $ip, $username, $attempt_time);
         $stmt->execute();
     }
 
@@ -213,7 +218,7 @@ class Auth {
      */
     private function resetLoginAttempts($username) {
         $ip = $_SERVER['REMOTE_ADDR'];
-        $stmt = $this->conn->prepare("DELETE FROM login_attempts WHERE ip = ? AND username = ?");
+        $stmt = $this->conn->prepare("DELETE FROM login_attempts WHERE ip_address = ? AND username = ?");
         $stmt->bind_param("ss", $ip, $username);
         $stmt->execute();
     }
@@ -240,7 +245,7 @@ class Auth {
     public function requireLogin() {
         if (!$this->isLoggedIn()) {
             $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
-            header('Location: login_new.php');
+            header('Location: login_fixed.php');
             exit();
         }
     }
