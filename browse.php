@@ -1,15 +1,9 @@
 <?php
-// Start session and check authentication
-session_start();
+require_once 'db.php';
+require_once 'auth.php';
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to login page with return URL
-    header("Location: login_fixed.php?redirect=browse.php");
-    exit();
-}
-
-include 'db.php';
+$auth = new Auth($conn);
+$auth->requireLogin();
 
 try {
     // Get all non-NSFW genres by splitting the category field using prepared statement
@@ -51,7 +45,7 @@ try {
       margin-top: 2rem;
       margin-bottom: 1rem;
       font-size: 2.5rem;
-      color: #eee;
+      color: var(--ink);
     }
   </style>
 </head>
@@ -142,20 +136,24 @@ if ($selected_genre) {
         <p>Last Chapter: <?= htmlspecialchars($manga['last_chapter']) ?></p>
       <?php endif; ?>
       <?php if (!empty($manga['read_link'])): ?>
-        <p><a href="<?= htmlspecialchars($manga['read_link']) ?>" target="_blank">Read Here</a></p>
+        <p><a href="<?= htmlspecialchars($manga['read_link']) ?>" target="_blank" rel="noopener noreferrer">Read Here</a></p>
       <?php endif; ?>
       <?php if (!empty($manga['external_links'])):
         $links = json_decode($manga['external_links'], true);
         if ($links && is_array($links)): ?>
         <div class="external-links"><strong>Read on:</strong><ul>
           <?php foreach ($links as $link): ?>
-            <li><a href="<?= htmlspecialchars($link['url']) ?>" target="_blank"><?= htmlspecialchars($link['name']) ?></a></li>
+            <li><a href="<?= htmlspecialchars($link['url']) ?>" target="_blank" rel="noopener noreferrer"><?= htmlspecialchars($link['name']) ?></a></li>
           <?php endforeach; ?>
         </ul></div>
       <?php endif; endif; ?>
       <div class="card-actions">
         <a href="edit.php?id=<?= $manga['id'] ?>" class="btn">✏️ Edit</a>
-        <a href="delete.php?id=<?= $manga['id'] ?>" class="btn" onclick="return confirm('Delete this manga?')">🗑️ Delete</a>
+        <form method="POST" action="delete.php" onsubmit="return confirm('Delete this manga?');" style="display:inline;">
+          <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
+          <input type="hidden" name="id" value="<?= (int)$manga['id'] ?>">
+          <button type="submit" class="btn">🗑️ Delete</button>
+        </form>
       </div>
     </div>
   <?php endwhile; ?>
