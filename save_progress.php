@@ -14,6 +14,12 @@ if (!$auth->isLoggedIn()) {
 $user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf_token']) || !$auth->validateCsrfToken($_POST['csrf_token'])) {
+        $_SESSION['error'] = 'Invalid request. Please try again.';
+        header('Location: user_progress.php');
+        exit();
+    }
+
     $manga_id = intval($_POST['manga_id']);
     $status = $_POST['status'];
     $current_chapter = $_POST['current_chapter'] ?? null;
