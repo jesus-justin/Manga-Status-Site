@@ -1,7 +1,20 @@
 <?php
-include 'db.php';
+require_once 'db.php';
+require_once 'auth.php';
 
-$id = $_GET['id'] ?? null;
+$auth = new Auth($conn);
+$auth->requireLogin();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: home.php");
+    exit();
+}
+
+if (!isset($_POST['csrf_token']) || !$auth->validateCsrfToken($_POST['csrf_token'])) {
+    die("CSRF token validation failed");
+}
+
+$id = isset($_POST['id']) ? (int)$_POST['id'] : null;
 
 if ($id) {
     // Use prepared statement for DELETE query
