@@ -202,38 +202,103 @@ try {
       }
 
       const searchInput = document.getElementById('searchInput');
+      const sortSelect = document.getElementById('sortSelect');
+      const statusFilter = document.getElementById('statusFilter');
+      const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+      const resultCount = document.getElementById('resultCount');
+
+      function refreshResultCount() {
+        if (!resultCount) return;
+        const visible = document.querySelectorAll('.manga-card:not([style*="display: none"])').length;
+        resultCount.textContent = `${visible} shown`;
+      }
+
+      function sortCards(mode) {
+        const grid = document.querySelector('.manga-grid');
+        if (!grid) return;
+        const cards = Array.from(grid.querySelectorAll('.manga-card'));
+
+        cards.sort((a, b) => {
+          const titleA = a.getAttribute('data-title') || '';
+          const titleB = b.getAttribute('data-title') || '';
+          const statusA = a.getAttribute('data-status') || '';
+          const statusB = b.getAttribute('data-status') || '';
+          const idA = parseInt(a.getAttribute('data-id') || '0', 10);
+          const idB = parseInt(b.getAttribute('data-id') || '0', 10);
+
+          if (mode === 'title-asc') return titleA.localeCompare(titleB);
+          if (mode === 'title-desc') return titleB.localeCompare(titleA);
+          if (mode === 'status') return statusA.localeCompare(statusB) || titleA.localeCompare(titleB);
+          return idB - idA;
+        });
+
+        cards.forEach(card => grid.appendChild(card));
+      }
+
+      function applyFilters(showNoResultsPopup = true) {
+        const query = (searchInput?.value || '').toLowerCase().trim();
+        const selectedStatus = (statusFilter?.value || 'all').toLowerCase();
+        let hasResults = false;
+
+        document.querySelectorAll('.manga-card').forEach(card => {
+          const title = card.getAttribute('data-title') || '';
+          const category = card.getAttribute('data-category') || '';
+          const status = card.getAttribute('data-status') || '';
+
+          const matchesQuery = !query || title.includes(query) || category.includes(query) || status.includes(query);
+          const matchesStatus = selectedStatus === 'all' || status === selectedStatus;
+          const shouldShow = matchesQuery && matchesStatus;
+
+          card.style.display = shouldShow ? '' : 'none';
+          if (shouldShow) hasResults = true;
+        });
+
+        refreshResultCount();
+
+        if (showNoResultsPopup && query && !hasResults) {
+          Swal.fire({
+            title: 'No Results',
+            text: `No manga found for "${query}"`,
+            icon: 'info',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#007bff',
+            timer: 2200,
+            timerProgressBar: true
+          });
+        }
+      }
+
       if (searchInput) {
         let searchTimeout;
         searchInput.addEventListener('input', function () {
           clearTimeout(searchTimeout);
-          searchTimeout = setTimeout(() => {
-            const query = this.value.toLowerCase();
-            let hasResults = false;
-            
-            document.querySelectorAll('.manga-card').forEach(card => {
-              const title = card.getAttribute('data-title');
-              const category = card.getAttribute('data-category');
-              const status = card.getAttribute('data-status');
-              const shouldShow = (title.includes(query) || category.includes(query) || status.includes(query));
-              card.style.display = shouldShow ? '' : 'none';
-              if (shouldShow) hasResults = true;
-            });
-
-            // Show SweetAlert if no results found
-            if (query && !hasResults) {
-              Swal.fire({
-                title: 'No Results',
-                text: `No manga found for "${query}"`,
-                icon: 'info',
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#007bff',
-                timer: 3000,
-                timerProgressBar: true
-              });
-            }
-          }, 200);
+          searchTimeout = setTimeout(() => applyFilters(true), 180);
         });
       }
+
+      if (statusFilter) {
+        statusFilter.addEventListener('change', () => applyFilters(false));
+      }
+
+      if (sortSelect) {
+        sortSelect.addEventListener('change', function () {
+          sortCards(this.value);
+          applyFilters(false);
+        });
+      }
+
+      if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', function () {
+          if (searchInput) searchInput.value = '';
+          if (statusFilter) statusFilter.value = 'all';
+          if (sortSelect) sortSelect.value = 'newest';
+          sortCards('newest');
+          applyFilters(false);
+        });
+      }
+
+      sortCards('newest');
+      applyFilters(false);
 
       window.enhancedRandomManga = function () {
         const randomBtn = document.getElementById('randomMangaBtn');
@@ -412,6 +477,24 @@ try {
 
 <main>
   <h1 class="latest-heading fade-in-up">Latest Manga</h1>
+  <section class="library-controls" aria-label="Library controls">
+    <input type="text" id="searchInput" class="library-input" placeholder="Search title, genre, or status..." aria-label="Search manga">
+    <select id="sortSelect" class="library-select" aria-label="Sort manga">
+      <option value="newest">Sort: Newest</option>
+      <option value="title-asc">Title A-Z</option>
+      <option value="title-desc">Title Z-A</option>
+      <option value="status">Status</option>
+    </select>
+    <select id="statusFilter" class="library-select" aria-label="Filter by status">
+      <option value="all">All statuses</option>
+      <option value="currently reading">Currently reading</option>
+      <option value="finished">Finished</option>
+      <option value="will read">Will read</option>
+      <option value="dropped">Dropped</option>
+    </select>
+    <button id="clearFiltersBtn" class="btn" type="button">Clear</button>
+    <span id="resultCount" class="result-count"></span>
+  </section>
   <div class="manga-container">
     <div class="manga-grid">
       <?php if ($result && $result->num_rows > 0): ?>
