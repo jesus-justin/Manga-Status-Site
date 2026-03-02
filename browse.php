@@ -25,10 +25,14 @@ try {
     sort($unique_genres);
 
     $selected_genre = $_GET['genre'] ?? null;
+    $selected_status = $_GET['status'] ?? 'all';
+    $selected_sort = $_GET['sort'] ?? 'title_asc';
 } catch (Exception $e) {
     error_log("Error fetching genres: " . $e->getMessage());
     $unique_genres = [];
     $selected_genre = null;
+    $selected_status = 'all';
+    $selected_sort = 'title_asc';
 }
 ?>
 
@@ -68,6 +72,25 @@ try {
 
 <div class="library-controls" aria-label="Browse controls" style="max-width: 1100px; margin: 0 auto 1rem;">
   <input type="text" id="genreSearch" class="library-input" placeholder="Filter genres..." aria-label="Filter genres">
+  <form method="GET" action="browse.php" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+    <?php if ($selected_genre): ?>
+      <input type="hidden" name="genre" value="<?php echo htmlspecialchars($selected_genre); ?>">
+    <?php endif; ?>
+    <select name="status" class="library-select" aria-label="Filter status">
+      <option value="all" <?php echo $selected_status === 'all' ? 'selected' : ''; ?>>All statuses</option>
+      <option value="currently reading" <?php echo $selected_status === 'currently reading' ? 'selected' : ''; ?>>Currently reading</option>
+      <option value="finished" <?php echo $selected_status === 'finished' ? 'selected' : ''; ?>>Finished</option>
+      <option value="will read" <?php echo $selected_status === 'will read' ? 'selected' : ''; ?>>Will read</option>
+      <option value="dropped" <?php echo $selected_status === 'dropped' ? 'selected' : ''; ?>>Dropped</option>
+    </select>
+    <select name="sort" class="library-select" aria-label="Sort manga">
+      <option value="title_asc" <?php echo $selected_sort === 'title_asc' ? 'selected' : ''; ?>>Title A-Z</option>
+      <option value="title_desc" <?php echo $selected_sort === 'title_desc' ? 'selected' : ''; ?>>Title Z-A</option>
+      <option value="newest" <?php echo $selected_sort === 'newest' ? 'selected' : ''; ?>>Newest</option>
+      <option value="updated" <?php echo $selected_sort === 'updated' ? 'selected' : ''; ?>>Recently Updated</option>
+    </select>
+    <button type="submit" class="btn">Apply</button>
+  </form>
   <a href="browse.php" class="btn" style="text-align:center; line-height: 42px;">Show All Genres</a>
 </div>
 
@@ -97,19 +120,50 @@ if ($selected_genre) {
         $offset = ($current_page - 1) * $manga_per_page;
 
         // Count total manga for selected genre
-        $count_sql = "SELECT COUNT(*) as total FROM manga WHERE category LIKE ? AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%'";
-        $count_stmt = $conn->prepare($count_sql);
         $search_pattern = "%" . $selected_genre . "%";
-        $count_stmt->bind_param("s", $search_pattern);
+        $count_sql = "SELECT COUNT(*) as total FROM manga WHERE category LIKE ? AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%'";
+        $count_types = "s";
+        $count_params = [$search_pattern];
+
+        if ($selected_status !== 'all') {
+          $count_sql .= " AND status = ?";
+          $count_types .= "s";
+          $count_params[] = $selected_status;
+        }
+
+        $count_stmt = $conn->prepare($count_sql);
+        $count_stmt->bind_param($count_types, ...$count_params);
         $count_stmt->execute();
         $count_result = $count_stmt->get_result();
         $total_manga = $count_result->fetch_assoc()['total'];
         $total_pages = ceil($total_manga / $manga_per_page);
 
         // Fetch manga for current page with pagination
-        $sql_manga = "SELECT * FROM manga WHERE category LIKE ? AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%' ORDER BY title ASC LIMIT ? OFFSET ?";
+        $allowed_order = [
+          'title_asc' => 'title ASC',
+          'title_desc' => 'title DESC',
+          'newest' => 'id DESC',
+          'updated' => 'updated_at DESC'
+        ];
+        $order_by = $allowed_order[$selected_sort] ?? 'title ASC';
+
+        $sql_manga = "SELECT * FROM manga WHERE category LIKE ? AND category NOT LIKE '%ecchi%' AND category NOT LIKE '%adult%'";
+        $types = "s";
+        $params = [$search_pattern];
+
+        if ($selected_status !== 'all') {
+          $sql_manga .= " AND status = ?";
+          $types .= "s";
+          $params[] = $selected_status;
+        }
+
+        $sql_manga .= " ORDER BY " . $order_by . " LIMIT ? OFFSET ?";
+        $types .= "ii";
+        $params[] = $manga_per_page;
+        $params[] = $offset;
+
         $stmt = $conn->prepare($sql_manga);
-        $stmt->bind_param("sii", $search_pattern, $manga_per_page, $offset);
+        $stmt->bind_param($types, ...$params);
         $stmt->execute();
         $manga_result = $stmt->get_result();
 
