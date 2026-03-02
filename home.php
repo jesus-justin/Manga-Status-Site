@@ -205,7 +205,17 @@ try {
       const sortSelect = document.getElementById('sortSelect');
       const statusFilter = document.getElementById('statusFilter');
       const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+      const viewModeBtn = document.getElementById('viewModeBtn');
       const resultCount = document.getElementById('resultCount');
+
+      function applyViewMode(mode) {
+        const compact = mode === 'compact';
+        document.body.classList.toggle('compact-view', compact);
+        if (viewModeBtn) {
+          viewModeBtn.textContent = compact ? 'Comfortable View' : 'Compact View';
+          viewModeBtn.setAttribute('aria-pressed', compact ? 'true' : 'false');
+        }
+      }
 
       function refreshResultCount() {
         if (!resultCount) return;
@@ -294,6 +304,17 @@ try {
           if (sortSelect) sortSelect.value = 'newest';
           sortCards('newest');
           applyFilters(false);
+        });
+      }
+
+      if (viewModeBtn) {
+        const savedViewMode = localStorage.getItem('homeViewMode') || 'comfortable';
+        applyViewMode(savedViewMode);
+
+        viewModeBtn.addEventListener('click', function () {
+          const nextMode = document.body.classList.contains('compact-view') ? 'comfortable' : 'compact';
+          applyViewMode(nextMode);
+          localStorage.setItem('homeViewMode', nextMode);
         });
       }
 
@@ -493,6 +514,7 @@ try {
       <option value="dropped">Dropped</option>
     </select>
     <button id="clearFiltersBtn" class="btn" type="button">Clear</button>
+    <button id="viewModeBtn" class="btn" type="button" aria-pressed="false">Compact View</button>
     <span id="resultCount" class="result-count"></span>
   </section>
   <div class="manga-container">
