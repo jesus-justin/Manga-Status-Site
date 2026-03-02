@@ -230,7 +230,7 @@ if ($selected_genre) {
   <div class="pagination">
     <!-- Previous button -->
     <?php if ($current_page > 1): ?>
-      <a href="?genre=<?= urlencode($selected_genre) ?>&page=<?= $current_page - 1 ?>" class="pagination-btn">Previous</a>
+      <a href="?genre=<?= urlencode($selected_genre) ?>&status=<?= urlencode($selected_status) ?>&sort=<?= urlencode($selected_sort) ?>&page=<?= $current_page - 1 ?>" class="pagination-btn">Previous</a>
     <?php endif; ?>
 
     <!-- Page numbers -->
@@ -240,7 +240,7 @@ if ($selected_genre) {
 
     // Show first page if not in range
     if ($start_page > 1): ?>
-      <a href="?genre=<?= urlencode($selected_genre) ?>&page=1" class="pagination-btn">1</a>
+      <a href="?genre=<?= urlencode($selected_genre) ?>&status=<?= urlencode($selected_status) ?>&sort=<?= urlencode($selected_sort) ?>&page=1" class="pagination-btn">1</a>
       <?php if ($start_page > 2): ?>
         <span class="pagination-ellipsis">...</span>
       <?php endif; ?>
@@ -251,7 +251,7 @@ if ($selected_genre) {
       <?php if ($i == $current_page): ?>
         <span class="pagination-btn current"><?= $i ?></span>
       <?php else: ?>
-        <a href="?genre=<?= urlencode($selected_genre) ?>&page=<?= $i ?>" class="pagination-btn"><?= $i ?></a>
+        <a href="?genre=<?= urlencode($selected_genre) ?>&status=<?= urlencode($selected_status) ?>&sort=<?= urlencode($selected_sort) ?>&page=<?= $i ?>" class="pagination-btn"><?= $i ?></a>
       <?php endif; ?>
     <?php endfor; ?>
 
@@ -260,12 +260,12 @@ if ($selected_genre) {
       <?php if ($end_page < $total_pages - 1): ?>
         <span class="pagination-ellipsis">...</span>
       <?php endif; ?>
-      <a href="?genre=<?= urlencode($selected_genre) ?>&page=<?= $total_pages ?>" class="pagination-btn"><?= $total_pages ?></a>
+      <a href="?genre=<?= urlencode($selected_genre) ?>&status=<?= urlencode($selected_status) ?>&sort=<?= urlencode($selected_sort) ?>&page=<?= $total_pages ?>" class="pagination-btn"><?= $total_pages ?></a>
     <?php endif; ?>
 
     <!-- Next button -->
     <?php if ($current_page < $total_pages): ?>
-      <a href="?genre=<?= urlencode($selected_genre) ?>&page=<?= $current_page + 1 ?>" class="pagination-btn">Next</a>
+      <a href="?genre=<?= urlencode($selected_genre) ?>&status=<?= urlencode($selected_status) ?>&sort=<?= urlencode($selected_sort) ?>&page=<?= $current_page + 1 ?>" class="pagination-btn">Next</a>
     <?php endif; ?>
   </div>
 <?php endif; ?>
