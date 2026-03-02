@@ -66,7 +66,13 @@ try {
 
 <h1 class="page-heading">Browse by Genre</h1>
 
+<div class="library-controls" aria-label="Browse controls" style="max-width: 1100px; margin: 0 auto 1rem;">
+  <input type="text" id="genreSearch" class="library-input" placeholder="Filter genres..." aria-label="Filter genres">
+  <a href="browse.php" class="btn" style="text-align:center; line-height: 42px;">Show All Genres</a>
+</div>
+
 <div class="category-filters">
+  <a href="browse.php"><div class="filter-pill <?php echo empty($selected_genre) ? 'active' : ''; ?>">All</div></a>
 <?php foreach ($unique_genres as $genre):
   $genre_name = htmlspecialchars($genre);
   $is_active = ($selected_genre === $genre) ? 'active' : '';
@@ -263,6 +269,17 @@ document.addEventListener('DOMContentLoaded', function () {
       const currentTheme = Array.from(document.body.classList).find(c => themes.includes(c)) || themes[0];
       const idx = (themes.indexOf(currentTheme) + 1) % themes.length;
       applyTheme(themes[idx]);
+    });
+  }
+
+  const genreSearch = document.getElementById('genreSearch');
+  if (genreSearch) {
+    genreSearch.addEventListener('input', function () {
+      const query = this.value.toLowerCase().trim();
+      document.querySelectorAll('.category-filters a').forEach((pillLink) => {
+        const text = pillLink.textContent.toLowerCase();
+        pillLink.style.display = !query || text.includes(query) ? '' : 'none';
+      });
     });
   }
 });
