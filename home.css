@@ -314,6 +314,27 @@ nav a:hover::after {
   cursor: pointer;
 }
 
+.compact-view .manga-card {
+  width: 170px;
+  padding: 8px;
+}
+
+.compact-view .manga-card h3 {
+  font-size: 0.98rem;
+  margin-top: 8px;
+}
+
+.compact-view .manga-card p,
+.compact-view .status-label,
+.compact-view .genre-badges {
+  font-size: 0.82rem;
+}
+
+.compact-view .card-actions {
+  margin-top: 6px;
+  gap: 6px;
+}
+
 .manga-card img {
   width: 100%;
   height: auto;
