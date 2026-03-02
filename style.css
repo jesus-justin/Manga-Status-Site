@@ -162,6 +162,15 @@ button:hover, a.button:hover {
     background: #b91e32;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid var(--accent-2);
+    outline-offset: 2px;
+}
+
 .latest-heading {
     text-align: center;
     margin: 20px 0;
