@@ -441,6 +441,19 @@ try {
       `;
       document.querySelector('.banner').after(statsContainer);
 
+      document.addEventListener('click', async (event) => {
+        const copyButton = event.target.closest('.copy-title-btn');
+        if (!copyButton) return;
+
+        const title = copyButton.getAttribute('data-title') || '';
+        try {
+          await navigator.clipboard.writeText(title);
+          showToast(`Copied: ${title}`);
+        } catch (error) {
+          showToast('Copy failed. Please try again.');
+        }
+      });
+
       document.addEventListener('keydown', (event) => {
         const tag = document.activeElement?.tagName?.toLowerCase();
         if (tag === 'input' || tag === 'textarea' || tag === 'select') {
@@ -583,6 +596,7 @@ try {
             <?php endif; endif; ?>
             <div class="card-actions">
               <a href="edit.php?id=<?= $row['id'] ?>" class="btn">✏️ Edit</a>
+              <button type="button" class="btn copy-title-btn" data-title="<?= htmlspecialchars($row['title']) ?>">📋 Copy</button>
               <form method="POST" action="delete.php" onsubmit="return confirm('Delete this manga?');" style="display:inline;">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($auth->getCsrfToken()) ?>">
                 <input type="hidden" name="id" value="<?= (int)$row['id'] ?>">
