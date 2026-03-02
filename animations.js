@@ -13,6 +13,7 @@ class ButtonAnimations {
         this.setupHoverAnimations();
         this.setupClickAnimations();
         this.setupLoadingStates();
+        this.setupCardKeyboardAccess();
     }
 
     // Ripple effect for buttons
@@ -120,6 +121,23 @@ class ButtonAnimations {
             button.innerHTML = originalText;
             button.disabled = false;
         }, 1500);
+    }
+
+    setupCardKeyboardAccess() {
+        const cards = document.querySelectorAll('.manga-card');
+        cards.forEach((card) => {
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'article');
+
+            card.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    const editLink = card.querySelector('a[href*="edit.php"]');
+                    if (editLink) {
+                        window.location.href = editLink.getAttribute('href');
+                    }
+                }
+            });
+        });
     }
 
     // Success animation
