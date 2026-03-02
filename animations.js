@@ -5,6 +5,10 @@ class ButtonAnimations {
     }
 
     init() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+
         this.setupRippleEffects();
         this.setupHoverAnimations();
         this.setupClickAnimations();
@@ -152,6 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Utility function for smooth scrolling
 function smoothScrollTo(element, duration = 1000) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        element.scrollIntoView({ block: 'center' });
+        return;
+    }
+
     const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
     const startPosition = window.pageYOffset;
     const distance = targetPosition - startPosition;
