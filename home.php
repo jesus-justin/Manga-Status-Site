@@ -440,6 +440,32 @@ try {
         </div>
       `;
       document.querySelector('.banner').after(statsContainer);
+
+      document.addEventListener('keydown', (event) => {
+        const tag = document.activeElement?.tagName?.toLowerCase();
+        if (tag === 'input' || tag === 'textarea' || tag === 'select') {
+          return;
+        }
+
+        if (event.key === '/') {
+          event.preventDefault();
+          searchInput?.focus();
+          searchInput?.select();
+        }
+
+        if (event.key.toLowerCase() === 'r') {
+          event.preventDefault();
+          window.enhancedRandomManga?.();
+        }
+
+        if (event.key.toLowerCase() === 'g') {
+          window.location.href = 'browse.php';
+        }
+
+        if (event.key.toLowerCase() === 'a') {
+          window.location.href = 'add.php';
+        }
+      });
     });
 
     function confirmLogout() {
