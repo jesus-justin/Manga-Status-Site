@@ -102,9 +102,10 @@ class ApiResponse {
         http_response_code($httpCode);
         
         // Set CORS headers
-        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Origin: ' . ($_SERVER['HTTP_ORIGIN'] ?? '*'));
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        header('Access-Control-Allow-Credentials: true');
         
         // Set content type
         header('Content-Type: application/json; charset=utf-8');
@@ -113,6 +114,11 @@ class ApiResponse {
         header('Cache-Control: no-cache, no-store, must-revalidate');
         header('Pragma: no-cache');
         header('Expires: 0');
+        
+        // Security headers
+        header('X-Content-Type-Options: nosniff');
+        header('X-Frame-Options: DENY');
+        header('X-XSS-Protection: 1; mode=block');
         
         echo json_encode($response, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         exit;
