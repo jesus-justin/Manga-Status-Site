@@ -1,3 +1,0 @@
--- Deprecated optimization script.
--- Indexes and core optimization defaults are now maintained in manga.sql.
--- Execute manga.sql as the single source of truth.

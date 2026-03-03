@@ -1,3 +1,0 @@
--- Deprecated schema file.
--- Canonical schema is in manga.sql.
--- Execute manga.sql to provision the full database.
