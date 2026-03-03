@@ -230,11 +230,12 @@ nav a:hover::after {
 /* Manga Container - Main wrapper for manga content */
 .manga-container {
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .library-controls {
@@ -293,16 +294,17 @@ nav a:hover::after {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  padding: 20px;
+  gap: 25px;
+  padding: 40px 20px;
   width: 100%;
+  min-height: 200px;
 }
 
 /* Individual Manga Card Styling */
 .manga-card {
   width: 200px;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 10px;
+  background: linear-gradient(135deg, rgba(100, 50, 60, 0.4), rgba(80, 40, 50, 0.3));
+  padding: 12px;
   border-radius: 12px;
   text-align: center;
   transition: all 0.3s ease;
@@ -312,6 +314,9 @@ nav a:hover::after {
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  border: 1px solid rgba(255, 126, 179, 0.3);
+  min-height: 300px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .compact-view .manga-card {

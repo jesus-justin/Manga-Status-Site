@@ -55,14 +55,29 @@ try {
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="animations.js"></script>
   <style>
-    .scroll-progress {
+    .side-scroll-track {
       position: fixed;
+      right: 12px;
+      top: 0;
+      width: 6px;
+      height: 100vh;
+      background: rgba(200, 200, 200, 0.15);
+      border-radius: 3px;
+      z-index: 9999;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .side-scroll-progress {
+      position: absolute;
       top: 0;
       left: 0;
-      height: 5px;
-      background: var(--accent);
-      width: 0%;
-      z-index: 9999;
+      width: 100%;
+      height: 0%;
+      background: linear-gradient(180deg, #ff4081, #ff1744);
+      border-radius: 3px;
+      transition: height 0.05s ease-out;
+      box-shadow: 0 0 8px rgba(255, 23, 68, 0.6);
     }
 
     .btn {
@@ -129,10 +144,13 @@ try {
     }
 
     function updateScrollProgress() {
-      const scrollTop = window.pageYOffset;
-      const docHeight = document.body.offsetHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
+      const scrollTop = window.scrollY || window.pageYOffset || 0;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progressElement = document.getElementById('sideScrollProgress');
+      if (!progressElement) return;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressElement.style.height = Math.min(100, Math.max(0, scrollPercent)) + '%';
+      console.log('Scroll:', {scrollTop, docHeight, scrollPercent}); // Debug
     }
 
     function showToast(message, duration = 3000) {
@@ -183,10 +201,8 @@ try {
       }
       createParticles();
 
-      const progressBar = document.createElement('div');
-      progressBar.className = 'scroll-progress';
-      document.body.appendChild(progressBar);
       window.addEventListener('scroll', updateScrollProgress);
+      updateScrollProgress();
 
       if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
@@ -501,7 +517,9 @@ try {
 </head>
 <body>
 
-<div class="scroll-progress"></div>
+<div class="side-scroll-track" aria-hidden="true">
+  <div class="side-scroll-progress" id="sideScrollProgress"></div>
+</div>
 
 <!-- Hero Section -->
 <section class="hero-section">
@@ -557,8 +575,9 @@ try {
     <span id="resultCount" class="result-count"></span>
   </section>
   <div class="manga-container">
-    <div class="manga-grid">
+    <div class="manga-grid" style="background: rgba(0,0,0,0.2); min-height: 400px; border-radius: 8px;">
       <?php if ($result && $result->num_rows > 0): ?>
+        <!-- Found <?php echo $result->num_rows; ?> manga -->
         <?php while ($row = $result->fetch_assoc()): ?>
           <?php
             $title = strtolower(trim($row['title']));
