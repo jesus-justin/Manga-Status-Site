@@ -1347,7 +1347,13 @@ nav.scrolled {
 
   .hero-buttons {
     flex-direction: column;
+    gap: 10px;
     align-items: center;
+  }
+
+  .library-controls {
+    grid-template-columns: 1fr !important;
+    gap: 8px;
   }
 
   .manga-grid {
@@ -1376,9 +1382,9 @@ nav.scrolled {
     font-size: 2rem;
   }
 
-  .hero-subtitle {
-    font-size: 1rem;
-  }
+    .hero-subtitle {
+      font-size: 0.95rem;
+    }
 
   .manga-grid {
     grid-template-columns: 1fr;
