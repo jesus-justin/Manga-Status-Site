@@ -43,6 +43,8 @@ try {
   <title>Browse Manga - Manga Library</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="accessibility.css">
+  <link rel="stylesheet" href="skeleton-loader.css">
   <style>
     .page-heading {
       text-align: center;

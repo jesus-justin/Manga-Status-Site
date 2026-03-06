@@ -52,6 +52,8 @@ try {
   <title>Manga Library</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="accessibility.css">
+  <link rel="stylesheet" href="skeleton-loader.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="animations.js"></script>
   <style>
