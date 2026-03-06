@@ -38,6 +38,32 @@ body {
     margin: 0;
     padding: 0;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Bebas Neue', 'Shippori Mincho', serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 1.2em 0 0.5em 0;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+p {
+    margin: 0.8em 0;
 }
 
 nav {
