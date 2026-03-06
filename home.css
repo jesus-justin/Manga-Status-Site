@@ -23,6 +23,45 @@
   50% { transform: translateY(-20px) rotate(180deg); }
 }
 
+/* Page-level polish */
+main {
+  position: relative;
+}
+
+main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 0%, rgba(255, 126, 179, 0.08), transparent 40%);
+}
+
+/* Branded scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #ff5f97 rgba(255, 255, 255, 0.12);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff80ab, #ff335f);
+  border-radius: 999px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffa0c2, #ff4b74);
+}
+
 /* Enhanced Form Inputs */
 input[type="text"],
 input[type="email"],
