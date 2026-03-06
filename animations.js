@@ -156,6 +156,83 @@ class ButtonAnimations {
         }, 1000);
     }
 
+    // Enhanced loading spinner overlay
+    showFullScreenLoading(message = 'Loading...') {
+        const overlay = document.createElement('div');
+        overlay.id = 'loading-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        `;
+        
+        const spinner = document.createElement('div');
+        spinner.style.cssText = `
+            text-align: center;
+            color: white;
+        `;
+        spinner.innerHTML = `
+            <div class="loading-spinner-enhanced" style="margin: 0 auto 20px;"></div>
+            <p style="font-size: 18px; margin: 0;">${message}</p>
+        `;
+        
+        overlay.appendChild(spinner);
+        document.body.appendChild(overlay);
+        return overlay;
+    }
+
+    hideFullScreenLoading() {
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+            overlay.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => overlay.remove(), 300);
+        }
+    }
+
+    // Toast notification
+    showToast(message, type = 'info', duration = 3000) {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: ${this.getToastColor(type)};
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            animation: slideInUp 0.3s ease;
+            font-weight: 500;
+        `;
+        
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'slideOutDown 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    }
+
+    getToastColor(type) {
+        const colors = {
+            'success': '#4CAF50',
+            'error': '#f44336',
+            'warning': '#FF9800',
+            'info': '#2196F3'
+        };
+        return colors[type] || colors['info'];
+    }
+
     // Page transition animation
     animatePageTransition(url) {
         document.body.style.opacity = '0';
