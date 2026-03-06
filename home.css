@@ -346,11 +346,11 @@ nav a:hover::after {
 /* Individual Manga Card Styling */
 .manga-card {
   width: 200px;
-  background: linear-gradient(135deg, rgba(100, 50, 60, 0.4), rgba(80, 40, 50, 0.3));
+  background: linear-gradient(135deg, rgba(100, 50, 60, 0.5), rgba(80, 40, 50, 0.4));
   padding: 12px;
   border-radius: 12px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -359,7 +359,8 @@ nav a:hover::after {
   cursor: pointer;
   border: 1px solid rgba(255, 126, 179, 0.3);
   min-height: 300px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .compact-view .manga-card {
@@ -927,11 +928,19 @@ nav.scrolled {
 
 .status-label {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
+  padding: 0.4rem 1rem;
   border-radius: 20px;
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.3px;
+}
+
+.manga-card:hover .status-label {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 .status-will-read {
@@ -946,6 +955,11 @@ nav.scrolled {
 
 .status-stopped {
   background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+}
+
+.status-dropped {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
   color: white;
 }
 
