@@ -149,10 +149,14 @@ try {
       const scrollTop = window.scrollY || window.pageYOffset || 0;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progressElement = document.getElementById('sideScrollProgress');
+      const trackElement = document.querySelector('.side-scroll-track');
       if (!progressElement) return;
       const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       progressElement.style.height = Math.min(100, Math.max(0, scrollPercent)) + '%';
-      console.log('Scroll:', {scrollTop, docHeight, scrollPercent}); // Debug
+
+      if (trackElement) {
+        trackElement.style.opacity = docHeight > 30 ? '1' : '0';
+      }
     }
 
     function showToast(message, duration = 3000) {
