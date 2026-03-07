@@ -1394,6 +1394,11 @@ nav.scrolled {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .hero-section {
+    height: min(42vh, 400px);
+    min-height: 280px;
+  }
+
   .hero-title {
     font-size: 3rem;
   }
@@ -1418,7 +1423,8 @@ nav.scrolled {
   }
 
   .hero-section {
-    height: 50vh;
+    height: min(38vh, 330px);
+    min-height: 240px;
   }
 
   .hero-title {
@@ -1458,6 +1464,11 @@ nav.scrolled {
 }
 
 @media (max-width: 480px) {
+  .hero-section {
+    height: min(34vh, 300px);
+    min-height: 220px;
+  }
+
   .hero-title {
     font-size: 2rem;
   }
