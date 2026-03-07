@@ -695,13 +695,14 @@ nav a:hover::after {
 }
 
 .hero-title {
-  font-size: 4rem;
+  font-size: clamp(2rem, 6vw, 4rem);
   font-weight: 700;
+  line-height: 1.04;
   background: linear-gradient(135deg, #ff7eb3, #ff758c, #ff6b7d);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   animation: titleGlow 3s ease-in-out infinite alternate;
 }
 
@@ -711,9 +712,9 @@ nav a:hover::after {
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 2.2vw, 1.5rem);
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
   font-weight: 300;
 }
 
