@@ -59,15 +59,17 @@ try {
   <style>
     .side-scroll-track {
       position: fixed;
-      right: 12px;
+      right: 10px;
       top: 0;
-      width: 6px;
+      width: 8px;
       height: 100vh;
-      background: rgba(200, 200, 200, 0.15);
-      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
       z-index: 9999;
       overflow: hidden;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
     }
 
     .side-scroll-progress {
@@ -76,10 +78,10 @@ try {
       left: 0;
       width: 100%;
       height: 0%;
-      background: linear-gradient(180deg, #ff4081, #ff1744);
-      border-radius: 3px;
-      transition: height 0.05s ease-out;
-      box-shadow: 0 0 8px rgba(255, 23, 68, 0.6);
+      background: linear-gradient(180deg, #ff8bb6, #ff335f);
+      border-radius: 999px;
+      transition: height 0.06s ease-out;
+      box-shadow: 0 0 10px rgba(255, 23, 68, 0.55);
     }
 
     .btn {
