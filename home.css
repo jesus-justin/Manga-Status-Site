@@ -38,8 +38,17 @@ main::before {
 
 /* Branded scrollbar */
 html {
+  height: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #ff5f97 rgba(255, 255, 255, 0.12);
+}
+
+body {
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 *::-webkit-scrollbar {
