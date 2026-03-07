@@ -46,11 +46,14 @@ html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #ff5f97 rgba(255, 255, 255, 0.12);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 body {
   min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 *::-webkit-scrollbar {
