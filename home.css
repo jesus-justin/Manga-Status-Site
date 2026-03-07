@@ -665,11 +665,13 @@ nav a:hover::after {
 /* Hero Section - Modern Design */
 .hero-section {
   position: relative;
-  height: 60vh;
+  height: min(46vh, 460px);
+  min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 24px 0 18px;
   overflow: hidden;
   background: linear-gradient(135deg, rgba(255, 126, 179, 0.1) 0%, rgba(255, 117, 140, 0.1) 100%);
   backdrop-filter: blur(20px);
