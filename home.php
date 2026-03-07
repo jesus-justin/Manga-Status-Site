@@ -536,6 +536,7 @@ try {
     <div class="hero-buttons">
       <a href="add.php" class="hero-btn hero-btn-primary">Add New Manga</a>
       <a href="browse.php" class="hero-btn hero-btn-secondary">Browse Collection</a>
+      <a href="#librarySection" class="hero-btn hero-btn-secondary">Jump To Library</a>
     </div>
   </div>
 </section>
@@ -555,7 +556,7 @@ try {
   </div>
 </nav>
 
-<main>
+<main id="librarySection">
   <h1 class="latest-heading fade-in-up">Latest Manga</h1>
   <section class="library-controls" aria-label="Library controls">
     <input type="text" id="searchInput" class="library-input" placeholder="Search title, genre, or status..." aria-label="Search manga">
