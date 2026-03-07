@@ -538,6 +538,10 @@ try {
       <a href="browse.php" class="hero-btn hero-btn-secondary">Browse Collection</a>
       <a href="#librarySection" class="hero-btn hero-btn-secondary">Jump To Library</a>
     </div>
+    <div class="hero-scroll-cue" aria-hidden="true">
+      <span class="hero-scroll-cue-dot"></span>
+      <span>Scroll Down For Library</span>
+    </div>
   </div>
 </section>
 
