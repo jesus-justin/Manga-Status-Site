@@ -582,9 +582,8 @@ try {
     <span id="resultCount" class="result-count"></span>
   </section>
   <div class="manga-container">
-    <div class="manga-grid" style="background: rgba(0,0,0,0.2); min-height: 400px; border-radius: 8px;">
+    <div class="manga-grid">
       <?php if ($result && $result->num_rows > 0): ?>
-        <!-- Found <?php echo $result->num_rows; ?> manga -->
         <?php while ($row = $result->fetch_assoc()): ?>
           <?php
             $title = strtolower(trim($row['title']));
