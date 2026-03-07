@@ -26,6 +26,7 @@
 /* Page-level polish */
 main {
   position: relative;
+  padding-top: 10px;
 }
 
 main::before {
@@ -321,12 +322,17 @@ nav a:hover::after {
 /* Manga Container - Main wrapper for manga content */
 .manga-container {
   max-width: 1400px;
-  margin: 20px auto;
+  margin: 10px auto 20px;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+.latest-heading {
+  margin: 12px 0 10px;
+  text-align: center;
 }
 
 .library-controls {
