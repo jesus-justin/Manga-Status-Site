@@ -29,6 +29,10 @@ main {
   padding-top: 10px;
 }
 
+#librarySection {
+  scroll-margin-top: 92px;
+}
+
 main::before {
   content: '';
   position: absolute;
