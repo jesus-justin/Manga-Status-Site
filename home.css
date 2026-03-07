@@ -41,19 +41,22 @@ main::before {
   background: radial-gradient(circle at 20% 0%, rgba(255, 126, 179, 0.08), transparent 40%);
 }
 
-/* Branded scrollbar */
+/* Branded scrollbar - Force scroll enable */
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #ff5f97 rgba(255, 255, 255, 0.12);
-  overflow-y: auto;
+  overflow-y: scroll !important;
   overflow-x: hidden;
+  height: auto;
 }
 
 body {
   min-height: 100vh;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: scroll !important;
+  height: auto;
+  position: relative;
 }
 
 *::-webkit-scrollbar {
@@ -398,7 +401,7 @@ nav a:hover::after {
   gap: 25px;
   padding: 40px 20px;
   width: 100%;
-  min-height: 200px;
+  min-height: 100vh;
 }
 
 /* Individual Manga Card Styling */
