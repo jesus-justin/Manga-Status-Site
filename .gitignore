@@ -1,0 +1,87 @@
+# Environment Configuration
+.env
+.env.local
+.env.*.php
+.env.backup
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# PHP and Composer
+vendor/
+composer.lock
+composer.phar
+
+# Application Directories
+logs/
+cache/
+uploads/
+temp/
+tmp/
+
+# Database Files
+*.sql.backup
+database.sqlite
+database.sqlite3
+*.db
+
+# System Files
+.htaccess.local
+web.config.local
+
+# OS Files
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+*.lnk
+
+# Project Specific
+config/.env
+config/database.local.php
+.env.production
+.env.staging
+
+# Backup and Temporary Files
+*.bak
+*.tmp
+*.swp
+*backup*
+*restore*
+
+# Log Files
+*.log
+logs/*
+!logs/.gitkeep
+
+# Session Files
+sessions/
+session.lock
+
+# Uploaded Files
+uploads/*
+!uploads/.gitkeep
+
+# Cache Files
+cache/*
+!cache/.gitkeep
+
+# Node modules (if using npm)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Testing
+phpunit.xml.bak
+.phpunit.result.cache
+coverage/
