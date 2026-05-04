@@ -62,12 +62,8 @@ $manga = $result->fetch_assoc();
 $selected_categories = explode(', ', $manga['category']);
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Edit Manga</title>
-  <link rel="stylesheet" href="edit.css">
+<!DOCTYPE php>
+<?php $pageTitle = 'Edit Manga - Manga Library'; require_once __DIR__ . '/templates/header.php'; ?>
   <style>
     .genre-container {
       display: grid;
@@ -174,5 +170,4 @@ $selected_categories = explode(', ', $manga['category']);
   </div>
 </main>
 
-</body>
-</html>
+<?php require_once __DIR__ . '/templates/footer.php'; ?>
