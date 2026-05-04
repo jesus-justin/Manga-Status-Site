@@ -42,19 +42,47 @@ main::before {
 }
 
 /* Branded scrollbar - Force scroll enable */
-html {
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: #ff5f97 rgba(255, 255, 255, 0.12);
-  overflow-y: scroll !important;
-  overflow-x: hidden;
-  height: auto;
-}
+    :root {
+      --paper: #f5efe3;
+      --ink: #141414;
+      --accent: #d7263d;
+      --accent-600: #b91e32;
+      --gold: #f2a900;
+      --muted: #6b7280;
+      --radius: 6px;
+      --focus-ring: 3px;
+      --max-width: 1200px;
+    }
 
-body {
-  min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: scroll !important;
+    .btn {
+      padding: 8px 12px;
+      background-color: var(--accent);
+      color: #fff7ea;
+      border: none;
+      border-radius: var(--radius);
+      text-decoration: none;
+      margin-right: 8px;
+      cursor: pointer;
+      transition: background-color 150ms ease, transform 120ms ease;
+    }
+
+    .btn:hover {
+      background-color: var(--accent-600);
+      transform: translateY(-1px);
+    }
+
+    .btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 var(--focus-ring) rgba(215,38,61,0.18);
+    }
+
+    /* Reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      .btn, .side-scroll-progress {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
   height: auto;
   position: relative;
 }

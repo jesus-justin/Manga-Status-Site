@@ -1,0 +1,20 @@
+/* Design tokens for Manga Status Site
+   - Centralized color, spacing and typography variables
+*/
+:root{
+  --paper: #f5efe3;
+  --ink: #141414;
+  --accent: #d7263d;
+  --accent-600:#b91e32;
+  --gold: #f2a900;
+  --muted:#6b7280;
+  --bg-gradient: linear-gradient(135deg,#12080a 0%,#2a0e12 55%,#16090c 100%);
+  --radius:8px;
+  --max-width:1200px;
+  --space-xs:4px;
+  --space-sm:8px;
+  --space-md:16px;
+  --space-lg:24px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:0 6px 18px rgba(0,0,0,0.16);
+}
