@@ -36,15 +36,8 @@ try {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Browse Manga - Manga Library</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="home.css">
-  <link rel="stylesheet" href="accessibility.css">
-  <link rel="stylesheet" href="skeleton-loader.css">
+<?php $pageTitle = 'Browse Manga - Manga Library'; require_once __DIR__ . '/templates/header.php'; ?>
+
   <style>
     .page-heading {
       text-align: center;
@@ -54,21 +47,6 @@ try {
       color: var(--ink);
     }
   </style>
-</head>
-<body>
-
-<nav>
-  <div class="logo">
-    <a href="home.php" style="color: inherit; text-decoration: none; cursor: pointer;">MangaLibrary</a>
-  </div>
-  <ul>
-    <li><a href="home.php">Home</a></li>
-    <li><a href="browse.php">Browse</a></li>
-  </ul>
-  <div class="nav-actions">
-    <button id="darkModeToggle" title="Toggle theme">🎨</button>
-  </div>
-</nav>
 
 <h1 class="page-heading">Browse by Genre</h1>
 
@@ -340,5 +318,5 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 </script>
-</body>
-</html>
+
+<?php require_once __DIR__ . '/templates/footer.php'; ?>
