@@ -24,4 +24,4 @@ $appName = $env->get('APP_NAME', 'Manga Status');
     </div>
   </nav>
 </header>
-<main id="main" role="main">
+<div id="main-content" role="main">

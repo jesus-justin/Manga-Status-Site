@@ -1,4 +1,4 @@
-</main>
+</div>
 <footer role="contentinfo">
   <div class="footer-inner">
     <p>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars($appName); ?> — Built for reliability.</p>

@@ -45,18 +45,12 @@ try {
     $current_page = 1;
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Manga Library</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="home.css">
-  <link rel="stylesheet" href="accessibility.css">
-  <link rel="stylesheet" href="skeleton-loader.css">
+<?php require_once __DIR__ . '/templates/header.php'; ?>
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="animations.js"></script>
   <style>
+    /* Page-specific small overrides kept inline for now */
     .side-scroll-track {
       position: fixed;
       right: 10px;
@@ -82,20 +76,6 @@ try {
       border-radius: 999px;
       transition: height 0.06s ease-out;
       box-shadow: 0 0 10px rgba(255, 23, 68, 0.55);
-    }
-
-    .btn {
-      padding: 5px 10px;
-      background-color: var(--accent);
-      color: #fff7ea;
-      border: none;
-      border-radius: 4px;
-      text-decoration: none;
-      margin-right: 5px;
-    }
-
-    .btn:hover {
-      background-color: #b91e32;
     }
 
     .card-actions {
@@ -710,7 +690,4 @@ try {
   <div class="footer-bottom">
     <p>&copy; 2024 MangaLibrary. Built with ❤️ for manga enthusiasts.</p>
   </div>
-</footer>
-
-</body>
-</html>
+<?php require_once __DIR__ . '/templates/footer.php'; ?>
