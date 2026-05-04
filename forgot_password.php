@@ -24,14 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password - Manga Library</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="home.css">
+<?php $pageTitle = 'Forgot Password - Manga Library'; require_once __DIR__ . '/templates/header.php'; ?>
+
     <style>
         .auth-container {
             max-width: 400px;
@@ -118,18 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 14px;
         }
     </style>
-</head>
-<body>
-    <nav>
-        <div class="logo">
-          <a href="home.php" style="color: inherit; text-decoration: none; cursor: pointer;">MangaLibrary</a>
-        </div>
-        <ul>
-            <li><a href="home.php">Home</a></li>
-            <li><a href="browse.php">Browse</a></li>
-        </ul>
-    </nav>
-    
     <div class="auth-container">
         <h2>Reset Password</h2>
         
@@ -149,5 +131,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>Remember your password? <a href="login_fixed.php">Back to login</a></p>
         </div>
     </div>
-</body>
-</html>
+<?php require_once __DIR__ . '/templates/footer.php'; ?>
