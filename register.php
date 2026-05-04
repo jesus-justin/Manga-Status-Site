@@ -59,15 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Manga Library</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="home.css">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<?php $pageTitle = 'Register - Manga Library'; require_once __DIR__ . '/templates/header.php'; ?>
+
     <style>
         * {
             margin: 0;
@@ -327,8 +320,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
         }
     </style>
-</head>
-<body>
+    </style>
+
     <!-- Animated falling leaves -->
     <div class="leaf" style="left: 10%; animation-duration: 10s; animation-delay: 0s;"></div>
     <div class="leaf" style="left: 20%; animation-duration: 12s; animation-delay: 1s;"></div>
@@ -349,15 +342,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="leaf" style="left: 85%; animation-duration: 7.5s; animation-delay: 3.8s;"></div>
     <div class="leaf" style="left: 95%; animation-duration: 14.5s; animation-delay: 0.3s;"></div>
 
-    <nav>
-        <div class="logo">
-          <a href="home.php" style="color: inherit; text-decoration: none; cursor: pointer;">MangaLibrary</a>
-        </div>
-        <ul>
-            <li><a href="home.php">Home</a></li>
-            <li><a href="browse.php">Browse</a></li>
-        </ul>
-    </nav>
     
     <div class="auth-container">
         <h2>Create Account</h2>
@@ -408,6 +392,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.addEventListener('DOMContentLoaded', function() {
             handleFormSubmission();
         });
-    </script>
-</body>
-</html>
+<?php require_once __DIR__ . '/templates/footer.php'; ?>

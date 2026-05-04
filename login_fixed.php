@@ -49,15 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Manga Library</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="home.css">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<?php $pageTitle = 'Login - Manga Library'; require_once __DIR__ . '/templates/header.php'; ?>
+
     <style>
         * {
             margin: 0;
@@ -377,18 +370,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     </style>
-</head>
-<body>
-    <nav>
-        <div class="logo">
-          <a href="home.php" style="color: inherit; text-decoration: none; cursor: pointer;">MangaLibrary</a>
-        </div>
-        <ul>
-            <li><a href="home.php">Home</a></li>
-            <li><a href="browse.php">Browse</a></li>
-        </ul>
-    </nav>
-    
+    </style>
+
     <div class="auth-container">
         <h2>Welcome Back</h2>
         
@@ -503,5 +486,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             handleFormSubmission();
         });
     </script>
-</body>
-</html>
+<?php require_once __DIR__ . '/templates/footer.php'; ?>
