@@ -13,14 +13,7 @@ if (!$auth->isLoggedIn()) {
 
 $user_id = $_SESSION['user_id'];
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Reading Progress - MangaLibrary</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="home.css">
+<?php $pageTitle = 'My Reading Progress - MangaLibrary'; require_once __DIR__ . '/templates/header.php'; ?>
     <style>
         .progress-container {
             max-width: 1200px;
@@ -178,17 +171,6 @@ $user_id = $_SESSION['user_id'];
             color: var(--ink);
         }
     </style>
-</head>
-<body>
-<nav>
-    <div class="logo">My Reading Progress</div>
-    <ul>
-        <li><a href="home.php">Home</a></li>
-        <li><a href="browse.php">Browse</a></li>
-        <li><a href="user_progress.php">My Progress</a></li>
-    </ul>
-</nav>
-
 <div class="progress-container">
     <div class="progress-header">
         <h1>My Reading Progress</h1>
@@ -408,8 +390,8 @@ function deleteProgress(id) {
     }
 }
 </script>
-</body>
-</html>
+
+<?php require_once __DIR__ . '/templates/footer.php'; ?>
 <?php
 $conn->close();
 ?>
