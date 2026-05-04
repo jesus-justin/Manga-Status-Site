@@ -5,13 +5,9 @@ require_once 'auth.php';
 $auth = new Auth($conn);
 $auth->requireLogin();
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Add Manga - Manga Library</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="home.css">
+
+<?php $pageTitle = 'Add Manga - Manga Library'; require_once __DIR__ . '/templates/header.php'; ?>
+
   <style>
     .genre-container {
       display: grid;
@@ -236,5 +232,4 @@ $auth->requireLogin();
     <button type="submit">Add Manga</button>
   </form>
 </div>
-</body>
-</html>
+<?php require_once __DIR__ . '/templates/footer.php'; ?>
